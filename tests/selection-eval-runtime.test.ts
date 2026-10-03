@@ -98,6 +98,12 @@ after(async () => {
   await closeDb();
 });
 
+/** A run's metrics without its wall-clock time, which a slower machine can push past a second. */
+const metrics = (summary: object) => {
+  const { wallSeconds: _wall, ...rest } = summary as { wallSeconds?: number };
+  return rest;
+};
+
 test("default evaluation follows the production score route and shares duplicate score inputs without changing tier decisions", async (t) => {
   await withoutModelOverrides(async () => {
     const prefilter = await stub(() => ({
@@ -119,7 +125,7 @@ test("default evaluation follows the production score route and shares duplicate
     const warm = await evaluate(rows, { prefilter: prefilter.url, score: score.url });
 
     assert.equal(cold.model, "glm-5.3-flash-selection", "no --models follows SCORE_MODEL / production routing");
-    assert.deepEqual(cold.summary, warm.summary, "cold and cached evaluations keep the same coverage and metrics");
+    assert.deepEqual(metrics(cold.summary), metrics(warm.summary), "cold and cached evaluations keep the same coverage and metrics");
     assert.deepEqual(cold.cases.map((item) => item.decision), ["select", "reject"], "the shared score still uses each tier's threshold");
     assert.deepEqual([cold.summary.decisive, cold.summary.errors, cold.summary.accuracy], [2, 0, 1]);
     assert.deepEqual([prefilter.hits(), score.hits()], [2, 2], "two per-case prefilters, two shared score calls across both runs");
