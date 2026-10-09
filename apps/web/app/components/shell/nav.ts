@@ -41,7 +41,7 @@ const SECTIONS: Array<{ title: string; items: NavItem[] }> = [
 ];
 
 /** Whether an engine page is a way in from the navigation (site.ts NAV.hidden); a hidden page still opens. */
-export const inNav = (to: string) => !NAV.hidden.includes(to);
+export const inNav = (to: string) => !(NAV.hidden as readonly string[]).includes(to);
 
 /**
  * The sidebar: the engine's sections with the modules' between 内容 and 更多; a module naming a section
