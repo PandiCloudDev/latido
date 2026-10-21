@@ -89,6 +89,8 @@ export function registerAdminAuth(app: FastifyInstance) {
       ?? (DEPLOYMENT.loginReturnHeader ? req.headers[DEPLOYMENT.loginReturnHeader.toLowerCase()] : undefined)
       ?? "/admin",
     );
+    // A live session does not need signing in again: go straight to where the visitor was headed.
+    if (await sessionPrincipal(req.headers.cookie)) return reply.header("Cache-Control", "no-store").redirect(safeReturn(returnTo), 302);
     if (feishuLoginConfigured() && !config.adminPassword) return feishuRedirect(reply, returnTo);
     return reply.header("Cache-Control", "no-store").redirect(loginPage(returnTo), 302);
   });

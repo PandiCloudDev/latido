@@ -41,6 +41,9 @@ test("an unrelated malformed cookie leaves a real admin session usable without a
   assert.equal(me.statusCode, 200);
   assert.equal(me.json().name, "Cookie test");
   assert.equal(me.json().csrf, "cookie-test-csrf");
+  const signedIn = await app.inject({ url: "/api/auth/login?return=%2Fadmin%2Fcontent", headers });
+  assert.equal(signedIn.statusCode, 302);
+  assert.equal(signedIn.headers.location, "/admin/content", "a live session skips the sign-in page");
   const write = await app.inject({ method: "POST", url: "/api/admin/sources", headers, payload: {} });
   assert.equal(write.statusCode, 403, "the usable session still needs CSRF for writes");
 
