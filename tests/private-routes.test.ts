@@ -44,7 +44,8 @@ test("an unrelated malformed cookie leaves a real admin session usable without a
   const write = await app.inject({ method: "POST", url: "/api/admin/sources", headers, payload: {} });
   assert.equal(write.statusCode, 403, "the usable session still needs CSRF for writes");
 
-  const logout = await app.inject({ method: "POST", url: "/api/auth/logout", headers });
+  // The sign-out button is a plain HTML form: the browser sends this content type even with an empty body.
+  const logout = await app.inject({ method: "POST", url: "/api/auth/logout", headers: { ...headers, "content-type": "application/x-www-form-urlencoded" }, payload: "" });
   assert.equal(logout.statusCode, 303);
   const ended = await app.inject({ url: "/api/auth/check", headers });
   assert.equal(ended.statusCode, 401);
