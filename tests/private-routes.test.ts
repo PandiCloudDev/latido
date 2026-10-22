@@ -44,6 +44,10 @@ test("an unrelated malformed cookie leaves a real admin session usable without a
   const write = await app.inject({ method: "POST", url: "/api/admin/sources", headers, payload: {} });
   assert.equal(write.statusCode, 403, "the usable session still needs CSRF for writes");
 
+  // The form parser now in front of sign-out keeps its size limit, and refuses before the session is touched.
+  const oversized = await app.inject({ method: "POST", url: "/api/auth/logout", headers: { ...headers, "content-type": "application/x-www-form-urlencoded" }, payload: `x=${"a".repeat(20_000)}` });
+  assert.equal(oversized.statusCode, 413);
+  assert.equal((await app.inject({ url: "/api/auth/check", headers })).statusCode, 204);
   // The sign-out button is a plain HTML form: the browser sends this content type even with an empty body.
   const logout = await app.inject({ method: "POST", url: "/api/auth/logout", headers: { ...headers, "content-type": "application/x-www-form-urlencoded" }, payload: "" });
   assert.equal(logout.statusCode, 303);
