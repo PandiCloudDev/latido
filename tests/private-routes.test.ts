@@ -44,6 +44,11 @@ test("an unrelated malformed cookie leaves a real admin session usable without a
   const signedIn = await app.inject({ url: "/api/auth/login?return=%2Fadmin%2Fcontent", headers });
   assert.equal(signedIn.statusCode, 302);
   assert.equal(signedIn.headers.location, "/admin/content", "a live session skips the sign-in page");
+  // The skip goes only to admin pages on this site, whatever the return asks for.
+  for (const [target, location] of [["javascript:alert(1)", "/admin"], ["data:text/html,x", "/admin"], ["//evil.example/admin", "/admin"], ["https://127.0.0.1:8080/admin/x", "/admin/x"], [`/${"a".repeat(5000)}`, "/admin"]]) {
+    const skipped = await app.inject({ url: `/api/auth/login?return=${encodeURIComponent(target)}`, headers });
+    assert.equal(skipped.headers.location, location, target.slice(0, 40));
+  }
   const write = await app.inject({ method: "POST", url: "/api/admin/sources", headers, payload: {} });
   assert.equal(write.statusCode, 403, "the usable session still needs CSRF for writes");
 

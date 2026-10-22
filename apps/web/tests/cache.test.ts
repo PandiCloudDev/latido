@@ -208,6 +208,11 @@ test("a signed-in admin is sent past the sign-in page", async () => {
     assert.equal(res.status, 302);
     assert.equal(res.headers.get("location"), "/admin/content");
     await res.text();
+    for (const target of ["javascript:alert(1)", "//evil.example/admin", "https://evil.example/admin"]) {
+      const away = await fetch(`${signedIn.origin}/admin/login?return=${encodeURIComponent(target)}`, { headers: { cookie: "aihot_admin=fixture" }, redirect: "manual" });
+      assert.equal(away.headers.get("location"), "/admin", target);
+      await away.text();
+    }
     const anonymous = await fetch(`${signedIn.origin}/admin/login?return=%2Fadmin`, { redirect: "manual" });
     assert.equal(anonymous.status, 200, "without a session the page still offers the ways in");
     await anonymous.text();
