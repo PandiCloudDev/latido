@@ -17,6 +17,7 @@
 // while it still counts for heat, whenever a fact close to it gains evidence (rematchSignals). History
 // (isHistorical) founds no event. A report about to open a card is compared with the cards readers
 // already see (cards.ts). Runs serially (queue concurrency 1).
+import { scaledLength } from "@aihot/site/locale";
 import { modelFor, modelRoute } from "../editorial/models.ts";
 import { beijingDate, beijingMidnight } from "@aihot/contracts/time";
 import { sql, type Db, type Tx } from "../db.ts";
@@ -379,7 +380,7 @@ async function decide(articleId: string, opts: GroupOptions, revision: number, r
     scope: composite ? "composite" : an.output?.scope === "single" ? "single" : "unknown",
     frame: frame ? { subject: frame.subject, action: frame.action, object: frame.object, occurredAt: frame.occurredAt } : null,
   };
-  const newTitle = String(frame?.title || title).slice(0, 60);
+  const newTitle = [...String(frame?.title || title)].slice(0, scaledLength(60)).join("");
 
   const { sameUrl, referenced } = await relatedPosts(a);
   // The URL settles identity, but an unseen fact still needs its first reading-value decision.

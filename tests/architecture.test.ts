@@ -170,9 +170,13 @@ test("every environment variable the code reads is listed in a template, and eve
 const convertsBeijingTime = (line: string) =>
   /(?<![\d.])8 ?\* ?(?:3_?600|60 ?\* ?60)/.test(line)
   || (line.includes("+08:00") && line.includes("${"))
-  || /(?:timeZone:|AT TIME ZONE) ?["']Asia\/Shanghai/.test(line);
+  || /(?:timeZone:|AT TIME ZONE) ?["']Asia\/Shanghai/.test(line)
+  // The site's zone comes from site/locale.ts: using its offset or zone name is a conversion too.
+  || /\bUTC_OFFSET_MS\b|LOCALE\.utcOffset\b|timeZone: ?LOCALE\.timeZone/.test(line);
 const CONVERTS_BEIJING_TIME: Record<string, string> = {
   "packages/contracts/src/time.ts": "the conversions themselves",
+  "packages/backend/src/sources/dates.ts": "a source date without a zone is read in the site's zone (site/locale.ts) by default",
+  "packages/backend/src/sources/web-list.ts": "a heading date without a zone is read in the site's zone (site/locale.ts) by default",
   "packages/backend/src/editorial/analyze.ts": "the score input keeps the form its prompt was tuned on (whole seconds without .000)",
   "packages/backend/src/editorial/writing.ts": "a beijingDate written out, left to the next change of editorial/",
   "site/changelog/FeatureRelease.tsx": "a changelog entry's Beijing date and time with its zone, to the minute, in dateTime",

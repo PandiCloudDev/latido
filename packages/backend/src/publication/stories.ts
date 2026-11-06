@@ -1,5 +1,6 @@
 // Stories (events) and the hot ranking through the public read layer. The website sees heat values;
 // v1 and MCP only see ranks and counts.
+import { scaledLength } from "@aihot/site/locale";
 import type { HeatPoint, HotResponse, StoryDetail, StoryReportView } from "@aihot/contracts/site";
 import { SITE } from "@aihot/site";
 import { sql } from "../db.ts";
@@ -273,7 +274,7 @@ export async function loadHot(): Promise<HotResponse> {
         sourceNames: [...new Set(e.sourceNames.map(publicSourceName))],
         participants: extras.participants(e),
         spark: sparks.get(e.storyId) ?? [],
-        summary: summary && summary.length > 480 ? summary.slice(0, 480).join('') + '…' : text.summary,
+        summary: summary && summary.length > scaledLength(480) ? summary.slice(0, scaledLength(480)).join('') + '…' : text.summary,
         latest: text.latest,
         cover: picture && coverUrl ? { url: coverUrl, srcSet: proxiedImageSet(picture.url, "hero") ?? undefined, width: picture.width, height: picture.height } : null,
       };
