@@ -1,4 +1,5 @@
 import { decodeHTMLStrict } from "entities/decode";
+import { LOCALE } from "@aihot/site/locale";
 
 export function collapseWhitespace(s: string): string {
   return s.replace(/\s+/g, " ").trim();
@@ -10,6 +11,56 @@ export function isChineseText(text: string, language?: string | null): boolean {
   if (declared === "zh") return true;
   if (declared && !["und", "unknown", "other", "zxx"].includes(declared)) return false;
   return /\p{Script=Han}/u.test(text) && !/[\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Hangul}]/u.test(text);
+}
+
+// Function words per language: a text in a Latin-script language is told apart by how many of its words are
+// these, not by accents alone (tech headlines in Spanish often carry none, and English ones borrow "café").
+const FUNCTION_WORDS: Record<"es" | "en" | "pt", ReadonlySet<string>> = {
+  es: new Set(("de la que el en y los del se las por un para con una su al lo como más pero sus le ya este " +
+    "porque esta entre cuando muy sin sobre también hasta hay donde desde todo nos durante todos uno les ni contra " +
+    "otros ese eso ante ellos esto antes algunos qué unos otro otras otra él tanto esa estos mucho nada muchos cual " +
+    "poco ella estar estas algunas algo es son fue ha han está están será puede según tras hoy así sólo solo cómo " +
+    // Headline verbs and words: short titles often carry no function word at all ("Meta lanza Llama 5").
+    "lanza presenta anuncia llega estrena compra adquiere invierte nuevo nueva nuevos nuevas ahora disponible " +
+    "millones empresa empresas usuarios inteligencia artificial datos mexicana mexicano latinoamérica méxico").split(" ")),
+  en: new Set(("the of and to in is that for on with as was are be by this it from at an or have has not but which " +
+    "their they will its can new more about after into than also how what who all would been were you your our we " +
+    "launches launch says said".split(" "))),
+  pt: new Set(("de que não o os da do das dos em um uma para com por se é são mais ao à pelo pela também você está " +
+    "foi ser ter seu sua então isso como já nos nas ou quando muito sem sobre até há onde desde todo durante " +
+    "lança anuncia expansão nova novo conta brasil brasileira empresa usuários dados").split(" ")),
+};
+const SPANISH_MARKS = /[ñ¿¡]/i;
+
+function functionWordShare(text: string, lang: "es" | "en" | "pt"): number {
+  const words = text.toLowerCase().match(/\p{L}+/gu) ?? [];
+  if (!words.length) return 0;
+  const set = FUNCTION_WORDS[lang];
+  return words.filter((w) => set.has(w)).length / words.length;
+}
+
+/**
+ * Whether a Latin-script text is written in `lang`. A declared language wins; otherwise the language whose
+ * function words cover the most of the text, with ñ ¿ ¡ as a tie-breaker for Spanish. Words shared by Spanish
+ * and Portuguese ("de", "que") count for both, so the comparison is between the two shares, not a threshold alone.
+ */
+export function isLatinLanguageText(text: string, lang: "es" | "en" | "pt", language?: string | null): boolean {
+  const declared = language?.toLowerCase().split(/[-_]/)[0];
+  if (declared && !["und", "unknown", "other", "zxx"].includes(declared)) return declared === lang;
+  if (/\p{Script=Han}|\p{Script=Hiragana}|\p{Script=Katakana}|\p{Script=Hangul}/u.test(text)) return false;
+  const share = { es: functionWordShare(text, "es"), en: functionWordShare(text, "en"), pt: functionWordShare(text, "pt") };
+  const mine = share[lang];
+  const others = (Object.keys(share) as Array<keyof typeof share>).filter((k) => k !== lang).map((k) => share[k]);
+  if (lang === "es" && SPANISH_MARKS.test(text) && mine >= Math.max(...others)) return true;
+  return mine > 0 && others.every((o) => mine > o * 1.15);
+}
+
+/**
+ * Whether the text is already in the site's language (site/locale.ts), so it needs no translation and can be shown
+ * as is. With the site in Chinese this is exactly the upstream `isChineseText`.
+ */
+export function isSiteLanguageText(text: string, language?: string | null): boolean {
+  return LOCALE.language === "zh" ? isChineseText(text, language) : isLatinLanguageText(text, LOCALE.language, language);
 }
 
 export function truncate(s: string, max: number, ellipsis = "…"): string {

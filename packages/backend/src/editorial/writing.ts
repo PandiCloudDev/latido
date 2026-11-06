@@ -1,10 +1,11 @@
+import { LOCALE, scaledLength } from "@aihot/site/locale";
 import { describePublicationTime } from "../sources/dates.ts";
 // The writing side of the analysis: the prefilter's and the content understanding's inputs, the
 // title/summary prompts for everything else, the output parsing and the deterministic guards. The
 // wording lives in the industry pack (industry/prompts/); a failed guard falls back without a repair call.
 import { IDENTITY_CONTEXT_ALIASES, IDENTITY_LEXICON, PUBLISHER_DOMAINS } from "@aihot/industry/taxonomy";
-import { stripTagMarkup, isChineseText as looksZh } from "../lib/text.ts";
-export { isChineseText as looksZh } from "../lib/text.ts";
+import { stripTagMarkup, isSiteLanguageText as looksZh } from "../lib/text.ts";
+export { isSiteLanguageText as looksZh } from "../lib/text.ts";
 import { onlyXArticleLink } from "../sources/x.ts";
 import type { AnalyzeInputArticle } from "./input.ts";
 import { promptText } from "./prompts.ts";
@@ -59,6 +60,9 @@ const stripNoise = (s: string) => s.replace(/https?:\/\/\S+/g, " ").replace(/@[A
 export function needsShortTweetTranslation(text: string): boolean {
   const clean = stripNoise(text);
   if (!looksZh(clean)) return true;
+  // Outside Chinese, a post the detector already reads as the site's language is shown as written: tech posts in
+  // Spanish routinely keep English product names, which is not a reason to translate them.
+  if (LOCALE.language !== "zh") return false;
   if (chineseDensity(clean) < 0.65) return true;
   const englishRuns = clean.match(/[A-Za-z][A-Za-z0-9+.#/-]*(?:\s+[A-Za-z][A-Za-z0-9+.#/-]*)+/g) ?? [];
   return englishRuns.some((run) => run.replace(/\s+/g, "").length >= 10);
@@ -228,15 +232,39 @@ export function enforceIdentity(input: TranslateInput, copy: { titleZh: string; 
 
 // Answer-first summary length
 
-export function compactAnswerFirstSummary(summary: string, maxChars = 190): string {
+// Sentence ends: Chinese stops always; a Latin "." "!" "?" only before a space or the end, and a "." not after a
+// lone capital (initials such as "J. Pérez") — so "3.5", "v2.1" and "OpenAI.com" stay whole.
+function sentencesOf(text: string): string[] {
+  const out: string[] = [];
+  let start = 0;
+  for (let i = 0; i < text.length; i += 1) {
+    const ch = text[i]!;
+    const next = text[i + 1];
+    const latinEnd = (ch === "." || ch === "!" || ch === "?") && (next === undefined || /\s/.test(next)) &&
+      !(ch === "." && /(?:^|\s)\p{Lu}$/u.test(text.slice(Math.max(0, i - 2), i)));
+    if ("。！？".includes(ch) || latinEnd) {
+      let end = i + 1;
+      while (end < text.length && /\s/.test(text[end]!)) end += 1;
+      out.push(text.slice(start, end));
+      start = end;
+      i = end - 1;
+    }
+  }
+  if (start < text.length && text.slice(start).trim()) out.push(text.slice(start));
+  return out.length ? out : [text];
+}
+const fullStop = () => (LOCALE.language === "zh" ? "。" : ".");
+
+export function compactAnswerFirstSummary(summary: string, maxChars = scaledLength(190)): string {
   const text = summary.trim().replace(/\s*\n+\s*/g, " ");
   if (text.length <= maxChars) return text;
-  const sentences = text.match(/[^。！？!?]+[。！？!?]?/gu) ?? [text];
+  const enough = scaledLength(80);
+  const sentences = LOCALE.language === "zh" ? (text.match(/[^。！？!?]+[。！？!?]?/gu) ?? [text]) : sentencesOf(text);
   let result = "";
   for (const sentence of sentences) {
     if ((result + sentence).length > maxChars) break;
     result += sentence;
-    if (result.length >= 80) break;
+    if (result.length >= enough) break;
   }
   // Whole sentences, even a short one, read better than half of the next.
   if (result) return result.trim();
@@ -245,17 +273,18 @@ export function compactAnswerFirstSummary(summary: string, maxChars = 190): stri
   for (const clause of clauses) {
     if ((result + clause).length + 1 > maxChars) break;
     result += clause;
-    if (result.length >= 80) break;
+    if (result.length >= enough) break;
   }
-  return result.length >= 50 ? `${result.replace(/[，；,;]$/u, "")}。` : text;
+  return result.length >= scaledLength(50) ? `${result.replace(/[，；,;]\s*$/u, "").trimEnd()}${fullStop()}` : text;
 }
 
 function answerFirstSummaryLengthOk(summary: string, input: TranslateInput): boolean {
   const trimmed = summary.trim();
   const sourceLength = (input.sourceKind === "x_search" ? input.text : cleanArticleTextForLLM(input.text)).trim().length;
-  const sentences = trimmed.split(/[。！？!?]+/u).map((p) => p.trim()).filter(Boolean).length;
-  const rich = sourceLength >= 500;
-  return trimmed.length <= 200 && trimmed.length >= (rich ? 80 : 50) && sentences <= 3 && (!rich || sentences >= 2);
+  const sentences = LOCALE.language === "zh" ? trimmed.split(/[。！？!?]+/u).map((p) => p.trim()).filter(Boolean).length : sentencesOf(trimmed).length;
+  // The source is measured in its own characters; a Spanish source of 500 Chinese-equivalents is ~1250 letters.
+  const rich = sourceLength >= scaledLength(500);
+  return trimmed.length <= scaledLength(200) && trimmed.length >= scaledLength(rich ? 80 : 50) && sentences <= 3 && (!rich || sentences >= 2);
 }
 
 export const isShortTweetInput = (input: TranslateInput) => input.sourceKind === "x_search" && isShortTweet(input.mainText || input.title);
@@ -273,7 +302,7 @@ const sourceName = (name?: string) => name?.trim() || "（未注明）";
 
 function anchorDate(d: Date | undefined): string {
   if (!d || Number.isNaN(d.getTime())) return "未注明";
-  return new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Shanghai", year: "numeric", month: "2-digit", day: "2-digit" }).format(d);
+  return new Intl.DateTimeFormat("en-CA", { timeZone: LOCALE.timeZone, year: "numeric", month: "2-digit", day: "2-digit" }).format(d);
 }
 
 export function buildArticlePrompt(input: TranslateInput): string {

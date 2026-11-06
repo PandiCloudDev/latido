@@ -15,7 +15,7 @@ import { sanitizeBody, textToHtml } from "../content/sanitize.ts";
 import { rebaseTranslation } from "../content/presentation.ts";
 import { chatJson } from "../providers/llm.ts";
 import { completeReceipt, failureKind, ProviderRejectedError, rejectReceivedResponse } from "../providers/receipts.ts";
-import { collapseWhitespace, isChineseText } from "../lib/text.ts";
+import { collapseWhitespace, isSiteLanguageText } from "../lib/text.ts";
 import { isEmptyOrLinkOnly } from "../content/posts.ts";
 import { sha256 } from "../lib/ids.ts";
 import { modelFor } from "./models.ts";
@@ -194,7 +194,7 @@ export async function translateArticle(articleId: string): Promise<TranslateResu
     const text = String(row.x_post?.text ?? row.body_text ?? "").trim();
     if (isEmptyOrLinkOnly(text)) return result({ status: "skipped", reason: "no text to translate" });
     const meaningful = collapseWhitespace(text.replace(/https?:\/\/\S+/g, ""));
-    if (isChineseText(text, row.language)) return result({ status: "skipped", reason: "already Chinese" });
+    if (isSiteLanguageText(text, row.language)) return result({ status: "skipped", reason: "already in the site language" });
     if (meaningful.length < X_MIN_CHARS) return result({ status: "skipped", reason: "short post" });
     const translated = await translateAll(articleId, row.revision, [text], SYSTEM_POST);
     const [t] = translated.translations;
@@ -203,7 +203,7 @@ export async function translateArticle(articleId: string): Promise<TranslateResu
     return result({ status: "translated", segments: 1 });
   }
 
-  if (!row.body_html || isChineseText(row.body_text ?? "", row.language)) return result({ status: "skipped", reason: "no foreign-language body" });
+  if (!row.body_html || isSiteLanguageText(row.body_text ?? "", row.language)) return result({ status: "skipped", reason: "no foreign-language body" });
   const $ = cheerio.load(row.body_html, null, false);
   const blocks = segmentsOf($);
   if (!blocks.length) return result({ status: "skipped", reason: "no translatable text" });
@@ -285,7 +285,7 @@ export async function importBodyTranslation(input: { articleId: string; sourceHt
 /** A quoted post worth translating: at least a few letters beyond its links, and not already Chinese. */
 function quoteTranslatable(text: string): boolean {
   const words = collapseWhitespace(text.replace(/https?:\/\/\S+/g, " "));
-  return words.length >= 10 && (words.match(/\p{L}/gu) ?? []).length >= 2 && !isChineseText(words);
+  return words.length >= 10 && (words.match(/\p{L}/gu) ?? []).length >= 2 && !isSiteLanguageText(words);
 }
 
 /**
@@ -379,7 +379,7 @@ export async function translatePending(opts: { limit?: number; budgetMs?: number
     ORDER BY p.discovered_at DESC`;
   // Reconsider language skips with the shared rule. Filter before taking the batch so Chinese
   // originals do not occupy every slot and starve foreign-language bodies behind them.
-  const rows = pending.filter(row => !isChineseText(row.text ?? "", row.language)).slice(0, opts.limit ?? 30);
+  const rows = pending.filter(row => !isSiteLanguageText(row.text ?? "", row.language)).slice(0, opts.limit ?? 30);
   const done: TranslateResult[] = [];
   for (const r of rows) {
     if (Date.now() - started > (opts.budgetMs ?? 4 * 60_000) || shutdownSignal.signal.aborted) break;

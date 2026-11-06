@@ -1,4 +1,5 @@
 // Published dates as list pages, articles and JSON lists print them, read the same on every host.
+import { LOCALE } from "@aihot/site/locale";
 import { beijingDate, beijingTime } from "@aihot/contracts/time";
 import type { SourceRow } from "./types.ts";
 
@@ -30,7 +31,7 @@ function atOffset(y: string | number, mo: string | number, d: string | number, h
  * on every host: a time with its zone. A calendar day always belongs to the source, including ISO date-only text. Anything else it would read
  * in the server's local zone (UTC in Docker), so "2026-09-26 10:00" is read in the source's offset instead.
  */
-export function parseLooseDate(value: string | null | undefined, utcOffset = "+08:00"): Date | null {
+export function parseLooseDate(value: string | null | undefined, utcOffset = LOCALE.utcOffset): Date | null {
   if (!value) return null;
   // "Sep 26, 2026 at 10:30": "at" joins a date and its time like a space.
   const v = value.trim().replace(/(\d),?\s+at\s+(?=\d{1,2}:\d{2})/gi, "$1 ");
@@ -79,7 +80,7 @@ export interface PublicationDate {
   publicationTime: string | null;
 }
 
-export function readPublicationDate(value: string | null | undefined, utcOffset = "+08:00"): PublicationDate {
+export function readPublicationDate(value: string | null | undefined, utcOffset = LOCALE.utcOffset): PublicationDate {
   const publishedAt = parseLooseDate(value, utcOffset);
   if (!publishedAt) return { publishedAt: null, publicationTime: null };
   const timed = /\d{1,2}:\d{2}/.test(value!) || /^\d{14}$/.test(value!.trim());
@@ -92,7 +93,7 @@ export function describePublicationTime(at: Date | null, source: string | null |
   if (!at) return "未知";
   if (!source) return `${beijingDate(at)} ${beijingTime(at)}（历史记录，原始精度未知）`;
   if (/^\d{4}-\d{2}-\d{2}$/.test(source)) return `${source}（原文仅有日期，时刻未知）`;
-  return `${beijingDate(at)} ${beijingTime(at)}（北京时间）`;
+  return `${beijingDate(at)} ${beijingTime(at)}${LOCALE.language === "zh" ? `（${LOCALE.timeZoneLabel}）` : ` (${LOCALE.timeZoneLabel})`}`;
 }
 
 const RELATIVE_UNITS: Record<string, number> = { 秒: 1e3, 分钟: 60e3, 分: 60e3, 小时: 3600e3, 天: 86400e3, second: 1e3, minute: 60e3, min: 60e3, m: 60e3, hour: 3600e3, hr: 3600e3, h: 3600e3, day: 86400e3, d: 86400e3 };
@@ -112,7 +113,7 @@ function dayAt(at: Date, utcOffset: string): string {
  * undated and missed that day's news. Hours and minutes keep a time, however many; days keep the calendar day in the
  * source's offset, and "今天/昨天/前天 HH:MM" is that time on that day there.
  */
-export function readRelativeDate(value: string | null | undefined, now: Date, utcOffset = "+08:00"): PublicationDate {
+export function readRelativeDate(value: string | null | undefined, now: Date, utcOffset = LOCALE.utcOffset): PublicationDate {
   const v = collapse(value).replace(/^[^·]+·\s*/, "");
   const none = { publishedAt: null, publicationTime: null };
   if (!v) return none;

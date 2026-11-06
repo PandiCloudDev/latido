@@ -1,8 +1,11 @@
-// Beijing (Asia/Shanghai, fixed UTC+8, no DST) calendar helpers shared by web and backend.
+// Calendar helpers shared by web and backend, in the site's zone (site/locale.ts: a fixed offset, no DST).
+// The names keep the upstream "beijing" prefix so the rest of the engine reads unchanged; they now mean
+// "the site's local time", whatever LOCALE says it is.
+import { LOCALE, UTC_OFFSET_MS } from "@aihot/site/locale";
 
-const OFFSET_MS = 8 * 3600 * 1000;
+const OFFSET_MS = UTC_OFFSET_MS;
 
-/** YYYY-MM-DD of the instant in Beijing time. */
+/** YYYY-MM-DD of the instant in the site's local time. */
 export function beijingDate(instant: Date | string | number): string {
   const d = new Date(new Date(instant).getTime() + OFFSET_MS);
   return d.toISOString().slice(0, 10);
@@ -16,16 +19,28 @@ export function beijingTime(instant: Date | string | number): string {
 
 /** The instant as ISO 8601 in Beijing time, to the millisecond: "2026-09-26T08:07:13.000+08:00". */
 export function beijingIso(instant: Date | string | number): string {
-  return `${new Date(new Date(instant).getTime() + OFFSET_MS).toISOString().slice(0, 23)}+08:00`;
+  return `${new Date(new Date(instant).getTime() + OFFSET_MS).toISOString().slice(0, 23)}${LOCALE.utcOffset}`;
 }
 
 /**
  * "9月28日" of a calendar date (YYYY-MM-DD). Given `today` (YYYY-MM-DD, Beijing), a day of another year carries its
  * year, so an archived item is not read as this year's: "2019年2月19日".
  */
+const MONTHS: Partial<Record<string, readonly string[]>> = {
+  es: ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"],
+  pt: ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"],
+  en: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+};
+
 export function monthDay(date: string, today?: string): string {
-  const year = today && date.slice(0, 4) !== today.slice(0, 4) ? `${date.slice(0, 4)}年` : "";
-  return `${year}${Number(date.slice(5, 7))}月${Number(date.slice(8, 10))}日`;
+  const otherYear = !!today && date.slice(0, 4) !== today.slice(0, 4);
+  const month = Number(date.slice(5, 7));
+  const day = Number(date.slice(8, 10));
+  const names = MONTHS[LOCALE.language];
+  if (!names) return `${otherYear ? `${date.slice(0, 4)}年` : ""}${month}月${day}日`;
+  if (LOCALE.language === "en") return `${names[month - 1]} ${day}${otherYear ? `, ${date.slice(0, 4)}` : ""}`;
+  // "6 de noviembre", "19 de febrero de 2019"
+  return `${day} de ${names[month - 1]}${otherYear ? ` de ${date.slice(0, 4)}` : ""}`;
 }
 
 /** "9月29日" in Beijing time. */
@@ -35,16 +50,16 @@ export const beijingDay = (instant: Date | string | number) => monthDay(beijingD
 export const beijingStamp = (instant: Date | string | number) => `${beijingDay(instant)} ${beijingTime(instant)}`;
 
 /** The zone's name, for whatever takes one (a scheduler, a report's metadata, SQL `AT TIME ZONE`). */
-export const BEIJING_TIMEZONE = "Asia/Shanghai" as const;
+export const BEIJING_TIMEZONE: string = LOCALE.timeZone;
 
 /** UTC instant of 00:00 Beijing on the given calendar day. */
 export function beijingMidnight(date: string): Date {
-  return new Date(Date.parse(`${date}T00:00:00+08:00`));
+  return new Date(Date.parse(`${date}T00:00:00${LOCALE.utcOffset}`));
 }
 
 /** UTC instant of an HH:mm Beijing time on the given calendar day. */
 export function beijingAt(date: string, time: string): Date {
-  return new Date(Date.parse(`${date}T${time}:00+08:00`));
+  return new Date(Date.parse(`${date}T${time}:00${LOCALE.utcOffset}`));
 }
 
 export function addDays(date: string, days: number): string {
@@ -52,10 +67,15 @@ export function addDays(date: string, days: number): string {
   return new Date(t).toISOString().slice(0, 10);
 }
 
-const WEEKDAYS = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
+const WEEKDAYS: Record<string, readonly string[]> = {
+  zh: ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"],
+  es: ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"],
+  pt: ["domingo", "segunda-feira", "terça-feira", "quarta-feira", "quinta-feira", "sexta-feira", "sábado"],
+  en: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+};
 
 export function beijingWeekday(date: string): string {
-  return WEEKDAYS[new Date(`${date}T00:00:00Z`).getUTCDay()]!;
+  return (WEEKDAYS[LOCALE.language] ?? WEEKDAYS.zh!)[new Date(`${date}T00:00:00Z`).getUTCDay()]!;
 }
 
 /** ISO week label (e.g. 2026-W38) of a calendar date. */
