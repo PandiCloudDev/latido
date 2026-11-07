@@ -3,9 +3,10 @@
 import { createHash } from "node:crypto";
 import { renderSVG } from "uqr";
 import { SITE } from "@aihot/site";
+import { EDITORIAL_RED } from "@aihot/site/brand/identity.ts";
 import { brandMark, clamp, FALLBACK_FONTS, h, nameMark, OG_FAMILY, renderPng, SITE_HOST, type Node } from "./og.ts";
 
-export const POSTER_TEMPLATE_VERSION = "poster-2026-11-06.latido";
+export const POSTER_TEMPLATE_VERSION = "poster-2026-11-07.triadica";
 const WIDTH = 1080;
 const HEIGHT = 1440;
 
@@ -19,8 +20,8 @@ export interface Poster {
   score: number | null;
 }
 
-const INK = "#1f1b1c";
-const ACCENT = "#c8213d";
+const INK = "#171719";
+const ACCENT = EDITORIAL_RED;
 
 async function tree(p: Poster): Promise<Node> {
   const k = OG_FAMILY !== "Noto Sans SC" ? 1.75 : 1;
@@ -40,24 +41,23 @@ async function tree(p: Poster): Promise<Node> {
       padding: "84px 88px 72px",
       fontFamily: OG_FAMILY,
       color: INK,
-      backgroundColor: "#fbf9f7",
-      backgroundImage: "radial-gradient(circle at 100% 0%, rgba(200,33,61,0.14), rgba(251,249,247,0) 52%), radial-gradient(circle at 0% 100%, rgba(255,90,110,0.09), rgba(251,249,247,0) 45%)",
+      backgroundColor: "#ffffff",
     },
     [
       h("div", { display: "flex", alignItems: "center", justifyContent: "space-between" }, [
         (await brandMark("wordmark.svg", 50)) ?? nameMark(44, INK, ACCENT),
-        h("div", { display: "flex", fontSize: 26, color: "#6d6462" }, p.date),
+        h("div", { display: "flex", fontSize: 26, color: "#5d5d67" }, p.date),
       ]),
       h("div", { display: "flex", alignItems: "center", marginTop: 96 }, [
         h("div", { width: 12, height: 12, borderRadius: 999, backgroundColor: ACCENT, marginRight: 16 }),
         h("div", { display: "flex", fontSize: 30, fontWeight: 700, color: ACCENT, letterSpacing: 1 }, clamp(p.kicker, Math.round(20 * k))),
         p.score !== null
-          ? h("div", { display: "flex", marginLeft: 20, padding: "4px 16px", borderRadius: 999, backgroundColor: "rgba(200,33,61,0.08)", fontSize: 26, color: "#a91b33" }, `Destacada · ${Math.round(p.score)} puntos`)
+          ? h("div", { display: "flex", marginLeft: 20, padding: "4px 16px", borderRadius: 999, backgroundColor: "rgba(181,31,56,0.08)", fontSize: 26, color: "#B51F38" }, `Destacada · ${Math.round(p.score)} puntos`)
           : null,
       ].filter(Boolean)),
       h("div", { display: "flex", marginTop: 30, fontSize: titleSize, fontWeight: 700, lineHeight: 1.3, color: INK }, title),
-      summary ? h("div", { display: "flex", marginTop: 36, fontSize: 34, lineHeight: 1.7, color: "#37302f" }, summary) : null,
-      h("div", { display: "flex", marginTop: 36, fontSize: 28, color: "#6d6462" }, clamp(`Fuente: ${p.source}`, Math.round(34 * k))),
+      summary ? h("div", { display: "flex", marginTop: 36, fontSize: 34, lineHeight: 1.7, color: "#323237" }, summary) : null,
+      h("div", { display: "flex", marginTop: 36, fontSize: 28, color: "#5d5d67" }, clamp(`Fuente: ${p.source}`, Math.round(34 * k))),
       h("div", { display: "flex", flex: 1 }),
       h(
         "div",
@@ -66,7 +66,7 @@ async function tree(p: Poster): Promise<Node> {
           h("img", { width: 200, height: 200 }, undefined, { src: qr, width: 200, height: 200 }),
           h("div", { display: "flex", flexDirection: "column", marginLeft: 44, flex: 1 }, [
             h("div", { display: "flex", fontSize: 36, fontWeight: 700, color: INK }, "Escanea el código QR"),
-            h("div", { display: "flex", marginTop: 14, fontSize: 28, lineHeight: 1.5, color: "#6d6462" }, "Lee la nota completa, la traducción y el enlace al original"),
+            h("div", { display: "flex", marginTop: 14, fontSize: 28, lineHeight: 1.5, color: "#5d5d67" }, "Lee la nota completa, la traducción y el enlace al original"),
             h("div", { display: "flex", marginTop: 22, fontSize: 26, color: ACCENT }, SITE_HOST),
           ]),
         ],

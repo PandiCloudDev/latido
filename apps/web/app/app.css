@@ -6,8 +6,8 @@
 @source "../../../modules/*/{web.tsx,web/**}";
 
 /* ---------------------------------------------------------------------------
-   Design tokens: warm off-white paper, ink text, one teal accent (cyan in
-   dark), hairline borders, no gradients.
+   Design tokens: white paper, charcoal ink, carmine actions, blue navigation
+   and ochre energy labels.
    Components use the semantic names below; values change per theme only.
    --------------------------------------------------------------------------- */
 
@@ -22,8 +22,33 @@
 /* Short windows (an unfolded foldable held sideways): the desktop sidebar scrolls as one column. */
 @custom-variant short (@media (max-height: 700px));
 
+@font-face {
+  font-family: Lato;
+  src: url("../../../site/brand/fonts/lato-regular.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Lato;
+  src: url("../../../site/brand/fonts/lato-bold.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Lato;
+  src: url("../../../site/brand/fonts/lato-black.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+}
+
 @theme {
-  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "HarmonyOS Sans SC", "Microsoft YaHei", sans-serif;
+  --font-brand: Lato, system-ui, sans-serif;
+  --font-sans: Lato, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "HarmonyOS Sans SC", "Microsoft YaHei", sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", monospace;
 
   /* Semantic colours. */
@@ -48,6 +73,8 @@
   --color-accent-soft: var(--accent-soft);
   --color-accent-softer: var(--accent-softer);
   --color-accent-contrast: var(--accent-contrast);
+  --color-editorial-blue: var(--editorial-blue);
+  --color-editorial-blue-soft: var(--editorial-blue-soft);
   --color-note: var(--note);
   --color-hot: var(--hot);
   --color-hot-soft: var(--hot-soft);
@@ -102,55 +129,57 @@
   --gutter-l: max(16px, env(safe-area-inset-left));
   --gutter-r: max(16px, env(safe-area-inset-right));
   color-scheme: light;
-  --bg: #fbf9f7;
-  --bg-sunk: #f4f1ee;
-  --bg-muted: #ebe6e2;
+  --bg: #ffffff;
+  --bg-sunk: #f5f5f7;
+  --bg-muted: #ebebef;
   /* Sunk fills: wells, pill tracks, search fields, quiet badges. */
   --well: var(--bg-sunk);
   --surface: #ffffff;
-  --surface-2: #fdfcfb;
+  --surface-2: #ffffff;
   --raised: #ffffff;
-  --sidebar: #fdfcfb;
-  --daybar: #f3efeb;
-  --ink: #1f1b1c;
-  --ink-2: #37302f;
-  --ink-3: #5f5755;
-  --ink-4: #6d6462;
-  --line: #e6e0dc;
-  --line-strong: #d8d0cb;
-  --line-soft: #efeae6;
-  --accent: #c8213d;
-  --accent-ink: #a91b33;
-  --accent-soft: rgba(200, 33, 61, 0.07);
-  --accent-softer: rgba(200, 33, 61, 0.04);
+  --sidebar: #ffffff;
+  --daybar: #f2f2f5;
+  --ink: #171719;
+  --ink-2: #323237;
+  --ink-3: #505059;
+  --ink-4: #5d5d67;
+  --line: #dadadd;
+  --line-strong: #c9c9d0;
+  --line-soft: #ececef;
+  --accent: #B51F38;
+  --accent-ink: #B51F38;
+  --accent-soft: rgba(181, 31, 56, 0.07);
+  --accent-softer: rgba(181, 31, 56, 0.04);
   --accent-contrast: #ffffff;
+  --editorial-blue: #244B94;
+  --editorial-blue-soft: rgba(36, 75, 148, 0.09);
   --note: #5b5f6b;
-  --hot: #b24a12;
-  --hot-soft: rgba(178, 74, 18, 0.08);
-  --amber: #b8873a;
-  --amber-ink: #7c5a24;
-  --amber-soft: rgba(184, 135, 58, 0.1);
+  --hot: #886100;
+  --hot-soft: rgba(136, 97, 0, 0.08);
+  --amber: #886100;
+  --amber-ink: #886100;
+  --amber-soft: rgba(136, 97, 0, 0.1);
   --ok: #2f7d5c;
   --ok-soft: rgba(47, 125, 92, 0.1);
   --ok-ink: #2a6e51;
-  --rank-1: #c8213d;
-  --rank-2: #b24a12;
-  --rank-3: #96702e;
+  --rank-1: #B51F38;
+  --rank-2: #886100;
+  --rank-3: #886100;
   --rank-rest: #6b7684;
   --shadow-card: 0 1px 2px rgba(40, 24, 26, 0.03);
   --shadow-card-hover: 0 3px 12px rgba(40, 24, 26, 0.06);
   --shadow-soft: 0 4px 12px rgba(28, 39, 51, 0.06);
   --shadow-thumb: 0 1px 2px rgba(28, 39, 51, 0.1), 0 1px 1px rgba(28, 39, 51, 0.04);
   --shadow-pop: 0 12px 32px rgba(28, 39, 51, 0.12);
-  --prose-ink: #2a2425;
-  --code-bg: #f6f7f4;
+  --prose-ink: #242429;
+  --code-bg: #f5f5f7;
   --code-keyword: #006d77;
   --code-string: #2f6f44;
   --code-number: #9a6700;
   --code-title: #6f42c1;
   --code-variable: #a13d10;
   --code-meta: #b42348;
-  --selection: rgba(200, 33, 61, 0.14);
+  --selection: rgba(181, 31, 56, 0.14);
 }
 
 @media (min-width: 700px) {
@@ -161,19 +190,19 @@
 
 [data-theme="dark"] {
   color-scheme: dark;
-  --bg: #141113;
-  --bg-sunk: #1a1618;
-  --bg-muted: #241e20;
+  --bg: #171719;
+  --bg-sunk: #1e1e23;
+  --bg-muted: #29292f;
   --well: color-mix(in oklab, var(--bg-muted) 60%, transparent);
-  --surface: #1b1719;
-  --surface-2: #1f1a1c;
-  --raised: #241f21;
-  --sidebar: #171315;
-  --daybar: #1a1618;
-  --ink: #efe9e8;
-  --ink-2: #dad2d0;
-  --ink-3: #ada3a1;
-  --ink-4: #938886;
+  --surface: #1e1e23;
+  --surface-2: #222228;
+  --raised: #29292f;
+  --sidebar: #1a1a1e;
+  --daybar: #1e1e23;
+  --ink: #f4f4f6;
+  --ink-2: #dedee4;
+  --ink-3: #b4b4bf;
+  --ink-4: #a1a1ad;
   --line: rgba(255, 255, 255, 0.08);
   --line-strong: rgba(255, 255, 255, 0.12);
   --line-soft: rgba(255, 255, 255, 0.06);
@@ -182,25 +211,27 @@
   --accent-soft: rgba(255, 90, 110, 0.13);
   --accent-softer: rgba(255, 90, 110, 0.06);
   --accent-contrast: #000000;
+  --editorial-blue: #9AB9FF;
+  --editorial-blue-soft: rgba(154, 185, 255, 0.12);
   --note: #a7adbb;
-  --hot: #f08a4b;
-  --hot-soft: rgba(240, 138, 75, 0.12);
-  --amber: #d3b26a;
-  --amber-ink: #d3b26a;
+  --hot: #e9bb61;
+  --hot-soft: rgba(233, 187, 97, 0.12);
+  --amber: #e9bb61;
+  --amber-ink: #e9bb61;
   --amber-soft: rgba(211, 178, 106, 0.12);
   --ok: #5fc79a;
   --ok-soft: rgba(95, 199, 154, 0.12);
   --ok-ink: #7fd1ad;
   --rank-1: #ff5a6e;
-  --rank-2: #f08a4b;
-  --rank-3: #d3b26a;
+  --rank-2: #e9bb61;
+  --rank-3: #e9bb61;
   --rank-rest: #7b869a;
   --shadow-card: none;
   --shadow-card-hover: none;
   --shadow-soft: 0 6px 18px rgba(0, 0, 0, 0.35);
   --shadow-thumb: 0 1px 2px rgba(0, 0, 0, 0.45);
   --shadow-pop: 0 16px 40px rgba(0, 0, 0, 0.45);
-  --prose-ink: #d7dfdf;
+  --prose-ink: #e0e0e6;
   --code-bg: #10151c;
   --code-keyword: #78dce8;
   --code-string: #a9dc76;

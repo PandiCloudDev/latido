@@ -284,7 +284,7 @@ export function resolvedTheme(pref: ThemePreference = getThemePreference()): "li
   }
 }
 
-const THEME_COLOR = { light: "#fbf9f7", dark: "#141113" } as const;
+export const THEME_COLOR = { light: "#ffffff", dark: "#171719" } as const;
 
 /** Puts a theme on the page: the document's data-theme and the browser's theme colour. */
 export function applyTheme(theme: "light" | "dark", followsSystem: boolean) {

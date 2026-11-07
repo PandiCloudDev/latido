@@ -1,29 +1,21 @@
-// La marca de Latido: el ícono del pulso y el nombre "latido.news" (size es la altura en píxeles).
-// RingMark es la marca pequeña; al girar es la animación de carga.
+// La marca editorial de Latido; size es la altura en píxeles.
 import { SITE } from "../site.ts";
+import { EDITORIAL_MARK_PATH } from "./identity.ts";
 
-/** El ícono: un cuadro redondeado con el trazo de un latido. */
-export function PulseMark({ size = 24, className = "" }: { size?: number; className?: string }) {
+export function EditorialMark({ size = 24, className = "" }: { size?: number; className?: string }) {
   return (
-    <svg viewBox="0 0 512 512" width={size} height={size} className={className} aria-hidden="true">
-      <defs>
-        <linearGradient id="latido-mark" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stopColor="#ff4d63" />
-          <stop offset="1" stopColor="#c8213d" />
-        </linearGradient>
-      </defs>
-      <rect width="512" height="512" rx="116" fill="url(#latido-mark)" />
-      <path d="M76 280H170L202 226L236 330L280 136L326 374L360 280H436" fill="none" stroke="#ffffff" strokeWidth="40" strokeLinecap="round" strokeLinejoin="round" />
+    <svg viewBox="0 0 24 24" width={size} height={size} className={className} aria-hidden="true">
+      <path d={EDITORIAL_MARK_PATH} fill="currentColor" />
     </svg>
   );
 }
 
 export function Wordmark({ size = 24, className = "", title = SITE.name }: { size?: number; className?: string; title?: string }) {
   return (
-    <span className={`inline-flex items-center leading-none ${className}`} style={{ fontSize: Math.round(size * 0.92) }} aria-label={title} role="img">
-      <PulseMark size={Math.round(size * 1.08)} className="mr-[0.32em] shrink-0" />
-      <span aria-hidden="true" className="font-black tracking-[-0.035em]">latido</span>
-      <span aria-hidden="true" className="font-semibold tracking-[-0.02em] text-accent">.news</span>
+    <span className={`inline-flex items-baseline font-brand leading-none ${className}`} style={{ fontSize: Math.round(size * 0.92) }} aria-label={title} role="img">
+      <EditorialMark size={Math.round(size * 1.08)} className="mr-[0.32em] shrink-0 self-center text-accent" />
+      <span aria-hidden="true" className="font-black tracking-[-0.035em]">Latido</span>
+      <span aria-hidden="true" className="text-[0.69em] font-bold tracking-[-0.02em] text-accent">.news</span>
     </span>
   );
 }

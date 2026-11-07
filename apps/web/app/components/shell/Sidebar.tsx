@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router";
 import { IntentLink } from "../ui/IntentLink";
 import { SITE } from "@aihot/site";
-import { RingMark, Wordmark } from "@aihot/site/brand/Logo.tsx";
+import { EditorialMark, Wordmark } from "@aihot/site/brand/Logo.tsx";
 import { useChangelogSeen } from "../../lib/local-state";
 import { activeSidebarItem, rail, railIsActive, sidebar, type NavItem } from "./nav";
 import { useScreen } from "./screens";
@@ -26,10 +26,10 @@ function SideLink({ item, dot, active }: { item: NavItem; dot: boolean; active: 
       to={item.to}
       aria-current={active ? "page" : undefined}
       className={`flex h-10 items-center gap-2.5 rounded-control px-2.5 text-[14px] transition-colors duration-150 touch:h-11 ${
-        active ? "bg-accent/10 font-semibold text-ink dark:bg-accent-soft" : "font-medium text-ink-3 hover:bg-bg-sunk hover:text-ink"
+        active ? "bg-editorial-blue-soft font-semibold text-ink" : "font-medium text-ink-3 hover:bg-bg-sunk hover:text-ink"
       }`}
     >
-      <span className={`flex w-[22px] shrink-0 justify-center ${active ? "text-accent" : ""}`}>
+      <span className={`flex w-[22px] shrink-0 justify-center ${active ? "text-editorial-blue" : ""}`}>
         <Icon size={17} />
       </span>
       <span className="min-w-0 truncate">{item.label}</span>
@@ -49,7 +49,7 @@ function Rail({ dot }: { dot: boolean }) {
   return (
     <aside className="scrollbar-thin sticky top-0 hidden h-dvh w-16 shrink-0 flex-col items-center border-r border-line bg-sidebar px-1.5 pb-[max(14px,env(safe-area-inset-bottom))] pt-5 lg:flex wide:hidden short:overflow-y-auto short:pt-3">
       <Link to="/" className="mb-3 flex size-11 shrink-0 items-center justify-center text-accent short:mb-1" aria-label={`Portada de ${SITE.name}`}>
-        <RingMark className="size-7" />
+        <EditorialMark size={28} />
       </Link>
       <nav className="flex w-full flex-col gap-1" aria-label="Navegación principal">
         {rail().map((t) => {
@@ -61,10 +61,10 @@ function Rail({ dot }: { dot: boolean }) {
               to={t.to}
               aria-current={on ? "page" : undefined}
               className={`relative flex h-14 shrink-0 flex-col items-center justify-center gap-[3px] rounded-control text-[11px] transition-colors duration-150 short:h-12 ${
-                on ? "bg-accent/10 font-semibold text-ink dark:bg-accent-soft" : "font-medium text-ink-3 hover:bg-bg-sunk hover:text-ink"
+                on ? "bg-editorial-blue-soft font-semibold text-ink" : "font-medium text-ink-3 hover:bg-bg-sunk hover:text-ink"
               }`}
             >
-              <span className={on ? "text-accent" : ""}>
+              <span className={on ? "text-editorial-blue" : ""}>
                 <Icon size={20} />
               </span>
               <span className="max-w-full truncate">{t.label}</span>
