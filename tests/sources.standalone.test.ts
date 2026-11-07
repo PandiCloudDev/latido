@@ -7,6 +7,9 @@
 // must reach every read of it.
 import "./setup.ts";
 import assert from "node:assert/strict";
+import { LOCALE } from "@aihot/site/locale";
+// These fixtures assume the zh profile (+08:00 source offset, Chinese as the site language); the es profile runs the same code with its own constant.
+const ZH_ONLY = { skip: LOCALE.language !== "zh" && "zh profile fixtures" };
 import http from "node:http";
 import { after, test } from "node:test";
 import { config } from "@aihot/backend/config";
@@ -236,7 +239,7 @@ test("noise words match whatever their case", () => {
   assert.equal(noiseFiltered(c("iPhone 18 开售", ""), source), true);
 });
 
-test("a time without a zone is read in the source's offset, in JSON lists and in detail page metadata", async () => {
+test("a time without a zone is read in the source's offset, in JSON lists and in detail page metadata", ZH_ONLY, async () => {
   const list = async (extra: Record<string, unknown> = {}) => (await fetchJsonList({ id: "test-json", config: { url: `${site}/zoneless.json`, itemsPath: "result", titlePaths: ["title"], urlTemplate: "https://example.org/p/{id}", publishedAtPath: "publishDate", ...extra } } as never))
     .map((c) => c.publishedAt?.toISOString());
   assert.deepEqual(await list(), ["2026-09-30T09:43:58.000Z", "2026-09-30T17:43:58.000Z", "2026-09-30T22:43:58.000Z"], "+08:00 by default, as list pages; a time with its zone keeps it");
@@ -250,7 +253,7 @@ test("posts embedded in a flight payload keep their own arrays and brackets insi
   assert.deepEqual(posts.map((c) => [c.title, c.url]), [["First [draft] post", "https://example.org/blog/first"], ["Second post", "https://example.org/blog/second"]]);
 });
 
-test("dates in yyyymmdd and in JSON-LD are read", async () => {
+test("dates in yyyymmdd and in JSON-LD are read", ZH_ONLY, async () => {
   const days = await fetchJsonList({ id: "test-json", config: { url: `${site}/days.json`, itemsPath: "data.list", titlePaths: ["ttl"], urlTemplate: "https://example.org/blog/view?seq={seq}", publishedAtPath: "day", publishedAtUnit: "yyyymmdd" } } as never);
   assert.deepEqual(days.map((c) => c.publishedAt?.toISOString() ?? null), ["2026-09-21T16:00:00.000Z", null], "calendar days use the source offset; February 30 is no date");
   const got = await fetchDetail(`${site}/ld-post`, { id: "test-feed", config: { detail: { maxFetches: 20 } } } as never, { date: true, title: false, summary: false, body: false });

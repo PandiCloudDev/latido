@@ -4,10 +4,10 @@
     {
       "date": "2026-10-01",
       "time": "08:00",
-      "kind": "公告",
-      "title": "网站上线",
+      "kind": "Aviso",
+      "title": "El sitio está en línea",
       "body": [
-        "用 AIHOT 开源框架搭起了这个站：自动盯住信源、精选、把同一件事归到一起，每天出一份日报。"
+        "Latido nace sobre el motor de código abierto AIHOT: sigue las fuentes, selecciona lo importante, agrupa las notas sobre lo mismo y publica un boletín diario."
       ]
     }
   ]

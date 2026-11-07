@@ -1,3 +1,4 @@
+import { tr } from "@aihot/site/locale";
 // Textless and link-only posts keep their own text and media instead of model-written copy.
 import { collapseWhitespace } from "../lib/text.ts";
 
@@ -6,7 +7,7 @@ export const isEmptyOrLinkOnly = (text: string) => !text.replace(/https?:\/\/\S+
 /** The post and its already fetched long article are one text for writing and public reading. */
 export function withXArticle(xPost: Record<string, any> | null, article: { title?: string; text?: string } | null): Record<string, any> | null {
   if (!xPost || !article?.text) return xPost;
-  const parts = [String(xPost.text ?? "").trim(), article.title ? `【X 长文】${article.title}` : "【X 长文】", article.text];
+  const parts = [String(xPost.text ?? "").trim(), article.title ? tr(`【X 长文】${article.title}`, `【Artículo de X】${article.title}`) : tr("【X 长文】", "【Artículo de X】"), article.text];
   return { ...xPost, text: parts.filter(Boolean).join("\n\n") };
 }
 

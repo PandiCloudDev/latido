@@ -1,3 +1,4 @@
+import { tr } from "@aihot/site/locale";
 // Story consolidation (group.ts calls it after a decision). Stories a report is firmly tied to may be
 // one story that grew two roots: their roots are compared directly and merge only when both models
 // see one story. Stories that stay apart though reports keep tying them list each other as related
@@ -115,7 +116,7 @@ export async function consolidate(storyIds: number[]): Promise<Consolidation[]> 
     const second = await judgeStories("groupReview", other, anchor);
     await completeReceipt(sql, second.receiptId);
     const merge = firmlyTied(second.relation, second.confidence, STORY_REVIEW_MIN_CONFIDENCE)
-      && !!await mergeStoryInto(other.storyId, anchor.storyId, `同一事件（${first.relation}，复核 ${second.relation}）：${other.report.title}｜${anchor.report.title}`, "grouping");
+      && !!await mergeStoryInto(other.storyId, anchor.storyId, tr(`同一事件（${first.relation}，复核 ${second.relation}）：${other.report.title}｜${anchor.report.title}`, `Mismo evento (${first.relation}, revisión ${second.relation}): ${other.report.title} | ${anchor.report.title}`), "grouping");
     out.push({ ...base, merge, first: first.relation, second: second.relation, difference: first.difference || second.difference });
   }
   return out;

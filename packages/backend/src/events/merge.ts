@@ -1,3 +1,4 @@
+import { tr } from "@aihot/site/locale";
 // Merging stories: facts and heat evidence move into the surviving story, and the old
 // public id keeps answering as an alias. Editors merge from the admin; grouping merges when two
 // stories turn out to be one (consolidate in group.ts). Merging facts: one happening that grew two
@@ -93,7 +94,7 @@ export async function mergeFactInto(fromId: number, intoId: number, reason: stri
       const [left] = await tx`SELECT 1 FROM facts f JOIN fact_articles fa ON fa.fact_id = f.id WHERE f.story_id = ${fromStory} AND fa.role IN ('primary', 'report') LIMIT 1`;
       if (left) await enqueue(QUEUES.digest, { storyId: fromStory }, { singletonKey: `story:${fromStory}` }, tx);
       else if (await mergeStoryTx(tx, fromStory, intoStory, actor)) {
-        await audit(actor, "story.merge", `story:${fromStory}`, `报道已全部并入另一个事实，旧地址跳到报道所在事件（事实 ${fromId}）`, null, { into: intoStory }, { db: tx });
+        await audit(actor, "story.merge", `story:${fromStory}`, tr(`报道已全部并入另一个事实，旧地址跳到报道所在事件（事实 ${fromId}）`, `Todas las notas se unieron a otro hecho; la dirección anterior redirige a su evento (hecho ${fromId})`), null, { into: intoStory }, { db: tx });
       }
     }
     for (const { article_id } of moved) await republishTx(tx, article_id);

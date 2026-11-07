@@ -1,3 +1,4 @@
+import { tr } from "@aihot/site/locale";
 // Model per capability: the code default (the site's choice in site/models.ts, else `default`, the deployment's
 // own model), an environment override, and an admin switch kept in settings (every switch is audited).
 // Read at call time and cached for a minute, so a switch applies to the next call without a restart; a
@@ -22,19 +23,19 @@ export interface Capability {
 }
 
 export const CAPABILITIES = {
-  prefilter: { label: "精选预筛（是否属于这个行业，宽召回）", env: "PREFILTER_MODEL", default: DEFAULTS.prefilter ?? "default", purposes: ["prefilter_article"] },
-  score: { label: "精选评分（两次独立评分，按信源分级与类别的门槛）", env: "SCORE_MODEL", default: DEFAULTS.score ?? "default", purposes: ["score_article"] },
-  understand: { label: "内容理解（入选和接近入选的标题、摘要、推荐理由，能看图时看首图）", env: "UNDERSTAND_MODEL", default: DEFAULTS.understand ?? "default", purposes: ["understand_article"] },
-  summarize: { label: "标题摘要（其余文章的中文标题与摘要）", env: "SUMMARIZE_MODEL", default: DEFAULTS.summarize ?? "default", purposes: ["summarize_article"] },
-  wording: { label: "改用词（标题、摘要、理由用了本站不用的词时，只改这些词）", env: "WORDING_MODEL", default: DEFAULTS.wording ?? "default", purposes: ["mend_wording"], idle: () => !READER_WORDING.length },
-  structure: { label: "结构抽取（分类、标签、主体公司、事件事实，不写读者文字）", env: "STRUCTURE_MODEL", default: DEFAULTS.structure ?? "default", purposes: ["structure_article"] },
-  group: { label: "事件归组（新报道与候选事实的关系：同一次发生、同一事件的进展、无关；被同一篇报道连起来的两个事件是否同一事件）", env: "GROUP_MODEL", default: DEFAULTS.group ?? "default", purposes: ["group_article", "group_signal", "group_story", "group_card"] },
-  groupReview: { label: "归组复核（相似度不高的合并、两个事件的合并，写入前再读一遍；最好换一家模型）", env: "GROUP_REVIEW_MODEL", default: DEFAULTS.groupReview ?? "default", purposes: ["group_review", "group_story_review", "group_card_review"] },
-  digest: { label: "事件综述", env: "DIGEST_MODEL", default: DEFAULTS.digest ?? "default", purposes: ["story_digest"] },
+  prefilter: { label: tr("精选预筛（是否属于这个行业，宽召回）", "Prefiltro (si pertenece al sector, con criterio amplio)"), env: "PREFILTER_MODEL", default: DEFAULTS.prefilter ?? "default", purposes: ["prefilter_article"] },
+  score: { label: tr("精选评分（两次独立评分，按信源分级与类别的门槛）", "Puntaje de selección (dos evaluaciones independientes, con umbrales por nivel y clase de fuente)"), env: "SCORE_MODEL", default: DEFAULTS.score ?? "default", purposes: ["score_article"] },
+  understand: { label: tr("内容理解（入选和接近入选的标题、摘要、推荐理由，能看图时看首图）", "Comprensión (título, resumen y motivo de las seleccionadas o casi seleccionadas; mira la imagen principal si puede)"), env: "UNDERSTAND_MODEL", default: DEFAULTS.understand ?? "default", purposes: ["understand_article"] },
+  summarize: { label: tr("标题摘要（其余文章的中文标题与摘要）", "Título y resumen (para el resto de las notas, en el idioma del sitio)"), env: "SUMMARIZE_MODEL", default: DEFAULTS.summarize ?? "default", purposes: ["summarize_article"] },
+  wording: { label: tr("改用词（标题、摘要、理由用了本站不用的词时，只改这些词）", "Corrección de términos (cambia solo las palabras que el sitio no usa)"), env: "WORDING_MODEL", default: DEFAULTS.wording ?? "default", purposes: ["mend_wording"], idle: () => !READER_WORDING.length },
+  structure: { label: tr("结构抽取（分类、标签、主体公司、事件事实，不写读者文字）", "Extracción de estructura (sección, etiquetas, empresa y hechos; sin texto para lectores)"), env: "STRUCTURE_MODEL", default: DEFAULTS.structure ?? "default", purposes: ["structure_article"] },
+  group: { label: tr("事件归组（新报道与候选事实的关系：同一次发生、同一事件的进展、无关；被同一篇报道连起来的两个事件是否同一事件）", "Agrupación en eventos (relación de una nota nueva con los hechos candidatos y si dos eventos unidos por una nota son el mismo)"), env: "GROUP_MODEL", default: DEFAULTS.group ?? "default", purposes: ["group_article", "group_signal", "group_story", "group_card"] },
+  groupReview: { label: tr("归组复核（相似度不高的合并、两个事件的合并，写入前再读一遍；最好换一家模型）", "Revisión de agrupación (relee fusiones dudosas antes de guardarlas; idealmente otro proveedor)"), env: "GROUP_REVIEW_MODEL", default: DEFAULTS.groupReview ?? "default", purposes: ["group_review", "group_story_review", "group_card_review"] },
+  digest: { label: tr("事件综述", "Panorama de eventos"), env: "DIGEST_MODEL", default: DEFAULTS.digest ?? "default", purposes: ["story_digest"] },
   // Dailies are computed by rule; report_lead and report_daily remain for their older receipts.
-  report: { label: "周报月报的总述与主题（日报由规则算出，不用模型）", env: "REPORT_MODEL", default: DEFAULTS.report ?? "default", purposes: ["report_weekly", "report_monthly", "report_lead", "report_daily"] },
-  translate: { label: "精选全文翻译（含引用帖）", env: "TRANSLATE_MODEL", default: DEFAULTS.translate ?? "default", purposes: ["translate_body", "translate_quoted"] },
-  feedback: { label: "反馈筛选（读者反馈有没有内容，没有内容的不转发）", env: "FEEDBACK_MODEL", default: DEFAULTS.feedback ?? "default", purposes: ["judge_feedback"] },
+  report: { label: tr("周报月报的总述与主题（日报由规则算出，不用模型）", "Panorama y temas de los boletines semanal y mensual (el diario se arma por reglas, sin modelo)"), env: "REPORT_MODEL", default: DEFAULTS.report ?? "default", purposes: ["report_weekly", "report_monthly", "report_lead", "report_daily"] },
+  translate: { label: tr("精选全文翻译（含引用帖）", "Traducción del texto completo de destacadas (incluye publicaciones citadas)"), env: "TRANSLATE_MODEL", default: DEFAULTS.translate ?? "default", purposes: ["translate_body", "translate_quoted"] },
+  feedback: { label: tr("反馈筛选（读者反馈有没有内容，没有内容的不转发）", "Filtro de comentarios (no reenvía los que no tienen contenido)"), env: "FEEDBACK_MODEL", default: DEFAULTS.feedback ?? "default", purposes: ["judge_feedback"] },
 } satisfies Record<string, Capability>;
 
 export type CapabilityKey = keyof typeof CAPABILITIES;

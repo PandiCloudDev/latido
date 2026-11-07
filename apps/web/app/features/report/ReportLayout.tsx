@@ -37,7 +37,7 @@ export function ReportLayout({ kind, index, current, today, outline = [], back, 
               center={<KindSwitch kind={kind} phone />}
               actions={
                 outline.length > 0 && (
-                  <BarButton label="本期目录" onClick={() => setOutlineOpen(true)}>
+                  <BarButton label="Contenido del número" onClick={() => setOutlineOpen(true)}>
                     <IconList size={21} />
                   </BarButton>
                 )
@@ -47,12 +47,12 @@ export function ReportLayout({ kind, index, current, today, outline = [], back, 
               <KindSwitch kind={kind} phone layoutId="report-kind-narrow" />
               {outline.length > 0 && (
                 <button type="button" onClick={() => setOutlineOpen(true)} className="inline-flex h-9 items-center gap-1.5 rounded-full px-3 text-[13px] font-medium text-ink-3 transition-colors hover:bg-bg-sunk hover:text-ink">
-                  <IconList size={16} /> 本期目录
+                  <IconList size={16} /> Contenido del número
                 </button>
               )}
             </div>
             <ReportPhoneNav kind={kind} index={index} current={current} today={today} />
-            {outline.length > 0 && <OutlineSheet title="本期目录" open={outlineOpen} onClose={() => setOutlineOpen(false)} outline={outline} />}
+            {outline.length > 0 && <OutlineSheet title="Contenido del número" open={outlineOpen} onClose={() => setOutlineOpen(false)} outline={outline} />}
           </>
         )}
         <div className="w-full lg:max-w-[1160px]">{children}</div>

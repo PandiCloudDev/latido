@@ -1,34 +1,34 @@
-# 使用规则
+# Términos de uso
 
-这是开源框架自带的模板。上线前请按你的实际情况改写（运营主体、允许和不允许的用途、联系方式），必要时请专业人士审阅。
+Plantilla de Latido. Antes del lanzamiento público hay que completar los datos marcados como pendientes y, de preferencia, pedir una revisión legal.
 
-| 项 | 值 |
+| elemento | valor |
 |---|---|
-| 版本 | 请填写 |
-| 生效日期 | 请填写 |
-| 运营主体 | 请填写 |
-| 联系方式 | 请填写 |
+| Versión | 1.0 |
+| Vigente desde | Pendiente |
+| Responsable | Pandi.Cloud (pendiente: razón social) |
+| Contacto | Pendiente |
 
-页首说明：
+Nota inicial:
 
-> 本站聚合公开信源，用模型生成中文摘要与精选，原文版权归各来源所有。网页、RSS、公开 API 与 MCP 均可匿名使用。
+> Latido reúne notas de fuentes públicas de tecnología y usa modelos de lenguaje para escribir resúmenes en español y seleccionar lo más importante. Los derechos de cada nota pertenecen a su fuente. El sitio, los RSS, la API pública y el MCP se pueden usar de forma anónima.
 
-## 1. 内容与版权
+## 1. Contenido y derechos de autor
 
-本站展示的标题、摘要和推荐理由由模型根据公开来源生成，可能有误，重要信息请以原文为准。原文版权归各来源所有；站内只在来源允许时展示全文，其余只展示摘要和原文链接。
+Los títulos, resúmenes y textos de "Por qué leerla" que muestra Latido los genera un modelo de lenguaje a partir de fuentes públicas y pueden contener errores; para cualquier dato importante, consulta la nota original. Los derechos de cada nota pertenecen a su fuente. Latido solo muestra el texto completo cuando la fuente lo permite; en los demás casos muestra el resumen y el enlace al original.
 
-## 2. 来源方的更正与下架
+## 2. Correcciones y retiros para fuentes
 
-如果你是来源方，希望更正、下架或调整展示方式，请通过反馈页联系我们，我们会尽快处理。
+Si representas a una fuente y quieres una corrección, el retiro de una nota o cambiar cómo se muestra, escríbenos desde la página de comentarios con el enlace de la nota y tu solicitud; la atenderemos a la brevedad.
 
-## 3. 使用本站的数据
+## 3. Uso de los datos de Latido
 
-请写明你允许的用途（例如个人阅读、组织内部使用），以及需要事先取得你同意的用途（例如商业产品、公开转载、批量再分发）。
+Puedes usar Latido para lectura personal y uso interno en tu organización. Requiere autorización previa por escrito cualquier uso comercial, la republicación pública de los resúmenes o la redistribución masiva de los datos.
 
-## 4. 接口与频率
+## 4. Interfaces y frecuencia de consulta
 
-RSS、公开 API 和 MCP 为匿名只读接口。请按响应中的缓存时间轮询，遇到 429 请遵守 Retry-After，不要并发重试。
+Los RSS, la API pública y el MCP son interfaces anónimas de solo lectura. Consulta respetando el tiempo de caché que indica cada respuesta; si recibes un código 429, respeta el encabezado Retry-After y no reintentes en paralelo.
 
-## 5. 免责
+## 5. Limitación de responsabilidad
 
-本站按“现状”提供，不保证内容完整、准确和持续可用。
+Latido se ofrece "tal cual", sin garantía de que el contenido esté completo, sea exacto o esté disponible de forma continua.

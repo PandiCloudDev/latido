@@ -1,4 +1,7 @@
 import assert from "node:assert/strict";
+import { LOCALE } from "@aihot/site/locale";
+// These fixtures assume the zh profile (+08:00 source offset, Chinese as the site language); the es profile runs the same code with its own constant.
+const ZH_ONLY = { skip: LOCALE.language !== "zh" && "zh profile fixtures" };
 import { test } from "node:test";
 import { looksZh } from "@aihot/backend/editorial/writing";
 import { isChineseBody, exportTranslation } from "@aihot/backend/publication/items";
@@ -50,7 +53,7 @@ test("stripTags decodes character references, also when a feed escaped them twic
   assert.equal(stripTags("?a=1&copy=2 &unknown; AT&T"), "?a=1&copy=2 &unknown; AT&T");
 });
 
-test("writing and public reading agree about Chinese, including Japanese with kanji", () => {
+test("writing and public reading agree about Chinese, including Japanese with kanji", ZH_ONLY, () => {
   for (const body_text of ["新しい人工知能モデルを公開しました。", "人工知能 모델을 공개했습니다."]) {
     assert.equal(looksZh(body_text), false);
     for (const language of [null, "ja", "ko"]) {

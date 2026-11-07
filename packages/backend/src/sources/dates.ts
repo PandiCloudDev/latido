@@ -1,5 +1,5 @@
 // Published dates as list pages, articles and JSON lists print them, read the same on every host.
-import { LOCALE } from "@aihot/site/locale";
+import { LOCALE, tr } from "@aihot/site/locale";
 import { beijingDate, beijingTime } from "@aihot/contracts/time";
 import type { SourceRow } from "./types.ts";
 
@@ -90,9 +90,9 @@ export function readPublicationDate(value: string | null | undefined, utcOffset 
 
 /** Legacy timestamps have lost their source precision; midnight never tells us which it was. */
 export function describePublicationTime(at: Date | null, source: string | null | undefined): string {
-  if (!at) return "未知";
-  if (!source) return `${beijingDate(at)} ${beijingTime(at)}（历史记录，原始精度未知）`;
-  if (/^\d{4}-\d{2}-\d{2}$/.test(source)) return `${source}（原文仅有日期，时刻未知）`;
+  if (!at) return tr("未知", "desconocida");
+  if (!source) return tr(`${beijingDate(at)} ${beijingTime(at)}（历史记录，原始精度未知）`, `${beijingDate(at)} ${beijingTime(at)} (registro histórico, precisión original desconocida)`);
+  if (/^\d{4}-\d{2}-\d{2}$/.test(source)) return tr(`${source}（原文仅有日期，时刻未知）`, `${source} (el original solo trae fecha, hora desconocida)`);
   return `${beijingDate(at)} ${beijingTime(at)}${LOCALE.language === "zh" ? `（${LOCALE.timeZoneLabel}）` : ` (${LOCALE.timeZoneLabel})`}`;
 }
 
