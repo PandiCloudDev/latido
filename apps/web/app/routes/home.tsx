@@ -1,4 +1,4 @@
-import { redirect, useLoaderData } from "react-router";
+import { Link, redirect, useLoaderData } from "react-router";
 import type { Route } from "./+types/home";
 import type { TimelineResponse } from "@aihot/contracts/site";
 import { cachedPage, loadOr404 } from "../lib/api.server";
@@ -47,6 +47,20 @@ export default function Home() {
           <SearchField keep={{ category: filters.category }} />
         </div>
       </div>
+
+      {!hasFeedFilters(filters) && (
+        <section aria-labelledby="latido-weekly" className="mb-5 mt-2 flex flex-wrap items-center justify-between gap-4 rounded-card border border-line border-t-[3px] border-t-editorial-blue bg-surface px-4 py-4 lg:mt-0 lg:px-5">
+          <div>
+            <p className="text-[11px] font-bold uppercase tracking-[0.12em] text-editorial-blue">El boletín de Latido</p>
+            <h2 id="latido-weekly" className="mt-1 text-[20px] font-bold leading-tight text-ink">Lo importante de la semana, en contexto.</h2>
+            <p className="mt-1 text-[14px] text-ink-3">Qué pasó, por qué importa y qué conviene seguir.</p>
+          </div>
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+            <Link to="/weekly" className="inline-flex min-h-11 items-center rounded-control bg-accent px-4 text-[14px] font-bold text-accent-contrast hover:opacity-90">Leer el boletín semanal</Link>
+            <a href="/feed.xml" className="inline-flex min-h-11 items-center text-[14px] font-bold text-editorial-blue hover:underline">Seguir vía RSS</a>
+          </div>
+        </section>
+      )}
 
       {data.hot && inNav("/hot") && <HotTopics entries={data.hot} />}
 

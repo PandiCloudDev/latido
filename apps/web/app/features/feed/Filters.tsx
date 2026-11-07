@@ -9,6 +9,7 @@ import { PillTabs } from "../../components/ui/Tabs";
 import { ChoiceTick, Sheet, sheetChoice } from "../../components/ui/Sheet";
 import { Wordmark } from "@aihot/site/brand/Logo.tsx";
 import { BarButton, PhoneBar } from "../../components/shell/PhoneBar";
+import { categoryTone } from "./category-tone";
 import { openSearch } from "../search/SearchOverlay";
 
 /** Same page with some query parameters changed (paging state dropped). */
@@ -33,7 +34,7 @@ function filterOptions(base: string, params: URLSearchParams, noneLabel: string)
   return [
     { key: "all", label: noneLabel, to: hrefWith(base, params, { category: null, channel: null }) },
     { key: "firstParty", label: CHANNEL_LABELS.firstParty, to: hrefWith(base, params, { category: null, channel: "firstParty" }) },
-    ...CATEGORY_KEYS.map((k) => ({ key: k, label: CATEGORY_LABELS[k], to: hrefWith(base, params, { category: k, channel: null }) })),
+    ...CATEGORY_KEYS.map((k) => ({ key: k, label: CATEGORY_LABELS[k], tone: categoryTone(k), to: hrefWith(base, params, { category: k, channel: null }) })),
   ];
 }
 
@@ -44,7 +45,7 @@ function filterKey(category: CategoryKey | null, channel: ChannelKey): string {
 /** Desktop: the filter as a row of tabs beside the search field. */
 export function CategoryTabs({ base, category, channel = "all", layoutId, className = "" }: { base: string; category: CategoryKey | null; channel?: ChannelKey; layoutId: string; className?: string }) {
   const [params] = useSearchParams();
-  return <PillTabs items={filterOptions(base, params, "Todo").map(o => ({ ...o, prefetchOnPress: true }))} active={filterKey(category, channel)} layoutId={layoutId} label="Filtrar" className={className} />;
+  return <PillTabs items={filterOptions(base, params, "Todo").map(o => ({ ...o, prefetchOnPress: true, label: "tone" in o ? <span className={o.tone}>{o.label}</span> : o.label }))} active={filterKey(category, channel)} layoutId={layoutId} label="Filtrar" className={className} />;
 }
 
 /**
@@ -60,13 +61,14 @@ export function FeedBar({ base, category, channel }: { base: "/" | "/all"; categ
     <>
       <PhoneBar
         leading={
-          <Link to="/" aria-label={`Portada de ${SITE.name}`} className="flex h-11 items-center pl-2.5 pr-2 text-ink">
-            <Wordmark size={17} />
+          <Link to="/" aria-label={`Portada de ${SITE.name}`} className="flex h-11 items-center pl-2 pr-0.5 text-ink">
+            <Wordmark size={14} />
           </Link>
         }
         center={
           <PillTabs
-            size="sm"
+            size="xs"
+            className="max-[359px]:[&_a]:px-2"
             layoutId="feed-scope"
             label="Ver destacadas o todas"
             active={base === "/" ? "featured" : "all"}

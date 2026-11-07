@@ -15,16 +15,16 @@ import { usePageTransition } from "./components/shell/transitions";
 import { SearchOverlay } from "./features/search/SearchOverlay";
 import { BackToTop, NavigationProgress } from "./components/shell/Chrome";
 import { buttonClass } from "./components/ui/Controls";
-import { rememberPage, APPEARANCE_BOOT_SCRIPT, useAppearanceSync } from "./lib/local-state";
+import { rememberPage, APPEARANCE_BOOT_SCRIPT, THEME_COLOR, useAppearanceSync } from "./lib/local-state";
 import { apiGet } from "./lib/api.server";
 import { useHydratedFlag } from "./lib/hydration";
 import { titled } from "./lib/seo";
 import { webModules } from "./site-modules";
 
 export const links: Route.LinksFunction = () => [
-  { rel: "icon", href: "/favicon.ico", sizes: "any" },
-  { rel: "icon", type: "image/png", href: "/icon.png" },
-  { rel: "apple-touch-icon", href: "/apple-icon.png" },
+  { rel: "icon", href: "/favicon.ico?v=triadica", sizes: "any" },
+  { rel: "icon", type: "image/png", href: "/icon.png?v=triadica" },
+  { rel: "apple-touch-icon", href: "/apple-icon.png?v=triadica" },
   { rel: "manifest", href: "/manifest.webmanifest" },
   { rel: "alternate", type: "application/rss+xml", title: `${SITE.name} — Destacadas`, href: "/feed.xml" },
 ];
@@ -54,8 +54,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <meta charSet="utf-8" />
         {documentRelease && <meta name="aihot-release" content={documentRelease} />}
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-        <meta name="theme-color" media="(prefers-color-scheme: light)" content="#fbf9f7" />
-        <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#141113" />
+        <meta name="theme-color" media="(prefers-color-scheme: light)" content={THEME_COLOR.light} />
+        <meta name="theme-color" media="(prefers-color-scheme: dark)" content={THEME_COLOR.dark} />
         <meta name="apple-mobile-web-app-title" content={SITE.name} />
         <script dangerouslySetInnerHTML={{ __html: APPEARANCE_BOOT_SCRIPT }} />
         {webModules().map((m) => m.root?.bootScript && <script key={m.name} dangerouslySetInnerHTML={{ __html: m.root.bootScript }} />)}

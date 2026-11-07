@@ -1,16 +1,16 @@
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="docs/assets/banner-dark.png">
-    <img src="docs/assets/banner-light.png" alt="Latido: el pulso de la tecnología en México y Latinoamérica. Decenas de fuentes entran a la selección del centro y salen como boletín diario, temas y tendencias" width="100%">
+    <img src="docs/assets/banner-light.png" alt="Latido: tecnología, negocios, energía y electromovilidad en México y Latinoamérica" width="100%">
   </picture>
 </p>
 
 <p align="center">
-  <a href="LICENSE"><img src="https://img.shields.io/badge/licencia-MIT-c8213d?style=flat-square" alt="Licencia MIT"></a>
-  <img src="https://img.shields.io/badge/Node.js-24-c8213d?style=flat-square&logo=nodedotjs&logoColor=white" alt="Node.js 24">
-  <img src="https://img.shields.io/badge/PostgreSQL-17-c8213d?style=flat-square&logo=postgresql&logoColor=white" alt="PostgreSQL 17">
-  <img src="https://img.shields.io/badge/Docker-Compose-c8213d?style=flat-square&logo=docker&logoColor=white" alt="Docker Compose">
-  <a href="https://latido.news"><img src="https://img.shields.io/badge/sitio-latido.news-1f1b1c?style=flat-square" alt="Sitio latido.news"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/licencia-MIT-B51F38?style=flat-square" alt="Licencia MIT"></a>
+  <img src="https://img.shields.io/badge/Node.js-24-B51F38?style=flat-square&logo=nodedotjs&logoColor=white" alt="Node.js 24">
+  <img src="https://img.shields.io/badge/PostgreSQL-17-B51F38?style=flat-square&logo=postgresql&logoColor=white" alt="PostgreSQL 17">
+  <img src="https://img.shields.io/badge/Docker-Compose-B51F38?style=flat-square&logo=docker&logoColor=white" alt="Docker Compose">
+  <a href="https://latido.news"><img src="https://img.shields.io/badge/sitio-latido.news-171719?style=flat-square" alt="Sitio latido.news"></a>
 </p>
 
 <p align="center">

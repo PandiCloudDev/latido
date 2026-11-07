@@ -8,9 +8,10 @@ import satori from "satori";
 import sharp from "sharp";
 import { config, REPO_ROOT } from "../config.ts";
 import { SITE } from "@aihot/site";
+import { EDITORIAL_MARK_PATH } from "@aihot/site/brand/identity.ts";
 import { LOCALE } from "@aihot/site/locale";
 
-export const OG_TEMPLATE_VERSION = "og-2026-11-06.latido";
+export const OG_TEMPLATE_VERSION = "og-2026-11-07.triadica";
 const WIDTH = 1200;
 const HEIGHT = 630;
 const CACHE_DIR = path.join(config.dataDir, "ogcache");
@@ -94,23 +95,19 @@ export async function brandMark(file: string, height: number): Promise<Node | nu
   return found && h("img", { height }, undefined, { src: found.src, height, width: Math.round(height * found.aspect) });
 }
 
-const PULSE_PATH = "M76 280H170L202 226L236 330L280 136L326 374L360 280H436";
-const svgSrc = (svg: string) => `data:image/svg+xml;base64,${Buffer.from(svg).toString("base64")}`;
-/** The pulse icon (site/brand/logo.svg) as an image source. */
-const PULSE_MARK = svgSrc(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff4d63"/><stop offset="1" stop-color="#c8213d"/></linearGradient></defs><rect width="512" height="512" rx="116" fill="url(#g)"/><path d="${PULSE_PATH}" fill="none" stroke="#fff" stroke-width="40" stroke-linecap="round" stroke-linejoin="round"/></svg>`);
-/** A long, faint heartbeat line across the card. */
-const PULSE_LINE = svgSrc(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 220"><defs><linearGradient id="l" x1="0" x2="1"><stop offset="0" stop-color="#ff5a6e" stop-opacity="0"/><stop offset="0.55" stop-color="#ff5a6e" stop-opacity="0.42"/><stop offset="1" stop-color="#ff5a6e" stop-opacity="0.1"/></linearGradient></defs><path d="M0 130H520L560 92L600 168L660 24L730 206L776 130H1200" fill="none" stroke="url(#l)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>`);
+/** The editorial L rendered on dark share cards. */
+const editorialMark = (color: string) => `data:image/svg+xml;base64,${Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="${EDITORIAL_MARK_PATH}" fill="${color}"/></svg>`).toString("base64")}`;
 
-/** The site's mark: the pulse icon and "latido" with ".news" in the accent colour. */
+/** The site's editorial mark and wordmark. */
 export function nameMark(size: number, color: string, dot: string): Node {
   return h("div", { display: "flex", alignItems: "center" }, [
-    h("img", { width: size * 1.15, height: size * 1.15, marginRight: size * 0.34 }, undefined, { src: PULSE_MARK, width: Math.round(size * 1.15), height: Math.round(size * 1.15) }),
-    h("div", { display: "flex", fontSize: size, fontWeight: 700, color, letterSpacing: -0.5 }, "latido"),
+    h("img", { width: size * 1.15, height: size * 1.15, marginRight: size * 0.34 }, undefined, { src: editorialMark(dot), width: Math.round(size * 1.15), height: Math.round(size * 1.15) }),
+    h("div", { display: "flex", fontSize: size, fontWeight: 700, color, letterSpacing: -0.5 }, "Latido"),
     h("div", { display: "flex", fontSize: size, fontWeight: 400, color: dot, letterSpacing: -0.3 }, ".news"),
   ]);
 }
 
-const ACCENTS = { teal: "#ff5a6e", hot: "#ff9a5c", amber: "#e2b454" } as const;
+const ACCENTS = { teal: "#ff5a6e", hot: "#e9bb61", amber: "#e9bb61" } as const;
 
 export function clamp(text: string, max: number) {
   const chars = [...text.replace(/\s+/g, " ").trim()];
@@ -135,12 +132,11 @@ async function tree(card: OgCard): Promise<Node> {
       padding: "64px 72px",
       fontFamily: OG_FAMILY,
       color: "#f3eceb",
-      backgroundColor: "#120d10",
-      backgroundImage: "radial-gradient(circle at 92% 0%, rgba(255,90,110,0.30), rgba(18,13,16,0) 45%), radial-gradient(circle at 0% 100%, rgba(200,33,61,0.32), rgba(18,13,16,0) 52%)",
+      backgroundColor: "#171719",
+      borderTop: "10px solid #244B94",
       position: "relative",
     },
     [
-      h("img", { position: "absolute", left: 0, bottom: -18, width: WIDTH, height: 150 }, undefined, { src: PULSE_LINE, width: WIDTH, height: 150 }),
       h("div", { display: "flex", alignItems: "center", justifyContent: "space-between" }, [
         (await brandMark("wordmark-dark.svg", 40)) ?? nameMark(34, "#f3eceb", "#ff5a6e"),
         h("div", { display: "flex", fontSize: 24, color: "#9c8f8d" }, OG_FAMILY === "inter" ? "Tecnología · México y Latinoamérica" : SITE_HOST),
