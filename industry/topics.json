@@ -8,7 +8,7 @@
     {
       "key": "field",
       "name": "Temas",
-      "blurb": "IA, smartphones, telecom, fintech, comercio electrónico y más"
+      "blurb": "IA, telecom, fintech, energía, electromovilidad y más"
     },
     {
       "key": "genre",
@@ -328,6 +328,24 @@
         "Código abierto"
       ],
       "definition": "Proyectos de software abierto que vale la pena conocer."
+    },
+    {
+      "slug": "energia",
+      "name": "Energía",
+      "group": "field",
+      "tags": [
+        "Energía"
+      ],
+      "definition": "Proyectos de generación, redes, renovables, almacenamiento estacionario, petróleo y gas."
+    },
+    {
+      "slug": "electromovilidad",
+      "name": "Electromovilidad",
+      "group": "field",
+      "tags": [
+        "Electromovilidad"
+      ],
+      "definition": "Vehículos eléctricos e híbridos, baterías de tracción, recarga y flotas eléctricas."
     }
   ]
 }

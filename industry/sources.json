@@ -1,5 +1,5 @@
 {
-  "$comment": "Fuentes de Latido: se importan en el primer arranque (scripts/seed.ts); las existentes no se sobrescriben. Niveles: T1 oficial de primera mano (umbral 60), T1_5 medios de referencia (65), T2 medios generales y regionales (76). Solo feeds de tecnología: no se usan feeds generales que obliguen a descartar notas pagando llamadas al modelo.",
+  "$comment": "Fuentes de Latido: scripts/seed.ts agrega las nuevas sin sobrescribir las existentes. Cobertura de tecnología, negocios, energía y electromovilidad; los nuevos canales empiezan con hasta 3 entradas por fuente. El criterio editorial descarta las notas ajenas.",
   "sources": [
     {
       "id": "rss-openai-news",
@@ -1185,6 +1185,707 @@
         "Medio",
         "Global",
         "Fintech"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-elfinanciero-empresas",
+      "name": "El Financiero · Empresas",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.elfinanciero.com.mx/arc/outboundfeeds/rss/category/empresas/?outputType=xml",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "México",
+        "Negocios"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-t21",
+      "name": "T21 · Logística",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://t21.com.mx/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "México",
+        "Negocios"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-the-logistics-world",
+      "name": "THE LOGISTICS WORLD",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://thelogisticsworld.com/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Latinoamérica",
+        "Negocios"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-la-republica-empresas",
+      "name": "La República · Empresas",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.larepublica.co/rss/empresas",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Colombia",
+        "Negocios"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-valora-analitik",
+      "name": "Valora Analitik",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.valoraanalitik.com/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        },
+        "publishedAtUtcOffset": "-05:00"
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Colombia",
+        "Negocios"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-ambito-negocios",
+      "name": "Ámbito · Negocios",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.ambito.com/rss/pages/negocios.xml",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Argentina",
+        "Negocios"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-el-cronista-negocios",
+      "name": "El Cronista · Negocios",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.cronista.com/arc/outboundfeeds/negocios/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Argentina",
+        "Negocios"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-primicias-economia",
+      "name": "Primicias · Economía",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.primicias.ec/rss/economia.xml",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Ecuador",
+        "Negocios"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-la-jornada-economia",
+      "name": "La Jornada · Economía",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.jornada.com.mx/rss/economia.xml",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "México",
+        "Negocios"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-informador-economia",
+      "name": "Informador · Economía",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.informador.mx/rss/economia.xml",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "México",
+        "Negocios"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-vanguardia-dinero",
+      "name": "Vanguardia · Dinero",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://vanguardia.com.mx/rss/dinero",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "México",
+        "Negocios"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-estadao-economia",
+      "name": "Estadão · Economia",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.estadao.com.br/arc/outboundfeeds/rss/section/economia/?outputType=xml",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Brasil",
+        "Negocios"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-agencia-brasil-economia",
+      "name": "Agência Brasil · Economia",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://agenciabrasil.ebc.com.br/rss/economia/feed.xml",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Brasil",
+        "Negocios"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-valor-empresas",
+      "name": "Valor Econômico · Empresas",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://valor.globo.com/rss/valor/empresas/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Brasil",
+        "Negocios"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-revista-mercado",
+      "name": "Revista Mercado",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://revistamercado.do/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "República Dominicana",
+        "Negocios"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-diario-libre-economia",
+      "name": "Diario Libre · Economía",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.diariolibre.com/rss/economia.xml",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "República Dominicana",
+        "Negocios"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-la-prensa-panama-economia",
+      "name": "La Prensa · Economía",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.prensa.com/arc/outboundfeeds/rss/category/economia/?outputType=xml",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Panamá",
+        "Negocios"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-la-nacion-cr-economia",
+      "name": "La Nación Costa Rica · Economía",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.nacion.com/arc/outboundfeeds/rss/category/economia/?outputType=xml",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Costa Rica",
+        "Negocios"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-la-prensa-grafica-economia",
+      "name": "La Prensa Gráfica · Economía",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.laprensagrafica.com/rss/economia.xml",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "El Salvador",
+        "Negocios"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-el-imparcial-dinero",
+      "name": "El Imparcial · Dinero",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.elimparcial.com/arc/outboundfeeds/rss/category/dinero/?outputType=xml",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "México",
+        "Negocios"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-energia-a-debate",
+      "name": "Energía a Debate",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://energiaadebate.com/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "México",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-global-energy",
+      "name": "Global Energy",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://globalenergy.mx/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "México",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-energia-hoy",
+      "name": "Energía Hoy",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://energiahoy.com/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "México",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-pv-magazine-latam",
+      "name": "pv magazine LatAm",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.pv-magazine-latam.com/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Latinoamérica",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-energia-online",
+      "name": "Energía Online",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://energiaonline.com.ar/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Argentina",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-econojournal",
+      "name": "EconoJournal",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://econojournal.com.ar/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Argentina",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-olacde",
+      "name": "OLACDE",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.olacde.org/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T1",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Latinoamérica",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-revista-electricidad",
+      "name": "Revista Electricidad",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.revistaei.cl/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Chile",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-revista-petroquimica",
+      "name": "Revista Petroquímica",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://revistapetroquimica.com/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Argentina",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-energy-storage-news",
+      "name": "Energy Storage News",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.energy-storage.news/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-latam-mobility",
+      "name": "Latam Mobility",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://latamobility.com/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Latinoamérica",
+        "Electromovilidad"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-insideevs-brasil",
+      "name": "InsideEVs Brasil",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://insideevs.uol.com.br/rss/news/all/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Brasil",
+        "Electromovilidad"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-electrek",
+      "name": "Electrek",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://electrek.co/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Electromovilidad"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-electrive",
+      "name": "electrive",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.electrive.com/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Electromovilidad"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-movilidad-electrica",
+      "name": "Movilidad Eléctrica",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://movilidadelectrica.com/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Electromovilidad"
       ],
       "site_fulltext": false,
       "syndicate_fulltext": false

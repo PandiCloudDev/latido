@@ -36,7 +36,7 @@ Antes de responder, verifica que `itemType` y la primera etiqueta de categoría 
 
 Después puedes agregar de 0 a 5 etiquetas, solo de estas dos listas:
 
-- Temas: IA, Agentes de IA, Smartphones, Gadgets, Telecom y 5G, Nube y centros de datos, Chips, Fintech, Comercio electrónico, Redes sociales, Streaming, Movilidad, Privacidad, Talento y empleo, México, Latinoamérica
+- Temas: IA, Agentes de IA, Smartphones, Gadgets, Telecom y 5G, Nube y centros de datos, Chips, Fintech, Comercio electrónico, Redes sociales, Streaming, Movilidad, Energía, Electromovilidad, Privacidad, Talento y empleo, México, Latinoamérica
 - Entidades: OpenAI, Google, Apple, Microsoft, Meta, Amazon, NVIDIA, Samsung, Anthropic, Mercado Libre, Nubank, América Móvil
 
 Usa "México" o "Latinoamérica" cuando el hecho ocurra en la región o la afecte directamente (precio, disponibilidad, empresas, usuarios o regulación locales). Aunque el cuerpo mencione otras empresas, no las pongas en `tags` si no están en la lista. No inventes etiquetas fuera de las listas. Si ningún tema o entidad aplica, devuelve solo la etiqueta de categoría.

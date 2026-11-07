@@ -14,7 +14,7 @@
 </p>
 
 <p align="center">
-  <b>The pulse of technology in Mexico and Latin America.</b><br>
+  <b>Technology, business, energy and electric mobility in Mexico and Latin America.</b><br>
   A Spanish-language news radar that reads dozens of outlets, clusters the ones telling the same story and delivers what is actually worth reading every morning.
 </p>
 
@@ -26,9 +26,9 @@
 
 ## What Latido is
 
-[Latido](https://latido.news) is a technology and digital business news radar written in Spanish, with a clear editorial priority: Mexico first, then Latin America, then the global stories that actually move the region. It covers artificial intelligence, products and gadgets, startups and fintech, telecom, cybersecurity, digital regulation and video games.
+[Latido](https://latido.news) is a news radar for technology, business, energy and electric mobility written in Spanish, with a clear editorial priority: Mexico first, then Latin America, then the global stories that actually move the region. It covers artificial intelligence, products and gadgets, startups and fintech, telecom, cybersecurity, digital regulation, video games, investment, industry, energy projects and electric transport.
 
-Every day it collects items from 54 sources, screens them with a language model, scores the promising ones twice and independently, and writes an informative headline and an answer-first summary for each. When several outlets report the same story, it clusters them into one **event** and ranks it by how many independent sources are talking about it. It publishes a daily briefing every morning, a weekly one on Mondays and a monthly one on the 1st.
+Every day it collects items from up to 89 configured sources (54 original feeds plus 20 for business, 10 for energy and 5 for electric mobility), screens them with a language model, scores the promising ones twice and independently, and writes an informative headline and an answer-first summary for each. When several outlets report the same story, it clusters them into one **event** and ranks it by how many independent sources are talking about it. It publishes a daily briefing every morning, a weekly one on Mondays and a monthly one on the 1st.
 
 This repository is the whole site: the public website, the admin, the selection pipeline, the clustering and heat algorithms, and **the full text of every prompt and selection threshold**, so anyone can audit how stories are chosen. The interface, the documentation and everything the site writes are in Spanish.
 

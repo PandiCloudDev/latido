@@ -1,6 +1,6 @@
 # Paquete del sector
 
-Aquí vive todo el conocimiento del sector que cubre Latido (tecnología y negocios digitales en México y Latinoamérica): categorías, temas, fuentes, criterio de selección y umbrales. Para cambiar de sector se modifica sobre todo esta carpeta y [`site/`](../site/) (nombre, textos, marca y páginas); los pasos están en [Adaptarlo a otro sector](../docs/customize.md).
+Aquí vive todo el conocimiento del sector que cubre Latido (tecnología, negocios, energía y electromovilidad en México y Latinoamérica): categorías, temas, fuentes, criterio de selección y umbrales. Para cambiar de sector se modifica sobre todo esta carpeta y [`site/`](../site/) (nombre, textos, marca y páginas); los pasos están en [Adaptarlo a otro sector](../docs/customize.md).
 
 | Archivo | Contenido |
 |---|---|

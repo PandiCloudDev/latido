@@ -24,9 +24,9 @@ export const SITE = {
   /** Nombre del sitio: navegación, títulos, imágenes para compartir, RSS, MCP y panel. */
   name: "Latido",
   /** El tema del sitio; en español va implícito en la marca y casi no se antepone a los nombres. */
-  subject: "tecnología",
+  subject: "tecnología, negocios, energía y electromovilidad",
   /** Título completo de la portada (pestaña del navegador, resultados de búsqueda). */
-  homeTitle: "Latido: lo más importante de tecnología en México y Latinoamérica, cada día",
+  homeTitle: "Latido: tecnología, negocios, energía y electromovilidad en México y Latinoamérica",
   /** Título del índice de temas (/topics). */
   topicsTitle: "Temas de Latido: empresas, tecnologías y tipos de noticia",
   /** Ejemplo dentro del campo del formulario de comentarios. */
@@ -36,13 +36,13 @@ export const SITE = {
   /** Indicación en el campo de correo del formulario de comentarios. */
   feedbackEmailHint: "Déjanos tu correo si quieres que te respondamos",
   /** Descripción de una línea: buscadores, tarjetas para compartir, RSS y llms.txt. */
-  description: `Latido revisa decenas de medios de tecnología, agrupa las notas que cuentan lo mismo y selecciona lo que vale la pena leer, con un boletín ${EDITION_WHEN.daily}.`,
+  description: `Latido revisa noticias de tecnología, negocios, energía y electromovilidad, agrupa las notas que cuentan lo mismo y selecciona lo que vale la pena leer, con un boletín ${EDITION_WHEN.daily}.`,
   /** Presentación más larga bajo la descripción en llms.txt (opcional). */
-  llmsIntro: "Latido es un radar de noticias de tecnología y negocios digitales en español, con prioridad en México y Latinoamérica: inteligencia artificial, productos y gadgets, startups, fintech, telecomunicaciones, ciberseguridad, regulación digital y videojuegos." as string | null,
+  llmsIntro: "Latido es un radar de tecnología, negocios, energía y electromovilidad en español, con prioridad en México y Latinoamérica." as string | null,
   /** Una línea pequeña: imágenes para compartir y pósters. */
-  tagline: "El pulso de la tecnología en México y Latinoamérica",
+  tagline: "El pulso de la innovación en México y Latinoamérica",
   /** Palabras clave para buscadores (datos estructurados de la portada). */
-  keywords: ["noticias de tecnología", "tecnología México", "tecnología Latinoamérica", "inteligencia artificial", "startups", "gadgets", "boletín de tecnología"] as string[],
+  keywords: ["noticias de tecnología", "tecnología México", "tecnología Latinoamérica", "inteligencia artificial", "startups", "gadgets", "boletín de tecnología", "negocios", "energía", "electromovilidad"] as string[],
   /** Año en que el sitio empezó a reunir notas (datos estructurados, opcional). */
   since: "2026" as string | null,
   /** Idioma de la interfaz (HTML lang, og:locale). */
@@ -137,7 +137,7 @@ export const ABOUT = {
   /** Descripción de la página (buscadores, tarjetas para compartir). */
   description: `Acerca de ${SITE.name}: ${SITE.description}`,
   /** Titular: la primera línea en color normal, la segunda en color de acento. */
-  headline: ["Cada día pasan cientos de cosas en tecnología.", "Las que importan son unas cuantas."] as [string, string],
+  headline: ["Cada día pasan cientos de cosas.", "Las que importan son unas cuantas."] as [string, string],
   /** Párrafo bajo el titular. {sources} se cambia por el número de fuentes en vivo (con espacios automáticos); si no hay estadística, por sourcesFallback. */
   lead: `${SITE.name} sigue por ti{sources}fuentes: las lee, agrupa, califica y selecciona, y publica un boletín ${EDITION_WHEN.daily}. Gratis y sin registro. Latido es un proyecto de Pandi.Cloud, un desarrollador mexicano independiente que no tiene vínculos con ninguna empresa editorial.`,
   sourcesFallback: "decenas de",
@@ -183,12 +183,12 @@ export const REPORTS = {
   /** La línea del editor bajo la cabecera. */
   imprint: SITE.name.toUpperCase(),
   /** Una palabra junto a la cabecera. */
-  motto: "Tecnología" as string,
+  motto: "Noticias" as string,
   /** Descripción de cada tipo de boletín (buscadores, tarjetas), sin punto final; también la usa llms.txt. */
   descriptions: {
-    daily: `El boletín diario de ${SITE.name} con lo más importante de tecnología, publicado ${EDITION_WHEN.daily} (${LOCALE.timeZoneLabel})`,
-    weekly: "El repaso semanal de lo más importante en tecnología y negocios digitales",
-    monthly: "El balance mensual de tecnología y negocios digitales",
+    daily: `El boletín diario de ${SITE.name} con lo más importante de los cuatro sectores, publicado ${EDITION_WHEN.daily} (${LOCALE.timeZoneLabel})`,
+    weekly: "El repaso semanal de lo más importante en tecnología, negocios, energía y electromovilidad",
+    monthly: "El balance mensual de tecnología, negocios, energía y electromovilidad",
   },
   /** Cómo se llama cada elemento de un número ("4 noticias clave"): títulos sin encabezado, conteos y descripciones. */
   entry: { measure: "", noun: "noticias clave" },
@@ -226,7 +226,7 @@ export const COMMUNITY_FEEDS: { dev: string[]; hn: string[] } = {
 
 /** Texto de las imágenes para compartir de cada página (/og/pages/*.png). */
 export const CARDS: Record<string, { kicker: string; title: string; subtitle: string; accent?: "hot" | "amber" }> = {
-  site: { kicker: "Lo destacado del día", title: SITE.tagline, subtitle: "Lo que importa en tecnología, seleccionado y resumido en español cada día." },
+  site: { kicker: "Lo destacado del día", title: SITE.tagline, subtitle: "Lo que importa en los cuatro sectores, seleccionado y resumido en español cada día." },
   all: { kicker: "Todas las notas", title: "Lo último de todas las fuentes, en un solo lugar", subtitle: "Las notas de todas las fuentes por orden de llegada, con filtros por sección y etiqueta." },
   hot: { kicker: "Lo más comentado", title: "De qué se está hablando en las últimas 48 horas", subtitle: "Índice de popularidad, tendencia y las fuentes públicas que la forman.", accent: "hot" },
   daily: { kicker: "Boletín diario", title: `Cada día a las ${spokenTime(EDITION_TIMES.daily)}, un boletín que sí terminas de leer`, subtitle: "Lo que valió la pena del día anterior." },
