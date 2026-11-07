@@ -49,7 +49,7 @@ export default function Home() {
       </div>
 
       {!hasFeedFilters(filters) && (
-        <section aria-labelledby="latido-weekly" className="mb-5 flex flex-wrap items-center justify-between gap-4 rounded-card border border-line border-t-[3px] border-t-editorial-blue bg-surface px-4 py-4 lg:px-5">
+        <section aria-labelledby="latido-weekly" className="mb-5 mt-2 flex flex-wrap items-center justify-between gap-4 rounded-card border border-line border-t-[3px] border-t-editorial-blue bg-surface px-4 py-4 lg:mt-0 lg:px-5">
           <div>
             <p className="text-[11px] font-bold uppercase tracking-[0.12em] text-editorial-blue">El boletín de Latido</p>
             <h2 id="latido-weekly" className="mt-1 text-[20px] font-bold leading-tight text-ink">Lo importante de la semana, en contexto.</h2>

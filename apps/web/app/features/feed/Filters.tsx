@@ -61,13 +61,14 @@ export function FeedBar({ base, category, channel }: { base: "/" | "/all"; categ
     <>
       <PhoneBar
         leading={
-          <Link to="/" aria-label={`Portada de ${SITE.name}`} className="flex h-11 items-center pl-2.5 pr-2 text-ink">
-            <Wordmark size={17} />
+          <Link to="/" aria-label={`Portada de ${SITE.name}`} className="flex h-11 items-center pl-2 pr-0.5 text-ink">
+            <Wordmark size={14} />
           </Link>
         }
         center={
           <PillTabs
-            size="sm"
+            size="xs"
+            className="max-[359px]:[&_a]:px-2"
             layoutId="feed-scope"
             label="Ver destacadas o todas"
             active={base === "/" ? "featured" : "all"}
