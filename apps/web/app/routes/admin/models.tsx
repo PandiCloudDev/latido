@@ -155,7 +155,7 @@ export default function ModelsAdmin({ loaderData: m }: Route.ComponentProps) {
       <ReasonDialog
         open={!!target}
         title={`Cambiar modelo: ${target?.label ?? ""}`}
-        description="Solo afecta tareas nuevas. «Restablecer» vuelve a la variable de entorno o al predeterminado del código."
+        description={"Solo afecta tareas nuevas. \"Restablecer\" vuelve a la variable de entorno o al predeterminado del código."}
         confirmLabel="Cambiar"
         busy={pending === "switch"}
         onClose={() => setTarget(null)}

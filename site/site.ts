@@ -62,9 +62,9 @@ export const SITE = {
    */
   interfaceVersion: "4.0.0",
   /** Correo de contacto público (opcional): aparece en llms.txt y en las instrucciones para agentes. */
-  contactEmail: null as string | null,
+  contactEmail: "monitor@pandi.cloud" as string | null,
   /** Una línea pequeña al pie de la página "Acerca de" (opcional). */
-  footerNote: "Un proyecto de Pandi.Cloud, construido sobre el motor de código abierto AIHOT",
+  footerNote: "Un proyecto de Pandi.Cloud, desarrollador mexicano independiente, construido sobre el motor de código abierto AIHOT",
   /** Registro ICP de sitios en China continental (no aplica). */
   icp: null as string | null,
   /** Registro de seguridad pública de China continental (no aplica). */
@@ -139,7 +139,7 @@ export const ABOUT = {
   /** Titular: la primera línea en color normal, la segunda en color de acento. */
   headline: ["Cada día pasan cientos de cosas en tecnología.", "Las que importan son unas cuantas."] as [string, string],
   /** Párrafo bajo el titular. {sources} se cambia por el número de fuentes en vivo (con espacios automáticos); si no hay estadística, por sourcesFallback. */
-  lead: `${SITE.name} sigue por ti{sources}fuentes: las lee, agrupa, califica y selecciona, y publica un boletín ${EDITION_WHEN.daily}. Gratis y sin registro. Latido lo opera el mismo equipo editorial de los portales ConCiencia y Tecnología, Generación C, Ayacnet y En la Red MX, que también figuran entre sus fuentes.`,
+  lead: `${SITE.name} sigue por ti{sources}fuentes: las lee, agrupa, califica y selecciona, y publica un boletín ${EDITION_WHEN.daily}. Gratis y sin registro. Latido es un proyecto de Pandi.Cloud, un desarrollador mexicano independiente que no tiene vínculos con ninguna empresa editorial.`,
   sourcesFallback: "decenas de",
   /** Los cuatro pasos bajo la animación del río de fuentes. */
   steps: {

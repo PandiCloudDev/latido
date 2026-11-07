@@ -143,7 +143,7 @@ export default function NewSource() {
         </Card>
         <Card title={preview ? `Vista previa: ${preview.count} notas (${preview.ms}ms)` : "Vista previa"}>
           {!preview ? (
-            <Empty>Completa la configuración y pulsa «Previsualizar»; aquí verás las notas que se recolectarían (sin guardarlas).</Empty>
+            <Empty>Completa la configuración y pulsa "Previsualizar"; aquí verás las notas que se recolectarían (sin guardarlas).</Empty>
           ) : preview.items.length ? (
             <ul className="space-y-3">
               {preview.items.map((i) => (

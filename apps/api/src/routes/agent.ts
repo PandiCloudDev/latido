@@ -60,7 +60,7 @@ export function registerAgent(app: FastifyInstance) {
     let found = await resolveStory(publicId);
     if (found.kind === "merged") found = await resolveStory(found.target);
     const body = found.kind === "found" ? await v1Story(found.storyId) : null;
-    if (!body) return sendProblem(req, reply, { status: 404, code: "not_found", detail: "Ese evento público no existe. Usa solo las direcciones de «Historia completa» que dan los resultados de lo más comentado; no las adivines.", cacheControl: "public, max-age=60" });
+    if (!body) return sendProblem(req, reply, { status: 404, code: "not_found", detail: "Ese evento público no existe. Usa solo las direcciones de \"Historia completa\" que dan los resultados de lo más comentado; no las adivines.", cacheControl: "public, max-age=60" });
     return markdown(req, reply, storyAnswer(body.story, limit, "http"), "agent-story", V1_OPERATIONS.storyByPublicId.cacheControl);
   }));
 

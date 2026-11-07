@@ -10,7 +10,7 @@ import { PhoneBar } from "../../components/shell/PhoneBar";
  * outline).
  */
 export function CopyPage({ doc, rendered, eyebrow, footer }: { doc: CopyDocument; rendered: RenderedCopy; eyebrow?: ReactNode; footer?: ReactNode }) {
-  const facts = (["Versión", "Vigente desde", "Responsable", "Contacto", "Registro"] as const).filter((k) => doc.meta[k]);
+  const facts = (["Versión", "Vigencia", "Responsable", "Contacto", "Registro"] as const).filter((k) => doc.meta[k]);
   const info = facts.length > 0 && (
     <RailSection title="Datos del documento">
       <dl className="space-y-2 text-[12.5px]">

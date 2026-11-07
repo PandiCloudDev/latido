@@ -245,7 +245,7 @@ export default function RunsAdmin({ loaderData }: Route.ComponentProps) {
       <ReasonDialog
         open={!!receipt}
         title={`Revisar recibo #${receipt?.id ?? ""}`}
-        description="Las solicitudes que siguen desconocidas tras la recuperación automática requieren liberación manual. Revisa el cobro; si no puedes verificarlo pero ya está autorizado, elige «cobro desconocido» y anota la autorización. Al liberar se vuelve a llamar y podría cobrarse dos veces."
+        description={"Las solicitudes que siguen desconocidas tras la recuperación automática requieren liberación manual. Revisa el cobro; si no puedes verificarlo pero ya está autorizado, elige \"cobro desconocido\" y anota la autorización. Al liberar se vuelve a llamar y podría cobrarse dos veces."}
         confirmLabel="Registrar y liberar"
         busy={pending === "release"}
         onClose={() => setReceipt(null)}

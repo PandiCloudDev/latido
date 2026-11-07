@@ -56,7 +56,7 @@ function itemLines(items: V1ItemPayload[]): string[] {
 
 const BRIEF_HINTS = [
   "Resume primero en una o dos frases y luego elige las 3 a 8 notas más importantes (todas si el usuario las pide); respeta el orden de arriba y no armes tu propio ranking.",
-  `En cada nota: título con enlace a ${SITE.name}, fuente y hora (${TZ}), y una o dos frases claras sobre qué pasó. Si trae «${ITEM_COPY.reasonLabel}», úsalo para explicar por qué importa; si no, no lo inventes.`,
+  `En cada nota: título con enlace a ${SITE.name}, fuente y hora (${TZ}), y una o dos frases claras sobre qué pasó. Si trae "${ITEM_COPY.reasonLabel}", úsalo para explicar por qué importa; si no, no lo inventes.`,
   "Responde solo con el contenido de arriba; no completes con lo que recuerdes de tu entrenamiento como si fueran noticias recientes. Da el enlace al original cuando el usuario pida la fuente.",
   NO_INTERNALS,
 ];
@@ -85,7 +85,7 @@ export async function searchItems(q: string, window: AgentWindow, cat: PublicApi
 }
 
 export function searchAnswer(found: { res: V1ItemsResult; expanded: boolean }, q: { q: string; window: AgentWindow; category: PublicApiCategoryKey | null }): string {
-  const title = [`${SITE.name}: búsqueda «${q.q}»`, category(q.category), WINDOW_ZH[q.window]].filter(Boolean).join(" · ");
+  const title = [`${SITE.name}: búsqueda "${q.q}"`, category(q.category), WINDOW_ZH[q.window]].filter(Boolean).join(" · ");
   const { res, expanded } = found;
   if (!res.items.length) {
     return answer([`# ${title}`, "", `No hay notas relacionadas entre las destacadas ni entre las notas públicas de ${WINDOW_ZH[q.window]}.`], null, [
@@ -119,8 +119,8 @@ export function hotAnswer(res: HotTopics, limit: number, via: Via): string {
     ];
   });
   return answer([`# ${SITE.name}: los ${items.length} temas más comentados`, "", `Eventos que varias fuentes independientes están cubriendo a la vez, en orden; horas en ${TZ}.`], data, [
-    "Lista todos en orden como «Lugar N»; no menciones puntajes ni presentes el número de fuentes como medida de popularidad.",
-    via === "http" ? "Si el usuario pregunta por la historia, la línea de tiempo o lo último de un evento, consulta su dirección de «Historia completa»; no construyas direcciones por tu cuenta." : `Si el usuario pregunta por la historia, la línea de tiempo o lo último de un evento, usa ${T.story} con el public_id de arriba; no lo adivines.`,
+    "Lista todos en orden como \"Lugar N\"; no menciones puntajes ni presentes el número de fuentes como medida de popularidad.",
+    via === "http" ? "Si el usuario pregunta por la historia, la línea de tiempo o lo último de un evento, consulta su dirección de \"Historia completa\"; no construyas direcciones por tu cuenta." : `Si el usuario pregunta por la historia, la línea de tiempo o lo último de un evento, usa ${T.story} con el public_id de arriba; no lo adivines.`,
     NO_INTERNALS,
   ]);
 }
@@ -139,13 +139,13 @@ export function storyAnswer(s: Story, limit: number, via: Via): string {
     ...(neighbours.length ? ["", "Eventos relacionados:", ...neighbours.map((n) => `- ${n.title}: ${via === "http" ? agentUrl(`/stories/${n.publicId}`) : `public_id=${n.publicId}`}`)] : []),
   ];
   return answer([
-    `# ${SITE.name}: evento «${s.title}»`,
+    `# ${SITE.name}: evento "${s.title}"`,
     "",
     `${s.status === "active" ? "En desarrollo" : "Evento concluido"} · ${s.reportCount} notas · ${s.sourceCount} fuentes · primera nota ${stamp(s.firstReportAt)} (${TZ})`,
     `Página del evento: ${s.links.aihot}`,
   ], data, [
     "Cuenta primero lo más reciente y luego la historia en orden; menciona tal cual las contradicciones o los puntos no confirmados que señale el panorama.",
-    "Las marcadas como «fuente directa» las publicó la propia empresa o persona; dales prioridad al citar.",
+    "Las marcadas como \"fuente directa\" las publicó la propia empresa o persona; dales prioridad al citar.",
     ...(s.reportCount > reports.length ? [`La línea de tiempo muestra las ${reports.length} notas más recientes de ${s.reportCount}; ${via === "http" ? "para ver más agrega limit (máximo 50)" : "para ver más sube report_limit (máximo 50)"}.`] : []),
     NO_INTERNALS,
   ]);
@@ -195,7 +195,7 @@ export function dailyAnswer(r: DailyReport, via: Via, notes: Map<string, DailyNo
     `Incluye lo publicado del ${stamp(r.windowStart)} al ${stamp(r.windowEnd)} (${TZ}); sale ${EDITION_WHEN.daily}. Página del boletín: ${r.links.aihot}`,
     ...(data.length ? [] : ["Por ahora este número no tiene notas para mostrar."]),
   ], data.length ? data : null, [
-    "Cuenta primero la nota principal y luego lo clave de cada sección; lista todo solo si el usuario lo pide. Cada nota es un hecho; «Relacionada» es otra novedad del mismo hecho u otro anuncio del mismo lanzamiento.",
+    "Cuenta primero la nota principal y luego lo clave de cada sección; lista todo solo si el usuario lo pide. Cada nota es un hecho; \"Relacionada\" es otra novedad del mismo hecho u otro anuncio del mismo lanzamiento.",
     `El boletín diario es una edición cerrada que sale ${EDITION_WHEN.daily}; no equivale a la lista continua de las últimas 24 horas.`,
     via === "http"
       ? `Para el boletín de otra fecha, consulta ${agentUrl("/daily/YYYY-MM-DD")} (con una fecha real); si no existe, dilo con franqueza y no lo sustituyas por otro día.`
@@ -273,7 +273,7 @@ export function agentGuide(): string {
     "",
     `${SITE.name} (${siteUrl("")}) es un sitio de noticias de tecnología en español: destacadas editoriales, todas las notas públicas, lo más comentado y boletines diario, semanal y mensual`
       + (abilities.length ? `, además de ${abilities.map((a) => a.title).join(", ")}` : "")
-      + `. Todas las direcciones de abajo son GET anónimos de solo lectura, sin API key; devuelven Markdown en español listo para usar y, al final, «Indicaciones para responder» explica cómo presentarlo al usuario. ${SITE.name} mantiene este documento y agrega aquí primero cualquier función nueva; es la referencia vigente.`,
+      + `. Todas las direcciones de abajo son GET anónimos de solo lectura, sin API key; devuelven Markdown en español listo para usar y, al final, "Indicaciones para responder" explica cómo presentarlo al usuario. ${SITE.name} mantiene este documento y agrega aquí primero cualquier función nueva; es la referencia vigente.`,
     "",
     "## Qué dirección usar según la pregunta",
     "",
@@ -286,7 +286,7 @@ export function agentGuide(): string {
     "| Ver más notas | agrega limit=20 (1–30, predeterminado 10) |",
     `| Una empresa, producto, modelo, persona o tema | ${u("/search?q=palabra")} (últimos 7 días; solo hoy con window=24h) |`,
     `| Lo más comentado ahora | ${u("/hot")} |`,
-    "| La historia o lo último de un tema comentado | la dirección «Historia completa» de cada evento en los resultados |",
+    "| La historia o lo último de un tema comentado | la dirección \"Historia completa\" de cada evento en los resultados |",
     `| Boletín diario de ${SITE.name} | ${u("/daily")} (el más reciente); de una fecha: ${u("/daily/2026-09-30")} |`,
     `| Lo clave de la semana o del mes (boletines semanal y mensual) | ${u("/weekly")}, ${u("/monthly")} (el más reciente); uno específico: ${u("/weekly/2026-W39")}, ${u("/monthly/2026-09")} |`,
     ...abilities.map((a) => `| ${a.ask} | ${u(a.path)} |`),

@@ -32,7 +32,7 @@ export default function TermsPage() {
             { to: "/agent", label: "Página para agentes" },
             ...webModules().flatMap((m) => m.termsLinks ?? []),
           ]}
-          note={`${POLICY.terms.name} ${TERMS.doc.meta["Versión"] ?? ""} · ${TERMS.doc.meta["Vigente desde"] ?? ""}`}
+          note={`${POLICY.terms.name} ${TERMS.doc.meta["Versión"] ?? ""} · ${TERMS.doc.meta["Vigencia"] ?? ""}`}
         />
       }
     />

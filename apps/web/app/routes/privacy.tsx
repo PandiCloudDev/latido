@@ -24,7 +24,7 @@ export default function PrivacyPage() {
       doc={PRIVACY.doc}
       rendered={PRIVACY.rendered}
       eyebrow={SITE.name}
-      footer={<LegalFooterLinks links={[{ to: "/terms", label: POLICY.terms.name }, { to: "/feedback", label: "Página de comentarios" }]} note={`Aviso de privacidad ${PRIVACY.doc.meta["Versión"] ?? ""} · ${PRIVACY.doc.meta["Vigente desde"] ?? ""}`} />}
+      footer={<LegalFooterLinks links={[{ to: "/terms", label: POLICY.terms.name }, { to: "/feedback", label: "Página de comentarios" }]} note={`Aviso de privacidad ${PRIVACY.doc.meta["Versión"] ?? ""} · ${PRIVACY.doc.meta["Vigencia"] ?? ""}`} />}
     />
   );
 }
