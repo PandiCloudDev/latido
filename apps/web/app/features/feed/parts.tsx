@@ -57,7 +57,7 @@ export function MediaThumbs({ media, className = "" }: { media: MediaView[]; cla
 
 type Starrable = Pick<FeedItemSummary, "id" | "title" | "summary" | "source" | "publishedAt" | "score" | "selected">;
 
-/** Whether an item is in this browser's 收藏, a toggle, and a counter that bumps when it is added. */
+/** Whether an item is in this browser's "Guardados", a toggle, and a counter that bumps when it is added. */
 export function useStar(item: Starrable) {
   const on = useIsStarred(item.id);
   const [pulse, setPulse] = useState(0);
@@ -71,7 +71,7 @@ export function useStar(item: Starrable) {
   return { on, toggle, pulse };
 }
 
-/** Bookmark toggle kept in this browser (收藏): 26px, or sized by `className`. */
+/** Bookmark toggle kept in this browser ("Guardados"): 26px, or sized by `className`. */
 export function StarButton({ item, className = "size-[26px]" }: { item: Starrable; className?: string }) {
   const { on, toggle, pulse } = useStar(item);
   return (

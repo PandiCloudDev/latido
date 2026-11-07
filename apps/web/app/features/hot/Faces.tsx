@@ -4,8 +4,8 @@ import { HOT_FACE_LIMIT, type HotParticipant } from "@aihot/contracts/site";
 import { SourceAvatar } from "../../components/ui/SourceAvatar";
 
 /**
- * Who is talking about a hot story: overlapping faces of the 精选组 sources in the order the server
- * gives (T1, T1.5, T2), then a count for everyone else, 氛围组 included. Hover lists every name; where
+ * Who is talking about a hot story: overlapping faces of the selection group sources in the order the server
+ * gives (T1, T1.5, T2), then a count for everyone else, ambient group included. Hover lists every name; where
  * the faces are their own control (not inside a link), a tap or Enter opens the list, so phones and
  * keyboards reach it too.
  */

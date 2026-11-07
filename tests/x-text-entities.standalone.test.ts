@@ -6,6 +6,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import { tweetText, type SdTweet } from "@aihot/backend/providers/socialdata";
 import { tweetToCandidate } from "@aihot/backend/sources/x";
+import { tr } from "@aihot/site/locale";
 
 const post = (text: string): SdTweet => ({ id_str: "123", tweet_created_at: "2026-10-01T00:00:00.000Z", full_text: text, user: { name: "Example", screen_name: "example" } });
 
@@ -26,6 +27,6 @@ test("the post title, body and quote share decoding while expanded links and med
   assert.equal(out.title, "Research & development");
   assert.equal(out.xPost?.text, `Research & development\n${expanded}`);
   assert.equal(out.xPost?.quoted?.text, "value < 3 & value > 0");
-  assert.equal(out.bodyText, `Research & development\n${expanded}\n\n【引用 @example】value < 3 & value > 0`);
+  assert.equal(out.bodyText, `Research & development\n${expanded}\n\n${tr("【引用 @example】", "【Cita de @example】")}value < 3 & value > 0`);
   assert.equal(out.media?.[0]?.url, "https://example.test/media.png");
 });

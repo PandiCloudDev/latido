@@ -155,7 +155,7 @@ test("unrelated storage failures still fail collection visibly", async () => {
   const s = source(`epoch-db-error-${T}`, "epoch_s", [Math.floor(Date.now() / 1000)]);
   await saveSource(s);
   const constraint = `epoch_test_reject_${T}`;
-  // 仅对本测试信源加临时约束，确保真实数据库错误仍按原有路径报告。
+  // Restricción temporal solo para la fuente de esta prueba, para que los errores reales de la base se sigan reportando por la ruta original.
   await sql.unsafe(`ALTER TABLE articles ADD CONSTRAINT "${constraint}" CHECK (source_id <> '${s.id}') NOT VALID`);
   try {
     const result = await collectSource(s.id);

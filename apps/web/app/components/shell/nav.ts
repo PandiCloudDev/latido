@@ -49,8 +49,8 @@ const UP = {
 } as const;
 
 /**
- * Where pages under a navigation entry lead back up to: the entry, or 精选 in its place while the site hides
- * it. `name` is for breadcrumbs and desktop back links (热点榜), `back` for the phone bar (热点), `tab` the
+ * Where pages under a navigation entry lead back up to: the entry, or "Selección" in its place while the site hides
+ * it. `name` is for breadcrumbs and desktop back links ("Tendencias"), `back` for the phone bar ("Tendencias"), `tab` the
  * phone tab it sits under, `crumbs` its breadcrumb after the site's home.
  */
 export function navUp(entry: keyof typeof UP): { to: string; name: string; back: string; tab: TabKey; crumbs: Array<{ name: string; path: string }> } {
@@ -59,7 +59,7 @@ export function navUp(entry: keyof typeof UP): { to: string; name: string; back:
 }
 
 /**
- * The sidebar: the engine's sections with the modules' between 内容 and 更多; a module naming a section
+ * The sidebar: the engine's sections with the modules' between "Contenido" and "Más"; a module naming a section
  * that is already there adds to it.
  */
 export function sidebar(): Array<{ title: string; items: NavItem[] }> {
@@ -75,7 +75,7 @@ export function sidebar(): Array<{ title: string; items: NavItem[] }> {
   return [...sections, more];
 }
 
-/** A sidebar entry is lit on its pages; 日报 also covers weekly and monthly reports. */
+/** A sidebar entry is lit on its pages; daily also covers weekly and monthly reports. */
 export function sidebarIsActive(item: Pick<NavItem, "to" | "end">, pathname: string): boolean {
   if (item.end) return pathname === item.to;
   if (item.to === "/daily") return /^\/(daily|weekly|monthly)(\/|$)/.test(pathname);
@@ -95,8 +95,8 @@ export function activeSidebarItem(items: readonly NavItem[], pathname: string): 
 }
 
 /**
- * The phone tab bar: 全部 lives beside 精选 as a switch, 热点 and 日报 are tabs, and "Más" at /more holds
- * 收藏, 外观, the tools and the site's own pages. Which tab a page sits under is declared by the page
+ * The phone tab bar: "Todo" lives beside "Selección" as a switch, "Tendencias" and daily are tabs, and "Más" at /more holds
+ * "Guardados", "Apariencia", the tools and the site's own pages. Which tab a page sits under is declared by the page
  * itself (components/shell/screens.ts).
  */
 export type TabKey =
@@ -122,14 +122,14 @@ const ENGINE_TABS: Tab[] = [
   { key: "me", to: "/more", label: "Más", icon: IconUser, changelog: true },
 ];
 
-/** The tab bar: the engine's, the modules' before 我的. */
+/** The tab bar: the engine's, the modules' before "Mi espacio". */
 export function tabs(): Tab[] {
   return [...ENGINE_TABS.slice(0, -1).filter((t) => inNav(t.to)), ...webModules().flatMap((m) => m.tabs ?? []), ENGINE_TABS.at(-1)!];
 }
 
 /**
  * The rail that stands in for the sidebar on narrow desktops (unfolded foldables, tablets upright): the
- * tabs, with 全部 after 精选 since desktop pages have no 精选 | 全部 switch.
+ * tabs, with "Todo" after "Selección" since desktop pages have no "Selección" | "Todo" switch.
  */
 export function rail(): Tab[] {
   const all = tabs();
@@ -138,7 +138,7 @@ export function rail(): Tab[] {
   return [...all.slice(0, at), { key: "all", to: "/all", label: "Todo", icon: IconList }, ...all.slice(at)];
 }
 
-/** A rail entry is lit on its pages; 我的 also on the pages that sit under it on phones. */
+/** A rail entry is lit on its pages; "Mi espacio" also on the pages that sit under it on phones. */
 export function railIsActive(tab: Tab, pathname: string, screenTab: TabKey | undefined): boolean {
   if (tab.key === "me") return pathname === tab.to || screenTab === "me";
   return sidebarIsActive({ to: tab.to, end: tab.to === "/" }, pathname);

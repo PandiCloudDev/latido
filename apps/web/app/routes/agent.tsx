@@ -32,7 +32,7 @@ const TRACKS: AgentTrack[] = [
 const FIRST = TRACKS[0]!.key;
 const tabKey = (key: string | null) => key && TRACKS.some(t => t.key === key) ? key : FIRST;
 const hrefOf = (key: string) => (key === FIRST ? "/agent" : `/agent?tab=${key}`);
-/** How many ways, as the copy counts them ("四种方式"). */
+/** How many ways, as the copy counts them ("four ways"). */
 const WAYS = ["cero", "una", "dos", "tres", "cuatro", "cinco", "seis"][TRACKS.length];
 
 /** The modules' sections at the end of a panel. */

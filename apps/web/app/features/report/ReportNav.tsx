@@ -8,7 +8,7 @@ import { IconChevronRight } from "../../components/icons";
 import { KINDS, KIND_PATH, archiveGroups, archiveMark, chipLabel, reportPath } from "./format";
 
 /**
- * 日报 / 周报 / 月报 as the site's pill switch: spread across the archive column, or compact in the phone bar
+ * daily / weekly / monthly as the site's pill switch: spread across the archive column, or compact in the phone bar
  * (opening at the top). Every place keeps its own layoutId: all of them stay mounted, hidden by width.
  */
 export function KindSwitch({ kind, phone = false, layoutId = phone ? "report-kind-phone" : "report-kind" }: { kind: ReportKind; phone?: boolean; layoutId?: string }) {

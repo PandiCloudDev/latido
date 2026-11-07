@@ -48,7 +48,7 @@ function partsOf(data: TopicPage): Part[] {
 
 /**
  * The search snippet: what the topic covers, after when it last changed and its biggest recent events. People search
- * "{name} 最新动态"; the page showed for that query but was rarely clicked while the snippet was the bare definition.
+ * "{name}: lo más reciente"; the page showed for that query but was rarely clicked while the snippet was the bare definition.
  */
 function description(data: TopicPage, parts: Part[]): string {
   const { topic } = data;

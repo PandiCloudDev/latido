@@ -9,7 +9,7 @@ const ALLOWED_TAGS = new Set<string>([...CATEGORY_TAGS, ...TOPIC_TAGS, ...ENTITY
 
 /**
  * Known tags only, synonyms mapped, duplicates dropped, at most six; the category tag goes first, and a
- * list without one gets the pack's last category tag (其他).
+ * list without one gets the pack's last category tag (Otros).
  */
 export function normalizeTags(v: unknown): string[] {
   const raw = Array.isArray(v) ? v : typeof v === "string" ? v.split(/[,，]/g) : [];

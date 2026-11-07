@@ -27,6 +27,7 @@ import {
 import { importSelectBenchRun } from "@aihot/backend/admin/selectbench";
 import { evalModels, pmap, positiveInt, safeReportNamePart, sampleCases, usageFor } from "./eval-tools.ts";
 import { parseSelectionGoldJsonl, selectionMetrics, selectionThresholdMetrics, type SelectionDecision, type SelectionGoldRow } from "./eval-selection-core.ts";
+import { tr } from "@aihot/site/locale";
 
 // Without options: the site's gold set (site.ts DEPLOYMENT.selectionGold), else the whole of .data/gold.jsonl
 // (up to 200 cases), swept over a wide range of thresholds.
@@ -176,7 +177,7 @@ const meta = { split: values.split, n: sample.length, seed: Number(values.seed),
 writeFileSync(file, JSON.stringify({ meta, models: report }, null, 2));
 console.log(`report: ${file}`);
 if (!values["no-import"]) {
-  const run = await importSelectBenchRun({ meta, models: report }, values.label ?? `${values.split} ${sample.length} 条 · ${Object.keys(report).join(" / ")}`, "script:eval-selection");
+  const run = await importSelectBenchRun({ meta, models: report }, values.label ?? tr(`${values.split} ${sample.length} 条 · ${Object.keys(report).join(" / ")}`, `${values.split} ${sample.length} muestras · ${Object.keys(report).join(" / ")}`), "script:eval-selection");
   console.log(`SelectBench run: ${run.id}`);
 }
 await closeDb();

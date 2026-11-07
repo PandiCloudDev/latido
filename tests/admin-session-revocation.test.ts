@@ -36,7 +36,7 @@ let writes = 0;
 app.post("/api/admin/session-test", adminHandler(async () => ({ writes: ++writes })));
 let base = "";
 const realFetch = globalThis.fetch;
-// OAuth 请求仅转发到本地假服务；测试之外的网络目的地一律拒绝。
+// Las peticiones OAuth solo se reenvían al servicio falso local; cualquier otro destino de red fuera de la prueba se rechaza.
 globalThis.fetch = (async (input: string | URL | Request, init?: RequestInit) => {
   const url = new URL(input instanceof Request ? input.url : String(input));
   if (url.origin === base) return realFetch(input, init);

@@ -6,6 +6,7 @@ import { sql, type Db } from "../db.ts";
 import { publishArticleTx } from "../publication/publish.ts";
 import { emit } from "../modules.ts";
 import { hasItemPage } from "../publication/rules.ts";
+import { tr } from "@aihot/site/locale";
 
 /**
  * An UPDATE articles SET fragment: the article's grouping and its "adds value" check are decided again
@@ -84,7 +85,7 @@ export async function reconcileMaterialSource(db: Db, articleId: string, observe
   await db`UPDATE articles SET source_id = ${publisher.id}, author = ${author}, updated_at = now()
     ${needsProcessing ? sql`, processing_state = 'new', processing_queued_at = NULL, ${groupingReset()}` : sql``}
     WHERE id = ${articleId}`;
-  await audit("system", "article.attribution", `article:${articleId}`, "唯一 T1 原发信源与已验证 URL 范围一致（显式配置或已观察官网列表）",
+  await audit("system", "article.attribution", `article:${articleId}`, tr("唯一 T1 原发信源与已验证 URL 范围一致（显式配置或已观察官网列表）", "Única fuente T1 de origen coincidente con el rango de URL verificado (configuración explícita o listado oficial observado)"),
     { sourceId: article.source_id, author: article.author }, { sourceId: publisher.id, author }, { db });
   // This changes attribution and the public seat, not the judgement or selection threshold.
   const published = await publishArticleTx(db as Parameters<typeof publishArticleTx>[0], articleId);

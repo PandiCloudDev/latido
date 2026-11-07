@@ -199,7 +199,7 @@ export async function passwordLogin(password: string, returnTo: string, userAgen
   if (!timingSafeEqual(given, wanted)) throw new LoginRejected(tr("密码不对", "Contraseña incorrecta"));
   const auth: SessionAuth = { method: "password", claims: null, binding: sessionBinding("password", expected, secret()) };
   const [user] = await sql<{ id: number }[]>`
-    INSERT INTO admin_users (email, display_name, last_login_at) VALUES (${PASSWORD_ADMIN}, '管理员', now())
+    INSERT INTO admin_users (email, display_name, last_login_at) VALUES (${PASSWORD_ADMIN}, ${tr("管理员", "Administrador")}, now())
     ON CONFLICT (email) DO UPDATE SET last_login_at = now() RETURNING id`;
   const token = await createSession(user!.id, userAgent, auth);
   await audit(`admin:${user!.id}`, "auth.login", null, null, null, { method: "password" });

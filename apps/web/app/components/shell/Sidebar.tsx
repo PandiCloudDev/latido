@@ -41,7 +41,7 @@ function SideLink({ item, dot, active }: { item: NavItem; dot: boolean; active: 
 /**
  * Narrow desktops (lg up to wide: an unfolded foldable, a tablet upright, a phone on its side) leave the
  * page too little room beside the full sidebar, so the phone's tabs stand down the left side instead and
- * the rest of the sidebar sits under 我的, as on phones.
+ * the rest of the sidebar sits under "Mi espacio", as on phones.
  */
 function Rail({ dot }: { dot: boolean }) {
   const { pathname } = useLocation();

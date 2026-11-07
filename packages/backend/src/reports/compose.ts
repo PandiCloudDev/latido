@@ -75,7 +75,7 @@ async function saveReport(kind: ReportKind, key: string, start: Date, end: Date,
   });
 }
 
-/** "10 月 4 日 08:00": one end of a quiet issue's window, as its lead paragraph names it. */
+/** "4 de octubre 08:00" (zh: "10 月 4 日 08:00"): one end of a quiet issue's window, as its lead paragraph names it. */
 function windowPoint(at: Date): string {
   const day = beijingDate(at);
   return `${Number(day.slice(8, 10))}/${Number(day.slice(5, 7))} ${beijingTime(at)}`;

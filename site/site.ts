@@ -250,29 +250,29 @@ export const ACCESS = {
 
 /** Ajustes propios de este despliegue (opcional). */
 export const DEPLOYMENT = {
-  /** 凭据分组文件（models.env、collectors.env……）默认放在哪个目录，相对仓库根目录；环境变量 AIHOT_CREDENTIALS_DIR 优先，都没有就只读环境变量。 */
+  /** Directorio predeterminado de los archivos de credenciales por grupo (models.env, collectors.env…), relativo a la raíz del repositorio; la variable AIHOT_CREDENTIALS_DIR tiene prioridad y, si no hay ninguno, solo se leen variables de entorno. */
   credentialsDir: null as string | null,
-  /** 凭据分组的文件名（放在凭据目录下，选填）：没写的分组用“分组名.env”，比如 models.env。 */
+  /** Nombres de archivo de los grupos de credenciales (dentro del directorio de credenciales, opcional): los grupos no listados usan "grupo.env", por ejemplo models.env. */
   credentialFiles: {} as Partial<Record<string, string>>,
-  /** 这个部署额外要求的凭据（[分组, 环境变量名]）；生产 API 启动时检查，默认没有额外要求。 */
+  /** Credenciales adicionales que exige este despliegue ([grupo, variable de entorno]); se verifican al arrancar la API de producción y de forma predeterminada no hay ninguna. */
   requiredSecrets: [] as const,
-  /** 线上 api 收到的 Host（CDN 回源用的域名，选填）；本地开发时，网页开发服务器转给 api 的请求也换成它，和线上一致。 */
+  /** Host que recibe la api en producción (el dominio con que la CDN consulta el origen, opcional); en desarrollo local, las peticiones que el servidor de desarrollo web pasa a la api también lo usan, igual que en producción. */
   originHost: null as string | null,
-  /** 反向代理把没登录的后台访问转去登录时，用哪个请求头带上原来的地址（选填，登录后回到那里）。 */
+  /** Encabezado con el que el proxy inverso envía la dirección original al mandar a iniciar sesión un acceso al panel sin sesión (opcional; tras entrar se regresa ahí). */
   loginReturnHeader: null as string | null,
   /**
-   * 图片代理从原站取图的流量上限：超过后没缓存的图先返回 503，等这一分钟或这一天过去，当天额度用完会进运营日报；
-   * null 就不设上限。环境变量 IMGPROXY_UPSTREAM_MB_PER_MINUTE、IMGPROXY_UPSTREAM_GB_PER_DAY 优先。
+   * Límite de tráfico del proxy de imágenes hacia los sitios originales: al superarlo, las imágenes sin caché devuelven 503 hasta que pase ese minuto o ese día, y si se agota la cuota diaria aparece en el informe diario de operaciones;
+   * null significa sin límite. Las variables IMGPROXY_UPSTREAM_MB_PER_MINUTE e IMGPROXY_UPSTREAM_GB_PER_DAY tienen prioridad.
    */
   imageUpstreamBudget: null as null | { mbPerMinute: number; gbPerDay: number },
   /**
-   * 已实测应由服务器直接连接、不走出网代理（EGRESS_PROXY_URL）的域名，采集和图片共用（选填）。
-   * 每次重定向重新按目标域名选路，直连仍检查实际连接地址。
+   * Dominios que, según pruebas reales, el servidor debe leer directamente sin el proxy de salida (EGRESS_PROXY_URL); los comparten la recolección y las imágenes (opcional).
+   * En cada redirección se vuelve a elegir la ruta según el dominio de destino, y la conexión directa sigue verificando la dirección real.
    */
   directFetchHosts: [] as string[],
   /**
-   * 精选评测（scripts/eval-selection.ts）不带参数时用的金标集：文件（相对仓库根目录）、抽样条数、只抽哪一份、门槛扫描范围。
-   * null 就用 .data/gold.jsonl 的全部样本（最多 200 条），在 40–90 之间扫描。
+   * Conjunto etiquetado que usa la evaluación de selección (scripts/eval-selection.ts) sin parámetros: archivo (relativo a la raíz), número de muestras, partición y rango de umbrales a explorar.
+   * null usa todas las muestras de .data/gold.jsonl (hasta 200) y explora entre 40 y 90.
    */
   selectionGold: null as null | { file: string; sample: number; split: string; sweep: [number, number] },
 };
@@ -284,9 +284,9 @@ export const FEED_COPY = {
 };
 
 /**
- * 公开接口（API、RSS、MCP）里和网页不同的类别（选填）。上线后不要改：接口参数和订阅地址里有类别的 key。
- * merge：并进另一类发布的类别，key 是行业包里的类别，值是它并进的类别（公开接口比网页少一类时用）；
- * feedLabels：分类 RSS 标题里的名字，替换行业包里的 feedLabel（并进了别的类别时，名字常常也要跟着改）。
+ * Categorías de las interfaces públicas (API, RSS, MCP) que difieren de la web (opcional). No se cambia una vez publicado: las key de categoría aparecen en parámetros y direcciones de feeds.
+ * merge: categorías que se publican dentro de otra; la key es la categoría del paquete del sector y el valor, la categoría que la absorbe (cuando la interfaz pública tiene una categoría menos que la web);
+ * feedLabels: nombres en el título del RSS por categoría, que sustituyen el feedLabel del paquete del sector (al absorber otra categoría, el nombre suele tener que cambiar también).
  */
 export const PUBLIC_CATEGORIES = {
   merge: {},

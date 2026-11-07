@@ -1,13 +1,14 @@
-# 站点
+# Sitio
 
-这个站自己的东西：名字、文案、品牌、页面，以及启用哪些模块。步骤见 [把它改成你的行业](../docs/customize.md)。
+Lo propio de Latido: nombre, textos, idioma, marca, páginas y qué módulos están activos. Los pasos para cambiarlos están en [Adaptarlo a otro sector](../docs/customize.md).
 
-| 文件 | 内容 |
+| Archivo | Contenido |
 |---|---|
-| `site.ts` | 站名、行业词、出刊时间、首页和关于页文案、分享图文字、条目与日报周报月报上的说法、公开接口的分类、备案号 |
-| `models.ts` | 具名的模型和每一步默认用哪个（没写的步骤用 `.env` 里配的那一个） |
-| `brand/` | 图标、Logo（`Logo.tsx`）、分享图和海报上的字标（`wordmark.svg`、`wordmark-dark.svg`，可选）、日报周报月报的报头字（`nameplates/`）、关于页的二维码（`contact/`，可选） |
-| `pages/` | 使用规则、隐私说明（模板，上线前按实际情况改写） |
-| `public/` | 发布在网站根目录的固定文件（站名、地址等占位符替换后发布）：`robots.txt`、`manifest.webmanifest`、`openapi-v1.json`，以及可选的 `.well-known/security.txt` |
-| `changelog.json` | 更新日志 |
-| `modules/` | 启用哪些模块：`index.ts`、`server.ts`、`web.ts` 三份清单，列出仓库根目录 `modules/<名字>/` 里要用的模块，默认都为空，见 [架构](../docs/architecture.md#模块) 的“模块” |
+| `site.ts` | Nombre, términos del sector, horarios de los boletines, textos de portada y de "Acerca de", textos de las imágenes para compartir, forma de nombrar notas y boletines, categorías de las interfaces públicas |
+| `locale.ts` | Idioma, zona horaria y factor de longitud de los textos generados (perfil `es` para Latido; `zh` conserva el comportamiento original de AIHOT) |
+| `models.ts` | Modelos con nombre y cuál usa cada paso (los pasos no listados usan el configurado en `.env`) |
+| `brand/` | Íconos, logotipo (`Logo.tsx`), logotipo para imágenes para compartir y pósters (`wordmark.svg`, `wordmark-dark.svg`, opcionales), cabeceras de los boletines (`nameplates/`) y códigos QR de "Acerca de" (`contact/`, opcional) |
+| `pages/` | Términos de uso y aviso de privacidad (plantillas que se adaptan antes de publicar) |
+| `public/` | Archivos fijos de la raíz del sitio, publicados tras sustituir marcadores como el nombre y la dirección: `robots.txt`, `manifest.webmanifest`, `openapi-v1.json` y, de forma opcional, `.well-known/security.txt` |
+| `changelog.json` | Registro de cambios |
+| `modules/` | Qué módulos están activos: las tres listas `index.ts`, `server.ts` y `web.ts` enumeran los módulos de `modules/<nombre>/` en la raíz del repositorio; vienen vacías (ver "Módulos" en [Arquitectura](../docs/architecture.md#módulos)) |

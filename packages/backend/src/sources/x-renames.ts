@@ -9,6 +9,7 @@ import { requestRepublish } from "../jobs/publication.ts";
 import { getTweet, privateAccountRefusal } from "../providers/socialdata.ts";
 import { collectSource } from "./collect.ts";
 import { X_HANDLE, xHandle } from "./account.ts";
+import { tr } from "@aihot/site/locale";
 
 const DAY_MS = 86400_000;
 
@@ -58,7 +59,7 @@ export async function followXRenames(opts: { now?: number; pauseMs?: number } = 
     const name = s.name.replace(handle, `$1${to}`);
     await sql.begin(async (tx) => {
       await tx`UPDATE sources SET config = jsonb_set(config, '{query}', to_jsonb(${query}::text)), name = ${name}, updated_at = now() WHERE id = ${s.id}`;
-      await audit("system", "source.update", `source:${s.id}`, `X 账号 @${from} 已改名 @${to}（已存帖子作者的现名）`,
+      await audit("system", "source.update", `source:${s.id}`, tr(`X 账号 @${from} 已改名 @${to}（已存帖子作者的现名）`, `La cuenta de X @${from} cambió su nombre a @${to} (nombre actual del autor de las publicaciones guardadas)`),
         { name: s.name, config: { query: s.query } }, { name, config: { query } }, { db: tx });
       await requestRepublish(tx, s.id, "system");
     });

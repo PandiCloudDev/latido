@@ -10,7 +10,7 @@ export interface OutlineEntry {
   level: number;
   /** In place of the running number ("" for none). */
   mark?: string;
-  /** On the right: how much the section holds ("5 件"). */
+  /** On the right: how much the section holds ("5 items"). */
   note?: string;
 }
 

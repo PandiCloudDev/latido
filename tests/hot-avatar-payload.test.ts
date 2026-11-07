@@ -65,7 +65,7 @@ test('faces are 精选组 sources by tier (T1, T1.5, T2), at most 6; 氛围组 o
   const home=(await loadHotStrip())![0]!;
   const hot=(await loadHot()).entries[0]!;
 
-  // T1 (face first), T1.5, T2 (faces first, then stored order), then 氛围组 whatever its tier.
+  // T1 (face first), T1.5, T2 (faces first, then stored order), then the ambient group whatever its tier.
   const order=[5,2,3,1,6,8,9,7,0,4];
   assert.deepEqual(full.map(p=>p.name),order.map(name));
   assert.deepEqual(home.participants,full,'home shows the same faces');

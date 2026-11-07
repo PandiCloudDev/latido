@@ -3,6 +3,7 @@
 import { sql } from "../db.ts";
 import { wakeAgent, flushAgentEvents } from "../notify/agent.ts";
 import { formatAlert, formatRecovery, sendAlert, type Finding } from "../notify/feishu.ts";
+import { tr } from "@aihot/site/locale";
 
 // The process manager restarts a crashed worker within seconds and a deploy restarts it on purpose;
 // half an hour without a heartbeat means those did not help.
@@ -11,10 +12,10 @@ const WORKER_STALE_MS = 30 * 60_000;
 const WORKER_DOWN: Finding = {
   key: "worker",
   level: "now",
-  title: "后台处理服务停了，网站不会出现新内容",
-  impact: "新内容的采集、处理、推送和日报全部暂停，网站停在旧内容上",
-  heals: "系统自动重启没有成功",
-  action: "把这条发给 AI 排查重启",
+  title: tr("后台处理服务停了，网站不会出现新内容", "El servicio de procesamiento se detuvo y no aparecerá contenido nuevo"),
+  impact: tr("新内容的采集、处理、推送和日报全部暂停，网站停在旧内容上", "La recolección, el procesamiento, los envíos y el boletín diario están en pausa y el sitio se quedó con contenido viejo"),
+  heals: tr("系统自动重启没有成功", "El reinicio automático no funcionó"),
+  action: tr("把这条发给 AI 排查重启", "Pásale este aviso a la IA para que lo investigue y reinicie"),
 };
 
 /**
@@ -36,7 +37,7 @@ export async function checkWorkerHeartbeat(): Promise<void> {
     if (stale) {
       const woken = await wakeAgent({ ...WORKER_DOWN, since: hb.updated_at }, now);
       const shown = woken
-        ? { ...WORKER_DOWN, action: "已自动通知 AI 排查重启；如果半小时还没收到“已恢复”再问 AI" }
+        ? { ...WORKER_DOWN, action: tr("已自动通知 AI 排查重启；如果半小时还没收到“已恢复”再问 AI", "Ya se avisó a la IA para que lo investigue y reinicie; si en media hora no llega el aviso de recuperación, pregúntale") }
         : WORKER_DOWN;
       const msg = formatAlert(shown, hb.updated_at, now);
       await sendAlert(msg.title, msg.lines);

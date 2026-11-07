@@ -52,7 +52,7 @@ jobs:
           MIGRATION_BASE: ${{ github.event.pull_request.base.sha || github.sha }}
         run: node scripts/check-migrations.ts --base "$MIGRATION_BASE"
       - name: PostgreSQL backup tools
-        # 恢复测试需要与 PostgreSQL 17 服务匹配的客户端，不能依赖 runner 的默认版本。
+        # La prueba de restauración necesita un cliente compatible con el servidor PostgreSQL 17; no se puede depender de la versión predeterminada del runner.
         run: |
           sudo install -d /usr/share/postgresql-common/pgdg
           sudo curl --fail --silent --show-error -o /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc https://www.postgresql.org/media/keys/ACCC4CF8.asc
@@ -74,8 +74,14 @@ jobs:
 
       # Each test file runs on its own copy of aihot_ci (tests/databases.ts), which the run migrates and
       # leaves empty; the smoke check then reads that empty database.
+      # Las pruebas heredadas de AIHOT verifican el comportamiento original y sus textos en chino: corren con el
+      # perfil zh (site/locale.ts). Las del perfil español de Latido corren aparte, con el perfil predeterminado.
       - name: Backend tests
+        env:
+          SITE_LOCALE: zh
         run: npm test
+      - name: Spanish profile tests
+        run: node --import ./tests/standalone.ts --test tests/locale-es.standalone.test.ts tests/x-text-entities.standalone.test.ts
       - name: Smoke check of the built site
         # The site itself runs with collection and model calls off (the tests above use local stubs).
         env:

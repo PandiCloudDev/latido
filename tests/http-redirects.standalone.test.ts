@@ -1,4 +1,4 @@
-// 重定向测试只使用虚构凭据和回环服务；HTTPS 分支使用禁止联网的传输替身。
+// Las pruebas de redirección solo usan credenciales ficticias y servicios de loopback; la rama HTTPS usa un sustituto de transporte que prohíbe salir a la red.
 import { tag } from "./setup.ts";
 import assert from "node:assert/strict";
 import http from "node:http";
@@ -144,7 +144,7 @@ test("normal private-network guards still refuse direct and redirect destination
     await assert.rejects(guardedFetch(b.url + "/secret"), /Blocked/);
     config.allowPrivateNetworkFetch = true;
     a.routes.set("/guarded-hop", (_hit, res) => {
-      // 初始回环请求到达后恢复正常校验，验证下一跳确实再次经过目的地检查。
+      // Al llegar la primera petición de loopback se restablece la validación normal, para verificar que el siguiente salto vuelve a pasar la revisión de destino.
       config.allowPrivateNetworkFetch = false;
       res.writeHead(302, { location: b.url + "/secret" }); res.end();
     });

@@ -1,35 +1,35 @@
-// 精选的门槛。评分标准本身写在 prompts/selection-score.md；这里只决定“多少分算入选”。
-// 每篇资料由评分模型独立打两次分（0–100），两次之和 ≥ 2 × 门槛才成为精选候选；
-// 确认新闻身份与新增价值后，由发布规则决定展示（见 docs/selection.md），卡片上显示两次的平均分。
-// 门槛按信源分级区分：官方一手信源的门槛低一些，媒体和个人的高一些；信源类别再把某些官方信源的门槛抬高。
-// 改了门槛或评分提示词，用 scripts/eval-selection.ts 在你自己标注的样本上重跑一遍，再决定上线（见 docs/selection.md）。
+// Umbrales de la selección. La rúbrica está en prompts/selection-score.md; aquí solo se decide cuántos puntos bastan para entrar.
+// El modelo califica cada nota dos veces por separado (0–100) y es candidata a la selección si la suma es ≥ 2 × el umbral;
+// tras confirmar la identidad de la noticia y su valor nuevo, las reglas de publicación deciden si se muestra (ver docs/selection.md), y la tarjeta muestra el promedio.
+// El umbral depende del nivel de la fuente: más bajo para fuentes oficiales de primera mano, más alto para medios y personas; la clase de fuente puede elevarlo para ciertas fuentes oficiales.
+// Si cambias umbrales o la rúbrica, vuelve a correr scripts/eval-selection.ts sobre tus muestras etiquetadas antes de publicar (ver docs/selection.md).
 
 export const SELECTION = {
   /**
-   * 信源分级 → 入选门槛（平均分）。分级在后台“信源”里给每个源设置：
-   *   T1 官方一手（官网、官方博客、机构）· T1_5 官方账号、准官方创作者 · T2 媒体与个人
-   * 分级 EXCLUDE_MP 以及这里没有列出的分级，不参与精选评分（只进“全部动态”）。
+   * Nivel de fuente → umbral de selección (promedio). El nivel se asigna a cada fuente en "Fuentes" del panel:
+   *   T1 oficial de primera mano (sitio, blog oficial, institución) · T1_5 cuenta oficial o creador semioficial · T2 medios y personas
+   * EXCLUDE_MP y los niveles que no aparecen aquí no participan en la calificación de selección (solo entran a "Todo").
    */
   thresholds: { T1: 60, T1_5: 65, T2: 76 } as Record<string, number>,
   /**
-   * 信源类别 → 门槛下限。分级只说明来源是不是官方、一手；有些官方信源的日常内容主要写给开发者或业内，
-   * 读者要看的只是其中的大事，就在后台“信源”里给它一个类别，门槛抬到不低于这里的数。
-   * 只抬不降：分级门槛本来就更高的（媒体）不受影响。没有类别的信源只按分级。
-   *   ecosystem 生态与基础设施：芯片与硬件、推理与云服务、模型托管、开发框架与工具链、安全研究厂商、工程与开发者博客
-   *   leaderboard 评测榜单：给各家模型跑分、排名的评测机构
+   * Clase de fuente → umbral mínimo. El nivel solo indica si la fuente es oficial y de primera mano; algunas fuentes oficiales publican sobre todo para desarrolladores o la industria,
+   * y al lector solo le interesan sus anuncios grandes: en "Fuentes" del panel se les asigna una clase y su umbral sube al menos hasta este número.
+   * Solo eleva, nunca baja: no afecta a los niveles cuyo umbral ya es mayor (medios). Sin clase, se usa solo el nivel.
+   *   ecosystem Ecosistema e infraestructura: chips y hardware, inferencia y nube, hospedaje de modelos, frameworks y herramientas, empresas de investigación de seguridad, blogs de ingeniería y desarrolladores
+   *   leaderboard Rankings y evaluaciones: organizaciones que miden y clasifican modelos
    */
   classes: {
     ecosystem: { label: "Ecosistema e infraestructura", threshold: 70 },
     leaderboard: { label: "Rankings y evaluaciones", threshold: 76 },
   } as Record<string, { label: string; threshold: number }>,
   /**
-   * 没入选、但平均分高于这个数的资料，也用精选的写法（内容理解：标题、摘要、推荐理由）来写，
-   * 其余用更便宜的“标题摘要翻译”。
+   * Las notas no seleccionadas con promedio mayor que este número también se redactan como seleccionadas (titular, resumen y motivo para leer);
+   * el resto usa la redacción más barata de titular, resumen y traducción.
    */
   understandFloor: 50,
   /**
-   * 浏览“全部动态”（网页列表、接口和 RSS 的全部模式）只出平均分不低于这个数的资料，没评上分的照常出；
-   * 搜索仍覆盖全部。低于 40 分的多是转述和资讯账号的刷屏（曾占全部动态三分之一以上），精选从没收过 60 分以下的。
+   * "Todo" (lista web, API y modo completo del RSS) solo muestra notas con promedio igual o mayor; las que no tienen calificación aparecen igual,
+   * y la búsqueda cubre todo. Por debajo de 40 suele haber reposteos y saturación de cuentas informativas (llegó a ser más de un tercio de "Todo"), y la selección nunca tomó notas de menos de 60.
    */
   browseFloor: 40,
 } as const;

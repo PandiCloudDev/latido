@@ -5,6 +5,7 @@
 // settled (content/materials.ts textSettled).
 import { z } from "zod";
 import { serverModules, type SourceUse } from "../modules.ts";
+import { tr } from "@aihot/site/locale";
 
 /** Every declared use by name; the first module to declare a name keeps it. */
 export function sourceUses(): Record<string, SourceUse> {
@@ -32,6 +33,6 @@ export const SourceUses = z
   .array(z.string())
   .max(10)
   .refine((uses) => uses.every((u) => Object.hasOwn(sourceUses(), u)), {
-    error: () => `信源用途只能是已装模块声明的：${Object.keys(sourceUses()).join("、") || "（没有）"}`,
+    error: () => tr(`信源用途只能是已装模块声明的：${Object.keys(sourceUses()).join("、") || "（没有）"}`, `El uso de la fuente solo puede ser uno declarado por un módulo instalado: ${Object.keys(sourceUses()).join(", ") || "(ninguno)"}`),
   })
   .transform((uses) => [...new Set(uses)]);

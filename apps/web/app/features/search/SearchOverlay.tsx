@@ -1,5 +1,5 @@
 // Phone search: opens over the page from the bars' magnifier with the keyboard
-// already up — the field is focused inside the same tap, which iOS requires — and searches 全部动态
+// already up — the field is focused inside the same tap, which iOS requires — and searches "Todo"
 // (/all?q=…). Below the field: this browser's recent searches, topics to browse and what is hot now.
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { Form, Link, useLocation, useNavigation } from "react-router";

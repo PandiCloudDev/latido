@@ -23,8 +23,8 @@ export function beijingIso(instant: Date | string | number): string {
 }
 
 /**
- * "9月28日" of a calendar date (YYYY-MM-DD). Given `today` (YYYY-MM-DD, Beijing), a day of another year carries its
- * year, so an archived item is not read as this year's: "2019年2月19日".
+ * "28 de septiembre" (zh: "9月28日") of a calendar date (YYYY-MM-DD). Given `today` (YYYY-MM-DD, site time), a day of another year carries its
+ * year, so an archived item is not read as this year's: "19 de febrero de 2019" (zh: "2019年2月19日").
  */
 const MONTHS: Partial<Record<string, readonly string[]>> = {
   es: ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"],
@@ -43,10 +43,10 @@ export function monthDay(date: string, today?: string): string {
   return `${day} de ${names[month - 1]}${otherYear ? ` de ${date.slice(0, 4)}` : ""}`;
 }
 
-/** "9月29日" in Beijing time. */
+/** "29 de septiembre" (zh: "9月29日") in the site's time zone. */
 export const beijingDay = (instant: Date | string | number) => monthDay(beijingDate(instant));
 
-/** "9月29日 13:40" in Beijing time. */
+/** "29 de septiembre 13:40" (zh: "9月29日 13:40") in the site's time zone. */
 export const beijingStamp = (instant: Date | string | number) => `${beijingDay(instant)} ${beijingTime(instant)}`;
 
 /** The zone's name, for whatever takes one (a scheduler, a report's metadata, SQL `AT TIME ZONE`). */

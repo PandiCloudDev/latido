@@ -7,7 +7,7 @@ import { KindSwitch, ReportArchive, ReportPhoneNav } from "./ReportNav";
 
 /**
  * Report pages sit beside their own archive column (desktop from `side`), flush against the site sidebar.
- * Phones get a bar with the kind switch and the issue's outline (本期目录), the recent issues under it;
+ * Phones get a bar with the kind switch and the issue's outline (issue contents), the recent issues under it;
  * narrower desktops get the same above the paper; a page below the reports (the archive) gets a bar
  * leading back instead. The paper is centred beside the archive, on a faintly toned paper in the light
  * theme, up to 1160px.

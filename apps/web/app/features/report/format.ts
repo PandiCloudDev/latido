@@ -31,7 +31,7 @@ const MESES = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "
 const mes = (n: number) => MESES[n - 1] ?? String(n);
 const Mes = (n: number) => { const m = mes(n); return m.charAt(0).toUpperCase() + m.slice(1); };
 
-/** "这一天的 4 件 AI 大事" / "本周的 12 件 AI 大事" / "8 月的 20 件 AI 大事" (the subject and REPORTS.entry from site/site.ts). */
+/** "Las 4 noticias de tecnología del día" / "Las 12 de la semana" / "Las 20 de agosto" (the subject and REPORTS.entry from site/site.ts). */
 export function headline(kind: ReportKind, key: string, count: number): string {
   void measure; void subjectAfter;
   if (kind === "daily") return `Las ${count} ${noun} del día`;
@@ -51,7 +51,7 @@ export interface ArchiveGroup {
 }
 
 /**
- * The archive column: days grouped by month, weeks by the month their Monday falls in ("第2周"),
+ * The archive column: days grouped by month, weeks by the month their Monday falls in ("semana 2"),
  * months by year. Newest first, as the index comes.
  */
 export function archiveGroups(kind: ReportKind, index: ReportNavigationEntry[]): ArchiveGroup[] {
@@ -91,7 +91,7 @@ export function archiveMark(kind: ReportKind, key: string): { big: string; small
   return { big: key.slice(5, 7), small: null };
 }
 
-/** Short chip label for the phone switcher: "Hoy", "9月26日", "9月第2周", "8 月". */
+/** Short chip label for the phone switcher: "Hoy", "26 de septiembre", "sept., semana 2", "agosto". */
 export function chipLabel(kind: ReportKind, key: string, index: ReportNavigationEntry[], today: string): string {
   if (kind === "daily") return key === today ? "Hoy" : engineMonthDay(key, today);
   if (kind === "monthly") return Mes(Number(key.slice(5, 7)));
@@ -101,7 +101,7 @@ export function chipLabel(kind: ReportKind, key: string, index: ReportNavigation
 }
 
 /**
- * "第 N 期": the issue's place in its series as the server counts it over every issue. The navigation
+ * "Número N": the issue's place in its series as the server counts it over every issue. The navigation
  * index holds only the newest issues, so its length cannot tell.
  */
 export function issueNumber(index: ReportNavigationEntry[], key: string): number | null {
@@ -123,7 +123,7 @@ export const EDITION: Record<ReportKind, string> = { daily: `Sale ${EDITION_WHEN
 
 /**
  * The masthead's figures, in the order a reader wants them, in the site's words (REPORTS). Releases of the
- * pack's headline launch kind (RELEASE, "个新模型" for AI) count only where the pack has one; zero is left out.
+ * pack's headline launch kind (RELEASE, "lanzamientos" in Latido) count only where the pack has one; zero is left out.
  */
 const UNITS = REPORTS.metricUnits;
 const METRICS: Array<[key: string, unit: string]> = [
@@ -139,7 +139,7 @@ export function metricItems(metrics: Record<string, number>): Array<{ value: num
   return METRICS.filter(([k]) => typeof metrics[k] === "number" && (k !== "modelsReleased" || metrics[k]! > 0)).map(([k, unit]) => ({ value: metrics[k]!, unit }));
 }
 
-/** "前一日 · 9月25日", "上一期 · 第 37 周", "下一期 · 7 月". A day of another year than `now` (Beijing) carries its year. */
+/** "Día anterior · 25 de septiembre", "Número anterior · semana 37", "Número siguiente · julio". A day of another year than `now` (site time) carries its year. */
 export function neighbourLabel(kind: ReportKind, key: string, direction: "prev" | "next", now: number = Date.now()): string {
   if (kind === "daily") return `${direction === "prev" ? "Día anterior" : "Día siguiente"} · ${monthDay(key, now)}`;
   const which = direction === "prev" ? "Número anterior" : "Número siguiente";
@@ -148,7 +148,7 @@ export function neighbourLabel(kind: ReportKind, key: string, direction: "prev" 
 
 
 
-/** The line above the nameplate: "2026 年 9 月 26 日 · 星期六", "2026 年第 38 周 · 09.14 — 09.20", "2026 年 8 月". */
+/** The line above the nameplate: "sábado, 26 de septiembre de 2026", "semana 38 de 2026 · 09.14 — 09.20", "agosto de 2026". */
 export function dateLine(kind: ReportKind, key: string): string {
   const m = dateMark(kind, key);
   if (kind === "daily") return `${m.bottom.charAt(0).toUpperCase()}${m.bottom.slice(1)} ${Number(key.slice(8, 10))} de ${m.top.toLowerCase()}`;
@@ -160,7 +160,7 @@ export const MOTTO: Record<ReportKind, string> = { daily: `${REPORTS.motto} · L
 
 export interface PeriodCell {
   key: string | null;
-  /** Hover text: "9月26日 · 第 158 期". */
+  /** Hover text: "26 de septiembre · número 158". */
   label: string;
   state: "current" | "issue" | "none" | "pad";
 }

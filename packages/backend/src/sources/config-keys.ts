@@ -2,6 +2,7 @@
 // know would otherwise fall back silently to the generic parse (menus and sentence fragments as
 // articles, dates never found).
 import type { SourceRow } from "./types.ts";
+import { tr } from "@aihot/site/locale";
 
 // Rules applied in collect.ts to every kind read through collectSource.
 const PUBLISHER = ["publisherRole", "publisherUrlPrefixes", "publisherRequiresDiscovery"];
@@ -91,5 +92,5 @@ export class UnsupportedConfig extends Error {
 /** Refuses a config with entries its kind does not implement (admin create, edit and preview). */
 export function assertSupportedConfig(kind: SourceRow["kind"], config: Record<string, unknown>): void {
   const bad = unsupportedConfig(kind, config);
-  if (bad.length) throw new UnsupportedConfig(`不支持的配置项：${bad.join("、")}`);
+  if (bad.length) throw new UnsupportedConfig(tr(`不支持的配置项：${bad.join("、")}`, `Opciones de configuración no admitidas: ${bad.join(", ")}`));
 }

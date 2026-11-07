@@ -355,7 +355,7 @@ function ItemView({ item, followups }: Loaded) {
       )}
     </Menu>
   );
-  // Phones: the same actions as a sheet from the bar (分享 and 原文 are on the toolbar).
+  // Phones: the same actions as a sheet from the bar ("Compartir" and "Original" are on the toolbar).
   const phoneActions: ActionRow[] = [
     { key: "poster", label: "Crear imagen para compartir", icon: <IconImage size={20} />, onSelect: openPoster },
     { key: "copy", label: "Copiar enlace", icon: <IconCopy size={20} />, onSelect: () => void copyLink() },
@@ -375,7 +375,7 @@ function ItemView({ item, followups }: Loaded) {
       {originalLabel} <IconExternal size={13} />
     </a>
   );
-  // Desktop actions head the right rail, one row as tall as 返回 at the head of the left one.
+  // Desktop actions head the right rail, one row as tall as "Regresar" at the head of the left one.
   const actions = (
     <div className="flex items-center gap-1">
       {originalLink("flex-1 touch:h-11")}
@@ -475,8 +475,8 @@ function ItemView({ item, followups }: Loaded) {
           </>
         }
       >
-        {/* Between lg and 2xl the left rail is hidden: 返回 stays at the top while reading, as on the original site.
-            Below side the right rail is hidden too, and its actions and the outline join 返回. */}
+        {/* Between lg and 2xl the left rail is hidden: "Back" stays at the top while reading, as on the original site.
+            Below side the right rail is hidden too, and its actions and the outline join "Back". */}
         <div className="sticky top-0 z-20 -mx-2 hidden items-center justify-between gap-3 bg-bg/95 px-2 py-1.5 backdrop-blur lg:flex 2xl:hidden">
           {backButton}
           <div className="flex items-center gap-1 side:hidden">

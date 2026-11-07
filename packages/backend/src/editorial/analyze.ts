@@ -6,7 +6,7 @@ import { describePublicationTime } from "../sources/dates.ts";
 // revision before any step.
 //   1. prefilter: does the material belong to this industry at all (wide recall). Only BLOCK stops an
 //      item; a BLOCK on an original post without text counts as UNKNOWN;
-//   2. score: two independent scores against the source's threshold (tier and class, industry/selection.ts) decide 精选;
+//   2. score: two independent scores against the source's threshold (tier and class, industry/selection.ts) decide "Selección";
 //   3. structure: category, tags, subjects and the current news fact, beside scoring;
 //   4. writing, once the structure is in: the Chinese title, summary and reason by the content
 //      understanding for selected and near-selected items, by the cheaper title/summary prompts for the rest;
@@ -57,7 +57,7 @@ export const SCORE_CALLS = 2;
 /**
  * The threshold on the mean score for a source (industry/selection.ts): its tier's, raised to its
  * class's floor; a class never lowers it. Selected when score1 + score2 >= 2 × threshold. Tiers
- * without a threshold are not scored for 精选.
+ * without a threshold are not scored for "Selección".
  */
 export function selectionThreshold(source: { tier: string; selectionClass?: string | null }): number | null {
   const tier = SELECTION.thresholds[source.tier];

@@ -84,7 +84,7 @@ test("one fact holds one selected seat on v1, RSS and the sync ledger", async ()
   assert.equal(net.get(official), "upsert");
   assert.equal(net.get(first), "remove");
   assert.ok(!net.has(second) || net.get(second) === "remove");
-  // 全部动态 and the item page list every report; the ones that yield the seat say which report stands
+  // "Todo" and the item page list every report; the ones that yield the seat say which report stands
   // for the fact, and the recommendation reason goes with the seat.
   const pool = (await get(`/api/site/pool?q=${T}`)).json.items as Array<{ id: string; reason: string | null; sameEvent?: { id: string } | null }>;
   assert.equal(pool.find((i) => i.id === first)?.sameEvent?.id, official);

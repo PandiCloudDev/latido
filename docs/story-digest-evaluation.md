@@ -1,51 +1,51 @@
-# 事件综述提示词评测
+# Evaluación del prompt de síntesis de eventos
 
-事件页的综述由 `industry/prompts/story-digest.md` 生成。改这份提示词之前，先在同一批事件上把现有提示词和候选提示词并排跑一遍，人工比较，不凭页面印象判断。
+La síntesis de la página de evento la genera `industry/prompts/story-digest.md`. Antes de cambiar este prompt, corre el actual y el candidato lado a lado sobre los mismos eventos y compáralos a mano, en lugar de juzgar por la impresión que deja la página.
 
-## 1. 准备案例
-
-```bash
-node --env-file=.env scripts/eval-story-digests.ts --stories <事件id>,<事件id> --out .data/story-digest-cases.jsonl
-```
-
-事件 id 是事件页地址 `/story/<id>` 里的那一段。导出只读数据库，不调用模型，不改动任何事件。报道按站点生成综述时的同一套规则取，只是顺带提及的、综合稿、撤下的和尚未公开的报道不算。已经有综述的事件按“更正后重写”组装（不带上一版综述），还没有综述的按首次撰写。找不到、已被合并或没有可用报道的事件会直接报错。
-
-导出的文件每行一个事件，可以先审阅。想测有新报道时的增量更新，把 `inputMode` 改为 `incremental`，填上 `story.previousDigest` 和 `knownArticleIds`（上一版已包含的报道 id）。也可以手写案例，格式见 `industry/story-digest-eval.example.jsonl`（虚构示例）。
-
-## 2. 并排对比
+## 1. Prepara los casos
 
 ```bash
-node --env-file=.env scripts/eval-story-digests.ts --cases .data/story-digest-cases.jsonl --system my-candidate.md
+node --env-file=.env scripts/eval-story-digests.ts --stories <id del evento>,<id del evento> --out .data/story-digest-cases.jsonl
 ```
 
-- 每个案例用现有提示词和候选提示词各跑一次：同一个模型（默认是“事件综述”这一步当前用的模型，`--models` 可指定），同一份输入。发给模型的系统提示词、输入和采样参数与站点生成综述时完全相同。
-- 候选文件的写法与 `industry/prompts/` 相同：`{{siteName}}` 换成站名，`{{> 文件名}}` 插入共用规则，缺值会报错。候选与现有提示词渲染后完全相同时拒绝运行。不传 `--system` 时只跑现有提示词。
-- 开始前打印调用次数（案例数 × 模型数 × 提示词数），超过 `--max-calls`（默认 18）一次都不发。每次调用和站点其他模型请求一样记录、计入预算；原样重跑复用已收到的结果，不再付费，所以改一版候选再跑，现有提示词那一半不花钱。
+El id del evento es la parte final de su dirección, `/story/<id>`. La exportación solo lee la base: no llama al modelo ni modifica ningún evento. Las coberturas se toman con las mismas reglas que usa el sitio al generar la síntesis, sin contar las menciones de paso, las notas que reúnen varios hechos, las retiradas ni las aún no publicadas. Los eventos que ya tienen síntesis se arman como "reescritura tras corrección" (sin la síntesis anterior) y los que no tienen, como primera redacción. Si un evento no existe, ya se fusionó con otro o no tiene coberturas utilizables, el script termina con error.
 
-结果写到 `.data/eval/`（`--out-dir` 可改），一份 JSON、一份 Markdown：两边的标题和综述并排，附每次调用的 token 用量和记录编号，失败的调用写明原因。
+El archivo exportado tiene un evento por línea y se puede revisar antes. Para probar una actualización incremental con coberturas nuevas, cambia `inputMode` a `incremental` y llena `story.previousDigest` y `knownArticleIds` (los ids de las coberturas que ya incluía la versión anterior). También puedes escribir casos a mano con el formato de `industry/story-digest-eval.example.jsonl` (ejemplo ficticio).
 
-## 3. 人工看什么
+## 2. Comparación lado a lado
 
-没有可靠的自动分数，这个工具也不让模型给模型打分。逐条看：
+```bash
+node --env-file=.env scripts/eval-story-digests.ts --cases .data/story-digest-cases.jsonl --system mi-candidato.md
+```
 
-- 是否先讲清核心变化和当前结论，而不是按日期复述下方的时间线；
-- 有没有空泛的宣传腔和套话；
-- 条件、适用对象、收费与额度、地域等限制是否仍绑在对应对象上；
-- 有没有报道和事实证据里没有的内容，有没有评论报道本身（“报道未披露……”）或把写作要求写进正文；
-- 更正后重写时，失效的旧说法是否清掉了。
+- Cada caso se corre una vez con el prompt actual y otra con el candidato, con el mismo modelo (de forma predeterminada el del paso "Síntesis de eventos"; `--models` permite elegir otro) y la misma entrada. El prompt de sistema, la entrada y los parámetros de muestreo son idénticos a los que usa el sitio.
+- El archivo candidato se escribe igual que los de `industry/prompts/`: `{{siteName}}` se sustituye por el nombre del sitio y `{{> nombre-de-archivo}}` inserta reglas compartidas; si falta un valor, se produce un error. Si el candidato, ya renderizado, es idéntico al actual, la ejecución se rechaza. Sin `--system` solo corre el prompt actual.
+- Antes de empezar imprime el número de llamadas (casos × modelos × prompts) y, si supera `--max-calls` (18 de forma predeterminada), no envía ninguna. Cada llamada se registra y cuenta para el presupuesto como cualquier otra petición del sitio; repetir sin cambios reutiliza los resultados recibidos sin volver a pagar, así que al probar una nueva versión del candidato la mitad del prompt actual no cuesta.
 
-## 4. 改完提示词之后
+Los resultados se escriben en `.data/eval/` (se cambia con `--out-dir`), en un JSON y un Markdown: titulares y síntesis de ambos lados, uno junto al otro, con el uso de tokens y el número de registro de cada llamada, y el motivo de las que fallaron.
 
-提示词换版本本身不会重写已有事件的综述。一个事件只在它的报道变化时才重新生成，有新报道时以旧综述为上一版增量改写，所以新提示词随新报道逐步生效，不会一次性产生大量模型调用。
+## 3. Qué revisar a mano
 
-想让某几个事件立即用新提示词重写，在仓库根目录调用 `rewriteStoryDigest`（每个事件一次模型调用，记进后台审计）：
+No existe una calificación automática confiable, y esta herramienta tampoco pone a un modelo a calificar a otro. Revisa caso por caso:
+
+- Si primero explica el cambio central y la conclusión actual, en lugar de repetir por fecha la línea de tiempo de abajo;
+- Si hay tono promocional vacío o frases hechas;
+- Si las condiciones, a quién aplica, precios y cuotas, regiones y otras restricciones siguen ligadas a lo que corresponden;
+- Si aparece algo que no está en las coberturas ni en la evidencia de los hechos, si comenta la cobertura en sí ("la nota no revela…") o si se filtran instrucciones de redacción al texto;
+- En una reescritura tras corrección, si se eliminaron las afirmaciones anteriores que ya no son válidas.
+
+## 4. Después de cambiar el prompt
+
+Cambiar de versión no reescribe las síntesis existentes. Un evento solo se regenera cuando cambian sus coberturas, y al llegar coberturas nuevas se reescribe de forma incremental a partir de la síntesis anterior, así que el prompt nuevo se aplica poco a poco sin provocar una avalancha de llamadas.
+
+Para que algunos eventos se reescriban de inmediato con el prompt nuevo, llama a `rewriteStoryDigest` desde la raíz del repositorio (una llamada al modelo por evento, registrada en la auditoría del panel):
 
 ```bash
 node --env-file=.env --input-type=module -e '
 const { rewriteStoryDigest } = await import("@aihot/backend/events/corrections");
 const { sql } = await import("@aihot/backend/db");
-const [s] = await sql`SELECT id FROM stories WHERE public_id = ${"<事件id>"}`;
-if (!s) throw new Error("没有这个事件 id");
-console.log(await rewriteStoryDigest(s.id, "综述提示词已更新", "ops-script"));
+const [s] = await sql`SELECT id FROM stories WHERE public_id = ${"<id del evento>"}`;
+if (!s) throw new Error("No existe ese id de evento");
+console.log(await rewriteStoryDigest(s.id, "Se actualizó el prompt de síntesis", "ops-script"));
 await sql.end();'
 ```

@@ -1,4 +1,4 @@
-// One report with a newspaper's structure in the site's own look: a nameplate with its 报眼 (the box
+// One report with a newspaper's structure in the site's own look: a nameplate with its ear (the box
 // beside it for the issue and date), a band of the issue's figures, the front page (the lead, today's
 // highlights and the page index), then one page per section in two columns, the neighbouring issues
 // and a colophon. Colours, type and components are the site's; only the structure is a paper's.
@@ -26,7 +26,7 @@ const pad = (n: number) => String(n).padStart(2, "0");
 const keyOf = (c: ReportCitation) => c.itemId ?? c.title;
 const anchorOf = (c: ReportCitation) => (c.itemId ? `r-${c.itemId}` : null);
 const LINK = "inline-flex min-h-7 items-center gap-0.5 font-medium transition-colors hover:text-accent";
-/** What comes before `noun` at the end of `phrase` ("往期 AI " of "往期 AI 周报"), so the kind's name is its own text. */
+/** What comes before `noun` at the end of `phrase` ("Números anteriores del " of "Números anteriores del boletín semanal"), so the kind's name is its own text. */
 const before = (phrase: string, noun: string) => phrase.slice(0, -noun.length);
 
 function Masthead({ report, index, quiet }: { report: ReportDetail; index: ReportNavigationEntry[]; quiet: boolean }) {
@@ -50,7 +50,7 @@ function Masthead({ report, index, quiet }: { report: ReportDetail; index: Repor
           </h1>
           <p className="mt-3 text-[11.5px] tracking-[0.36em] text-ink-4 @[880px]:mt-4 @[880px]:text-[12.5px]">{REPORTS.imprint}</p>
         </div>
-        {/* 报眼: the box beside the nameplate, as a Chinese daily sets it: the issue and the date in the
+        {/* The "ear" (baoyan): the box beside the nameplate, as a Chinese daily sets it: the issue and the date in the
             nameplate's dots, and on wider paper the issue calendar beside them. */}
         <div className="flex shrink-0 items-stretch well rounded-panel">
           <div className="flex w-[112px] flex-col items-center justify-center px-2 py-3 text-center @[880px]:w-[150px] @[880px]:py-4">
@@ -83,7 +83,7 @@ function Masthead({ report, index, quiet }: { report: ReportDetail; index: Repor
   );
 }
 
-/** Source face and name, and the site's 一手 mark when first-hand. */
+/** Source face and name, and the site's first-hand mark when first-hand. */
 function Source({ c, size = 16 }: { c: ReportCitation; size?: number }) {
   return (
     <span className="inline-flex min-w-0 items-center gap-1.5">
@@ -403,7 +403,7 @@ export function SectionPage({ id, no, label, children }: { id: string; no?: numb
   );
 }
 
-/** Two columns with a hairline between them, once the page is wide enough (快讯). */
+/** Two columns with a hairline between them, once the page is wide enough (briefs). */
 const COLUMNS = "@[760px]:columns-2 @[760px]:gap-x-12 @[760px]:[column-rule:1px_solid_var(--line)]";
 
 /** Issues change through these links, never by a sideways swipe: on iOS that would fight the edge swipe back. */
@@ -458,7 +458,7 @@ function History({ report, index }: { report: ReportDetail; index: ReportNavigat
   );
 }
 
-/** The issue's pages for the phone outline: the front page, each page under its number, then 快讯. */
+/** The issue's pages for the phone outline: the front page, each page under its number, then the briefs. */
 export function reportOutline(report: ReportDetail): OutlineEntry[] {
   const pages = pagesOf(report, leadStoryOf(report));
   if (pages.length === 0 && report.flashes.length === 0) return [];

@@ -71,8 +71,8 @@ export interface FeedItemSummary extends Pick<ItemSummary, "id" | "title" | "sum
     quoted: Omit<NonNullable<XPostView["quoted"]>, "url"> | null;
   }) | null;
   /**
-   * A selected report whose fact is represented by another report (全部动态 and search): that report,
-   * so the card can say "同一件事，精选收录的是《…》" instead of claiming a seat of its own.
+   * A selected report whose fact is represented by another report ("Todo" and search): that report,
+   * so the card can say "same story; the selection carries "…"" instead of claiming a seat of its own.
    */
   sameEvent?: { id: string; title: string } | null;
 }
@@ -145,7 +145,7 @@ export interface OutlineEntry {
 export interface SiteItemDetail extends ItemSummary {
   /** The post with all its media; its text is the body. */
   x: Omit<XPostView, "text" | "translation"> | null;
-  /** Selected, but its fact's seat is held by this report: marked 同事件, without a reason of its own. */
+  /** Selected, but its fact's seat is held by this report: marked "same event", without a reason of its own. */
   sameEvent?: { id: string; title: string } | null;
   readingMode: "full" | "summary-only";
   author: string | null;
@@ -162,7 +162,7 @@ export interface SiteItemDetail extends ItemSummary {
   bodyLanguage: "zh" | "original";
 }
 
-/** A fact's public reports under the list's filters: what "另外 N 家也报道了" opens. */
+/** A fact's public reports under the list's filters: what "N more outlets also covered this" opens. */
 export interface GroupReport {
   id: string;
   title: string;
@@ -314,7 +314,7 @@ export interface ReportCitation {
 export interface ReportDetail {
   kind: ReportKind;
   key: string;
-  /** The issue's place among the existing issues of its kind, oldest first ("第 N 期"). */
+  /** The issue's place among the existing issues of its kind, oldest first ("issue N"). */
   issueNumber: number;
   title: string;
   generatedAt: string;
@@ -403,11 +403,11 @@ export interface SiteStats {
   items: number;
   selected: number;
   dailies: number;
-  /** The last 24 hours: items found (heat-only sources included), and items that made 精选 (by their place on the timeline). */
+  /** The last 24 hours: items found (heat-only sources included), and items that made the selection (by their place on the timeline). */
   day: { collected: number; selected: number };
   /** Enabled sources in a daily shuffle, for the about page's river: one line per source. */
   sampleSources: Array<{ name: string; kind: string; heatOnly: boolean }>;
-  /** The latest 精选, newest first. */
+  /** The latest selection, newest first. */
   latest: Array<{ id: string; title: string; source: string }>;
 }
 

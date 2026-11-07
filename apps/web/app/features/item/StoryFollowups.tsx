@@ -3,7 +3,7 @@ import type { StoryFollowup, StoryFollowupsResponse, StoryRef } from "@aihot/con
 import { MoreLink } from "../../components/ui/Page";
 import { relativeTime } from "../../lib/format";
 
-/** "事件后续": the other developments of the event this report belongs to, newest first, with a link to the whole event. */
+/** "Event follow-ups": the other developments of the event this report belongs to, newest first, with a link to the whole event. */
 export function StoryFollowups({ followups, story, currentId }: { followups: StoryFollowupsResponse | null; story: StoryRef; currentId: string }) {
   const items = followups?.items.filter((d) => d.representative.id !== currentId) ?? [];
   return items.length > 0

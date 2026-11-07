@@ -91,7 +91,7 @@ function LoadState({ loading, error, onRetry, empty }: { loading: boolean; error
   return null;
 }
 
-/** "另外 N 家也报道了": the other reports of the fact the card stands for, behind a toggle. */
+/** "N more outlets also covered this": the other reports of the fact the card stands for, behind a toggle. */
 export function GroupSources({ group, filters, parentId }: { group: GroupInfo; filters?: TimelineFilters; parentId: string }) {
   const entry = useLocation().key;
   const key = `${group.factId}|${parentId}`;

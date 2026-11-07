@@ -1,53 +1,60 @@
-# 给 Agent 的说明
+# Instrucciones para agentes
 
-这是一个行业热点网站的框架：采集信源、用模型筛选和写作、归组事件、出日报周报月报，并通过网站、RSS、公开 API、Agent Markdown 和 MCP 对外提供。默认配置是一个 AI 行业的示例站。先读 README，再按任务读 `docs/` 里对应的文档。
+Este repositorio es Latido, un radar de noticias de tecnología en español para México y Latinoamérica, construido sobre el motor de código abierto AIHOT: recoge fuentes, filtra y redacta con modelos, agrupa eventos, publica boletines diario, semanal y mensual, y lo ofrece por web, RSS, API pública, Markdown para agentes y MCP. Lee primero el README y después, según la tarea, el documento correspondiente de `docs/`.
 
-## 最常见的任务：改成另一个行业
+## Particularidades de Latido
 
-按 `docs/customize.md` 的顺序做。这个站自己的东西在 `site/`：站名文案（`site.ts`）、每一步的模型（`models.ts`）、品牌与 Logo（`brand/`）、条款页（`pages/`）、发布在网站根目录的固定文件（`public/`，替换占位符后发布）、更新日志（`changelog.json`）。行业知识在 `industry/`：分类标签（`taxonomy.ts`）、主题（`topics.json`）、示范信源（`sources.json`）、提示词（`prompts/`）、门槛（`selection.ts`）。通常不需要改 `apps/` 和 `packages/`；框架里没有、只有这个站要的功能，做成模块放进 `modules/`（`docs/architecture.md` 的“模块”）。
+- Todo lo que el sitio escribe y muestra está en español de México. El idioma, la zona horaria (`America/Mexico_City`, `-06:00`) y el factor de longitud de los textos generados viven en `site/locale.ts`; el motor los consulta en lugar de suponer chino y hora de Pekín.
+- El perfil `zh` de `site/locale.ts` conserva el comportamiento original de AIHOT. Las pruebas heredadas que usan datos en chino se corren con `SITE_LOCALE=zh`; no traduzcas esos datos de prueba ni los patrones que reconocen texto chino (fechas, unidades, puntuación), porque prueban comportamiento real del motor.
+- En títulos, resúmenes y textos públicos se usan solo comillas rectas dobles ("), nunca comillas angulares.
+- Pandi.Cloud opera Latido como desarrollador independiente; no lo vincules en textos ni metadatos con otras empresas o medios.
 
-这些事要问使用者本人，不要替他决定：站名；要盯哪些信源；什么消息重要、什么是噪声；分类怎么分；条款和隐私说明的内容（`site/pages/` 是模板，上线前需要他本人确认）。
+## La tarea más común: adaptarlo a otro sector
 
-改评分标准时保留原有结构（内容类型、五个维度加权、噪声压制、安全边界），替换的是“什么算重要”“什么算噪声”的例子。门槛要用使用者标注的样本重新校准（`docs/selection.md`），不要凭感觉改数字。
+Sigue el orden de `docs/customize.md`. Lo propio del sitio está en `site/`: nombre y textos (`site.ts`), idioma y zona horaria (`locale.ts`), modelo de cada paso (`models.ts`), marca y logotipo (`brand/`), páginas de términos (`pages/`), archivos fijos de la raíz del sitio (`public/`, publicados tras sustituir sus marcadores) y registro de cambios (`changelog.json`). El conocimiento del sector está en `industry/`: categorías y etiquetas (`taxonomy.ts`), temas (`topics.json`), fuentes (`sources.json`), prompts (`prompts/`) y umbrales (`selection.ts`). Normalmente no hace falta tocar `apps/` ni `packages/`; lo que el framework no tiene y solo necesita este sitio se hace como módulo en `modules/` ("Módulos" en `docs/architecture.md`).
 
-## 运行与检查
+Estas decisiones son del usuario y hay que preguntárselas, no tomarlas por él: el nombre del sitio, qué fuentes seguir, qué noticia importa y qué es ruido, cómo se dividen las categorías, y el contenido de los términos y el aviso de privacidad (`site/pages/` son plantillas que él debe confirmar antes de publicar).
 
-- Node.js 24 直接运行 TypeScript，后端没有构建步骤。npm workspaces：`apps/*`、`packages/*`、`industry`、`site`、`modules/*`。
-- 本机运行和 Docker 见 `docs/deploy.md`。
-- 改完至少跑：
+Al cambiar la rúbrica conserva su estructura (tipos de contenido, cinco dimensiones ponderadas, contención de ruido, límites de seguridad) y sustituye los ejemplos de qué es importante y qué es ruido. Los umbrales se recalibran con muestras etiquetadas por el usuario (`docs/selection.md`); no cambies números por intuición.
+
+## Ejecución y revisión
+
+- Node.js 24 ejecuta TypeScript directamente y el backend no tiene paso de construcción. Workspaces de npm: `apps/*`, `packages/*`, `industry`, `site` y `modules/*`.
+- La ejecución local y con Docker está en `docs/deploy.md`.
+- Después de un cambio corre como mínimo:
   ```bash
   npm run typecheck
-  DATABASE_URL=postgres://127.0.0.1:5432/<名字>_test npm test   # 名字必须以 _test 或 _ci 结尾；没有会自动建好并迁移，账号要能建库
+  DATABASE_URL=postgres://127.0.0.1:5432/<nombre>_test npm test   # el nombre debe terminar en _test o _ci; si no existe se crea y migra, y la cuenta debe poder crear bases
   npm run build -w @aihot/web && npm run test:web
-  node scripts/smoke.ts --base http://localhost:3000             # 站点跑起来以后
+  node scripts/smoke.ts --base http://localhost:3000             # con el sitio en marcha
   ```
-- `tests/` 里部分测试用的是示例行业的分类、标签和公司，改了 `industry/taxonomy.ts` 后把这些例子换成新行业的对应项。
+- Algunas pruebas de `tests/` usan categorías, etiquetas y empresas del sector de ejemplo; si cambias `industry/taxonomy.ts`, sustituye esos ejemplos por sus equivalentes.
 
-## 要守住的规则
+## Reglas que hay que respetar
 
-- 前端（`apps/web`）只通过 HTTP 读 `apps/api`，数据库、模型调用和密钥只在后端。
-- 所有公开出口都从 `packages/backend/src/publication/` 这一个读取层读，新增公开出口也一样。
-- 读者打开页面不触发模型调用；模型只在 worker 的任务里调用。
-- 付费请求都经过回执（`providers/receipts.ts`）和预算熔断，不要绕开。
-- 安全阀只有设成 `true` 才打开。开发时保持关闭：`COLLECT_ENABLED`、`MODEL_CALLS_ENABLED`、`FEISHU_*_ENABLED`、`INDEXNOW_SUBMIT_ENABLED`。测试里推送一直关着，采集和模型调用只连本地假服务，不访问任何外部服务。
-- 信源默认只展示摘要和原文链接（`site_fulltext` 关）；只有来源明确允许时才打开全文。
-- 公开内容匿名，管理员和访客看到的一样；后台只允许管理员。
-- 停用或替换一个功能、机制时，同一个改动删掉它的代码、测试、文档和存下的状态（库表与列、定时任务、settings、环境变量和 `.env.example` 里的项）；会删掉使用者已有数据的，在 `docs/deploy.md` 的更新说明里写明。加锁、重试、兼容旧格式、开关和兜底，先要有证据：真实部署里发生过，或平台的语义决定它会发生。
-- 数据库迁移放在 `database/migrations/`（只属于某个模块的表放在它的 `migrations/`），按完整文件名排序执行和记账；编号相同的不同文件分别执行，新增迁移使用新的文件名，已经发布的迁移不改。从 `0055` 起，每个文件只放一条允许在线执行的语句，PR 会检查；索引使用 `CONCURRENTLY IF NOT EXISTS`，大批数据回填不放进发布迁移。约束验证和破坏性变更先按 [迁移约定](docs/architecture.md#数据库迁移) 设计，不能修改历史文件或关闭检查绕过。
-- 不要提交 `.env`、密钥和 `.data/`。
-- 不要使用 AIHOT 的名字和 Logo。
+- El frontend (`apps/web`) solo lee `apps/api` por HTTP; la base de datos, las llamadas al modelo y las claves viven solo en el backend.
+- Todas las salidas públicas leen de una sola capa, `packages/backend/src/publication/`, y cualquier salida nueva también.
+- Abrir una página no dispara llamadas al modelo; el modelo solo se llama dentro de tareas del worker.
+- Todas las peticiones de pago pasan por comprobantes (`providers/receipts.ts`) y límites de presupuesto; no los evites.
+- Las válvulas de seguridad solo se abren con `true`. Durante el desarrollo mantenlas cerradas: `COLLECT_ENABLED`, `MODEL_CALLS_ENABLED`, `FEISHU_*_ENABLED` e `INDEXNOW_SUBMIT_ENABLED`. En las pruebas los envíos están siempre cerrados y la recolección y el modelo solo hablan con servicios falsos locales, sin acceder a ningún servicio externo.
+- De forma predeterminada las fuentes solo muestran resumen y enlace al original (`site_fulltext` apagado); el texto completo se activa únicamente cuando la fuente lo permite de forma explícita.
+- El contenido público es anónimo y administradores y visitantes ven lo mismo; el panel es solo para administradores.
+- Al retirar o reemplazar una función o mecanismo, el mismo cambio borra su código, pruebas, documentación y estado guardado (tablas y columnas, tareas programadas, settings, variables de entorno y sus entradas en `.env.example`); si se borran datos existentes del usuario, se documenta en las notas de actualización de `docs/deploy.md`. Los bloqueos, reintentos, compatibilidad con formatos viejos, interruptores y respaldos requieren evidencia previa: que haya ocurrido en un despliegue real o que la semántica de la plataforma lo haga inevitable.
+- Las migraciones van en `database/migrations/` (las tablas de un solo módulo, en su `migrations/`) y se ejecutan y registran por nombre completo de archivo; dos archivos con el mismo número se ejecutan por separado, las migraciones nuevas usan un nombre nuevo y las ya publicadas no se modifican. Desde `0055` cada archivo contiene una sola sentencia apta para ejecutarse en línea, y el PR lo verifica; los índices usan `CONCURRENTLY IF NOT EXISTS` y los rellenos masivos no van en migraciones publicadas. La validación de restricciones y los cambios destructivos se diseñan según la [convención de migraciones](docs/architecture.md#migraciones-de-base-de-datos), sin modificar archivos históricos ni apagar la revisión.
+- No subas `.env`, claves ni `.data/`.
+- No uses el nombre ni el logotipo de AIHOT.
 
-## 写代码
+## Cómo escribir código
 
-匹配周围代码的写法、命名和注释密度。选能清楚解决问题的简单方案，只定义正在使用的抽象。验证改动涉及的重要行为，不为简单的样式改动写测试。
+Sigue el estilo, los nombres y la densidad de comentarios del código cercano. Elige la solución sencilla que resuelva el problema con claridad y define solo las abstracciones que se usan. Verifica el comportamiento importante que toca el cambio y no escribas pruebas para cambios de estilo simples.
 
-## 给本仓库提 PR
+## Contribuir al motor original
 
-要把改动提回 `KKKKhazix/AIHOT` 时，先读 `CONTRIBUTING.md`。下面是评审里最常被退回或返工的情况：
+Si un cambio sirve a cualquier sitio y se quiere proponer a `KKKKhazix/AIHOT`, lee antes su `CONTRIBUTING.md`. Estos son los motivos más comunes de rechazo o retrabajo en su revisión:
 
-- **只收对所有站都成立的改进。** 新开关、新的配置入口和新功能再小也算产品行为，先开 Issue 讲清场景：每个开关所有站都要长期维护，没讨论就提交的这类 PR 大多没有收。你们站自己的规定、数字和例子留在自己的 `industry/`、`site/`，不写进共享的提示词模板、注释和测试。
-- **先找现有的。** 加函数、插口或配置前先搜一遍，常见能力多半已有一份：模块发自己的文件用 `apps/api/src/routes/static.ts` 的 `sendFile`，接中转站填 `LLM_BASE_URL`。再写一份，两处迟早不一致。
-- **测试只证明你想到的情况。** 动了采集、日期、正文清洗、精选或归组的，拿一批公开的真实订阅和网页跑改动前后，在 PR 里写有多少条结果变了、变的是否都对。中文网页的时间常不带时区，按信源时区读（默认 `+08:00`），上面的 “CST” 一般指北京时间；测试结果不能取决于运行机器的时区。
-- **测试守行为，不守写法。** 复现问题的测试并进这个功能已有的测试文件，不为一次修复新开文件；不断言私有常量、CSS 类名、像素位置或浏览器自己的行为，不把重构前的输出钉成永久测试。合并前会按这个标准删减测试。
-- **这几类文件不收外部 PR 的修改：** 依赖与锁文件（版本升级由 dependabot 提）、`AGENTS.md`、`CLAUDE.md`、`CONTRIBUTING.md`、`SECURITY.md` 和 `.agents/`、`.claude/` 下的规则、二进制文件（测试要的样本请用代码生成）。需要改的先开 Issue 说明，由维护者来改：规则文件决定之后的 Agent 怎么做事，依赖和二进制没法逐行审。
-- **改全。** 新的环境变量写进 `.env.example`，新的站点配置写进 `site/`；改了配置字段的意思，示例配置跟着改，让已部署的站升级后行为不变（比如改成只给声明了 `vision` 的模型附图，本来就能看图的预设要补上声明）；改一个读者看到的名字或入口，出现它的地方一起改。新增或更改导航配置时，分别核对默认配置与非默认配置的电脑侧栏、手机底栏、返回和“我的”入口，入口变少时的标签布局也要在浏览器里看；默认值不变只能证明原行为，不能证明配置可用。
+- **Solo se aceptan mejoras válidas para todos los sitios.** Interruptores nuevos, puntos de configuración nuevos y funciones nuevas, por pequeños que sean, son comportamiento del producto: primero se abre un issue que explique el caso, porque cada interruptor obliga a todos los sitios a mantenerlo. Las reglas, cifras y ejemplos propios de Latido se quedan en su `industry/` y su `site/`, no en plantillas de prompts, comentarios ni pruebas compartidas.
+- **Busca primero lo que ya existe.** Antes de agregar funciones, conexiones o configuración, busca: la mayoría de las capacidades comunes ya existen una vez. Un módulo envía sus archivos con `sendFile` de `apps/api/src/routes/static.ts`, y un servicio intermediario se conecta con `LLM_BASE_URL`. Una segunda copia terminará divergiendo.
+- **Las pruebas solo demuestran los casos que imaginaste.** Si tocas recolección, fechas, limpieza del cuerpo, selección o agrupación, corre un lote de feeds y páginas públicas reales antes y después del cambio, e indica en el PR cuántos resultados cambiaron y si todos los cambios son correctos. Las páginas chinas a menudo publican horas sin zona horaria, que se leen con la zona de la fuente (en el motor original, `+08:00` por defecto), y "CST" en ellas suele significar hora de Pekín; los resultados de las pruebas no deben depender de la zona horaria de la máquina.
+- **Las pruebas protegen comportamiento, no la forma de escribirlo.** Las pruebas que reproducen un problema se agregan al archivo de pruebas existente de esa función, sin abrir un archivo nuevo por cada corrección; no verifican constantes privadas, clases CSS, posiciones en píxeles ni el comportamiento propio del navegador, ni fijan como prueba permanente la salida previa a una refactorización.
+- **El motor original no acepta PR externos sobre estos archivos:** dependencias y lockfiles (las versiones las sube dependabot), `AGENTS.md`, `CLAUDE.md`, `CONTRIBUTING.md`, `SECURITY.md`, las reglas de `.agents/` y `.claude/`, y archivos binarios (las muestras que necesiten las pruebas se generan con código). Si hace falta cambiarlos, abre antes un issue para que lo haga el mantenedor.
+- **Cambia todo lo relacionado.** Las variables de entorno nuevas van en `.env.example` y la configuración nueva del sitio en `site/`; si cambia el significado de un campo de configuración, actualiza los ejemplos para que los sitios desplegados mantengan su comportamiento al actualizar (por ejemplo, si solo los modelos que declaran `vision` reciben imágenes, los preajustes que ya veían imágenes deben declararlo); si cambia un nombre o una entrada que ve el lector, cámbialos en todos los lugares donde aparecen. Al agregar o cambiar la configuración de navegación, revisa con la configuración predeterminada y con otras la barra lateral de escritorio, la barra inferior móvil, el regreso y la entrada "Mi espacio", y revisa en el navegador cómo quedan las pestañas cuando hay menos entradas; que el valor predeterminado no cambie solo demuestra el comportamiento original, no que la configuración funcione.

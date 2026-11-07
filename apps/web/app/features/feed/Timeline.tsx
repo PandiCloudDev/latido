@@ -1,4 +1,4 @@
-// The 精选 home's day-grouped feed: a time rail with cards on desktop, rows under grey day bars on phones.
+// The "Selección" home's day-grouped feed: a time rail with cards on desktop, rows under grey day bars on phones.
 // Keeps its place across back navigation and loads further pages. There is no "new items" prompt:
 // readers refresh for the latest head — on phones also by tapping the tab again. The paged lists
 // (DayList) share its day header and slot.

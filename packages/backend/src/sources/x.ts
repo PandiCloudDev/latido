@@ -6,6 +6,7 @@ import type { XPostData } from "../content/materials.ts";
 import { sha256 } from "../lib/ids.ts";
 import { FetchError, type Candidate, type SourceRow } from "./types.ts";
 import { xHandle } from "./account.ts";
+import { tr } from "@aihot/site/locale";
 
 function avatar(url: string | undefined): string | null {
   // Larger avatar than the default 48px thumbnail.
@@ -64,7 +65,7 @@ export function tweetToCandidate(t: SdTweet): Candidate {
     author: t.user.screen_name,
     language: t.lang ?? null,
     publishedAt: new Date(t.tweet_created_at),
-    bodyText: [post.text, post.quoted ? `\n\n【引用 @${post.quoted.handle}】${post.quoted.text}` : ""].join("").trim(),
+    bodyText: [post.text, post.quoted ? `\n\n${tr(`【引用 @${post.quoted.handle}】`, `【Cita de @${post.quoted.handle}】`)}${post.quoted.text}` : ""].join("").trim(),
     // A linked X Article is the post's real body: extraction fetches it (jobs/content.ts route).
     bodyStatus: linksXArticle(post.text) ? "pending" : "ok",
     xPost: post,

@@ -1,12 +1,14 @@
-AIHOT
-Copyright (c) 2026 数字生命卡兹克. The code is licensed under the MIT License (LICENSE).
+Latido
+Copyright (c) 2026 Pandi.Cloud. Las adaptaciones de Latido se distribuyen bajo la licencia MIT (LICENSE).
 
-The name "AIHOT" and the AIHOT logo are not licensed under the MIT License. Please use your own name
-and logo for your site.
+Latido está construido sobre AIHOT, Copyright (c) 2026 数字生命卡兹克 (Khazix), distribuido bajo la licencia MIT
+(LICENSE). El nombre "AIHOT" y su logotipo no están cubiertos por la licencia MIT y Latido no los usa. El nombre
+"Latido" y su logotipo tampoco están cubiertos por la licencia MIT.
 
-This repository also contains third-party material under its own terms:
+Este repositorio incluye además material de terceros con sus propios términos:
 
-- assets/og-fonts/: Noto Sans SC, SIL Open Font License 1.1 (assets/og-fonts/LICENSE).
+- assets/og-fonts/inter-*.ttf: Inter, SIL Open Font License 1.1 (assets/og-fonts/LICENSE-inter).
+- assets/og-fonts/noto-sans-sc-*.ttf: Noto Sans SC, SIL Open Font License 1.1 (assets/og-fonts/LICENSE).
 
-The demo sources in industry/sources.json are public feeds of their publishers. Their content belongs
-to them; by default the site shows only a summary and a link to the original.
+Las fuentes de industry/sources.json son feeds públicos de sus editores. Su contenido les pertenece; de forma
+predeterminada el sitio solo muestra un resumen y un enlace al original.

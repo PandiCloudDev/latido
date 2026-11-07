@@ -15,7 +15,7 @@ export function shownScore(score: number | null): number | null {
   return ITEM_COPY.showScore ? score : null;
 }
 
-/** "AI 评分 · 88" on desktop cards; `compact` keeps only the number (phones). */
+/** "Calificación IA · 88" on desktop cards; `compact` keeps only the number (phones). */
 export function ScoreLabel({ score, compact = false }: { score: number | null; compact?: boolean }) {
   const shown = shownScore(score);
   if (shown === null) return null;

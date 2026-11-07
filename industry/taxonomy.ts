@@ -1,15 +1,15 @@
-// 这个行业的分类体系：类别、标签词表、公司（主体）名录，以及防止张冠李戴的身份词典。
-// 模型按这里的词表打标签，主题页（topics.json）按标签归类，筛选栏按类别分组。
-// 换行业时：类别的 key 会出现在网址里（/all?category=…），上线后就不要再改；标签和名录可以随时增减。
+// Clasificación del sector: categorías, vocabularios de etiquetas, directorio de empresas (protagonistas) y el diccionario de identidad que evita atribuciones equivocadas.
+// El modelo etiqueta con estos vocabularios, las páginas de temas (topics.json) agrupan por etiqueta y la barra de filtros agrupa por categoría.
+// Al cambiar de sector: la key de cada categoría aparece en las URL (/all?category=…) y no se cambia una vez publicada; etiquetas y directorio se pueden ajustar cuando quieras.
 
 /**
- * 网页上的类别（筛选栏、卡片角标、RSS 分类订阅）。key 是网址和接口里的身份，上线后不要改。
- * section 是日报里的分节标题（几个类别可以共用一节，按这里的顺序排）；guide 告诉结构抽取模型这一类收什么、
- * 和相邻类别的边界在哪（总的归类原则写在 prompts/structure.md 里）。
- * commentary 标出评论类（教程、观点）：日报写过的事又有评论类的后续报道，只占一行快讯（报道它的信源够多时除外）。
- * 没归上类的资料在日报里放进第一个 key 为 industry 的类别所在的节（没有就放最后一节）。
- * tagColor 是飞书推送卡片里跟在标题后面的这一类小标签的颜色（飞书 text_tag 的颜色名）。
- * feedLabel 是分类 RSS 标题里的名字（不写就用 label）。公开接口、RSS 和 MCP 里要把一类并进另一类发布，写在站点设置里（site/site.ts 的 PUBLIC_CATEGORIES）。
+ * Categorías de la web (barra de filtros, marca en tarjetas, RSS por categoría). La key es la identidad en URL e interfaces y no se cambia una vez publicada.
+ * section es el título de sección en el boletín diario (varias categorías pueden compartir sección, en este orden); guide le dice al modelo de estructura qué entra en la categoría
+ * y dónde está el límite con las vecinas (el criterio general de clasificación está en prompts/structure.md).
+ * commentary marca las categorías de comentario (guías, opinión): si un hecho ya publicado en el diario tiene un seguimiento de este tipo, solo ocupa una breve (salvo que lo cubran suficientes fuentes).
+ * Las notas sin categoría van en el diario a la sección de la primera categoría con key industry (si no existe, a la última sección).
+ * tagColor es el color de la pequeña etiqueta de la categoría tras el titular en las tarjetas de Feishu (nombre de color de text_tag de Feishu).
+ * feedLabel es el nombre en el título del RSS por categoría (si falta, se usa label). Para publicar una categoría dentro de otra en la API, el RSS y el MCP, se configura en PUBLIC_CATEGORIES de site/site.ts.
  */
 export const CATEGORIES = [
   { key: "ia", tagColor: "indigo", label: "IA", feedLabel: "Inteligencia artificial", section: "Inteligencia artificial", guide: "Modelos de IA, asistentes, agentes y funciones de IA: lanzamientos, versiones, capacidades, precios y resultados en pruebas. Un producto que solo agrega una función de IA menor va en Productos." },
@@ -72,13 +72,13 @@ export const TAG_SYNONYMS: Readonly<Record<string, string>> = {
   mexico: "México", latam: "Latinoamérica", latinoamerica: "Latinoamérica", "américa latina": "Latinoamérica",
 };
 
-// ── 公司与主体 ──────────────────────────────────────────────────────────────────────────
+// ── Empresas y protagonistas ──────────────────────────────────────────────────────────────
 
 /**
- * 公司主题：id → 显示名、卡片上显示的标签（null 表示只用 entity:<id> 归类）、别名。
- * aliases 给结构抽取模型看；orgNames 是这家公司发消息时开头用的组织名（公司、实验室、团队），
- * 在它自己的主题页上读者知道说的是谁，可以省去；otherNames 是公司的其他称呼（官方账号名、子品牌）。
- * 所有这些名字都用来认出说的是哪家公司，比如把事实的主体对到发布方。
+ * Temas de empresa: id → nombre visible, etiqueta en tarjetas (null para agrupar solo con entity:<id>) y alias.
+ * aliases es para el modelo de estructura; orgNames son los nombres de organización con que la empresa firma sus anuncios (empresa, laboratorio, equipo),
+ * que en su propia página de tema se pueden omitir porque el lector ya sabe de quién se habla; otherNames son otras formas de llamarla (cuentas oficiales, submarcas).
+ * Todos estos nombres sirven para reconocer de qué empresa se trata, por ejemplo para asociar el protagonista de un hecho con su emisor.
  */
 export const ENTITIES: Record<string, { name: string; displayTag: string | null; aliases: string[]; orgNames?: string[]; otherNames?: string[] }> = {
   openai: { name: "OpenAI", displayTag: "OpenAI", aliases: ["OpenAI", "ChatGPT", "Sora", "Codex", "GPT"], orgNames: ["OpenAI"], otherNames: ["OpenAI Developers"] },
@@ -114,8 +114,8 @@ export const ENTITIES: Record<string, { name: string; displayTag: string | null;
 };
 
 /**
- * 身份词典：摘要和标题里出现的公司，必须在原文里也出现过，否则退回原标题、丢掉摘要（防止模型张冠李戴）。
- * 行业没有这个问题时可以留空数组。
+ * Diccionario de identidad: las empresas que aparecen en titular y resumen deben aparecer también en el original; si no, se regresa al titular original y se descarta el resumen (evita que el modelo atribuya mal).
+ * Si el sector no tiene este problema, puede quedar como arreglo vacío.
  */
 export const IDENTITY_LEXICON: ReadonlyArray<{ id: string; name: string; patterns: RegExp[] }> = [
   { id: "openai", name: "OpenAI", patterns: [/openai|chatgpt|\bgpt-?[o\d]|\bsora\b|\bcodex\b/i] },

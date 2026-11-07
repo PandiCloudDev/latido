@@ -94,7 +94,7 @@ export default function AllPage() {
 
   return (
     <div className="pb-6">
-      {/* Phones: the feed bar, or for a search the query (tap to change it) and back to 全部. */}
+      {/* Phones: the feed bar, or for a search the query (tap to change it) and back to "Todo". */}
       {f.q ? (
         <PhoneBar
           back={{ to: "/all", label: "Todo" }}
@@ -110,7 +110,7 @@ export default function AllPage() {
       )}
       <ActiveFilters base="/all" category={f.category} channel={f.channel} tag={f.tag} />
 
-      {/* Desktop, as on 精选: the title, then one filter row with the search field aligned on the right. */}
+      {/* Desktop, as on "Selección": the title, then one filter row with the search field aligned on the right. */}
       <div className="hidden lg:block">
         <h1 className="text-[24px] font-semibold leading-[1.3] text-ink">{title ?? ALL_TITLE}</h1>
         <div className="mb-5 mt-4 flex items-center justify-between gap-4">

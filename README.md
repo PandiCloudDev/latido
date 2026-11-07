@@ -1,187 +1,163 @@
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="docs/assets/banner-dark.png">
-    <img src="docs/assets/banner-light.png" alt="AIHOT：每个行业，都可以有自己的 AIHOT。很多条信源流进中间的精选，再分给法律、人力资源、金融等各个行业" width="100%">
+    <img src="docs/assets/banner-light.png" alt="Latido: el pulso de la tecnología en México y Latinoamérica. Decenas de fuentes entran a la selección del centro y salen como boletín diario, temas y tendencias" width="100%">
   </picture>
 </p>
 
 <p align="center">
-  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-176b75?style=flat-square" alt="MIT License"></a>
-  <img src="https://img.shields.io/badge/Node.js-24-176b75?style=flat-square&logo=nodedotjs&logoColor=white" alt="Node.js 24">
-  <img src="https://img.shields.io/badge/PostgreSQL-17-176b75?style=flat-square&logo=postgresql&logoColor=white" alt="PostgreSQL 17">
-  <img src="https://img.shields.io/badge/Docker-Compose-176b75?style=flat-square&logo=docker&logoColor=white" alt="Docker Compose">
-  <a href="https://aihot.news"><img src="https://img.shields.io/badge/%E7%BA%BF%E4%B8%8A%E5%8E%9F%E7%AB%99-aihot.news-202a30?style=flat-square" alt="线上原站 aihot.news"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/licencia-MIT-c8213d?style=flat-square" alt="Licencia MIT"></a>
+  <img src="https://img.shields.io/badge/Node.js-24-c8213d?style=flat-square&logo=nodedotjs&logoColor=white" alt="Node.js 24">
+  <img src="https://img.shields.io/badge/PostgreSQL-17-c8213d?style=flat-square&logo=postgresql&logoColor=white" alt="PostgreSQL 17">
+  <img src="https://img.shields.io/badge/Docker-Compose-c8213d?style=flat-square&logo=docker&logoColor=white" alt="Docker Compose">
+  <a href="https://latido.news"><img src="https://img.shields.io/badge/sitio-latido.news-1f1b1c?style=flat-square" alt="Sitio latido.news"></a>
 </p>
 
 <p align="center">
-  <b>一个自己找热点、自己写日报的网站框架。</b><br>
-  把信源换成你的，把精选标准换成你的 KnowHow，它就是你的行业热点站。
+  <b>El pulso de la tecnología en México y Latinoamérica.</b><br>
+  Un radar de noticias en español que lee decenas de medios, agrupa lo que cuentan lo mismo y entrega cada mañana lo que de verdad vale la pena leer.
 </p>
 
 <p align="center">
-  <b>简体中文</b> · <a href="README.en.md">English</a>
+  <b>Español</b> · <a href="README.en.md">English</a>
 </p>
 
 <p align="center">
-  <a href="#跑起来">跑起来</a> ·
-  <a href="docs/customize.md">改成你的行业</a> ·
-  <a href="#它是怎么工作的">它是怎么工作的</a> ·
-  <a href="#文档">文档</a> ·
-  <a href="https://github.com/KKKKhazix/AIHOT/discussions">社区交流</a>
+  <a href="#ponlo-en-marcha">Ponlo en marcha</a> ·
+  <a href="#cómo-funciona">Cómo funciona</a> ·
+  <a href="#adáptalo-a-otro-sector">Adáptalo a otro sector</a> ·
+  <a href="#documentación">Documentación</a>
 </p>
 
 <br>
 
-## 这是什么
+## Qué es Latido
 
-[AIHOT](https://aihot.news) 是我做的一个 AI 热点网站。它每天从一批信源里收资料，用大模型先筛一遍、再独立打两次分，挑出真正值得看的，写成中文标题和摘要；把不同来源说的同一件事聚成一个事件，按有多少人在说排出热点；每天早上出一份日报。
+[Latido](https://latido.news) es un radar de noticias de tecnología y negocios digitales escrito en español, con una prioridad editorial clara: primero México, después Latinoamérica y, al final, lo global que sí mueve el tablero en la región. Cubre inteligencia artificial, productos y gadgets, startups y fintech, telecomunicaciones, ciberseguridad, regulación digital y videojuegos.
 
-这个仓库是它的引擎和框架：网站、后台、精选流程、聚簇和热度算法，**所有提示词的原文和入选门槛**，都在这里。
+Todos los días recoge notas de 54 fuentes, las filtra con un modelo de lenguaje, califica dos veces y por separado las que prometen, y redacta para cada una un titular informativo y un resumen que responde primero a la pregunta del lector. Cuando varios medios cuentan la misma historia, la agrupa en un solo **evento** y la ordena según cuántas fuentes independientes están hablando de ella. Cada mañana publica el boletín *Latido diario*, los lunes el semanal y el día 1 de cada mes el mensual.
 
-## 为什么开源
+Este repositorio es el sitio completo: la web pública, el panel de administración, el flujo de selección, el algoritmo de agrupación y de temperatura, y **el texto íntegro de cada prompt y de cada umbral de selección**, para que cualquiera pueda auditar con qué criterio se elige lo que se publica.
 
-这半年，很多做法律、做 HR、做金融、做贵金属的朋友问我，能不能也给他们的行业做一个。
+## Criterio editorial
 
-我做不了。我不懂你们的行业，不知道哪些信源有用，也不知道什么样的消息，对你们来说才叫热点。
+Latido no intenta publicar todo, sino lo que un lector interesado en tecnología necesita saber hoy. Por eso los nombramientos de directivos siempre entran, los comunicados solo pasan si contienen un hecho noticioso, los rumores solo se toman de fuentes confiables y se marcan como tales, y los titulares buscan informar con gancho sin caer en el clickbait. Ese criterio vive en [`industry/prompts/`](industry/prompts/) y en [`industry/selection.ts`](industry/selection.ts), no en el código, así que se puede discutir, versionar y calibrar como cualquier otra decisión editorial.
 
-但你们懂。
-
-既然我没办法满足所有人，那就把火种交到大家自己手上。
-
-## 说在前面
-
-- **我不是专业的开发者。** 我是设计师出身，半年前还看不太懂代码。这套代码是我和 AI 一起重写的，比以前干净了很多，但一定还有写得不好的地方。发现问题欢迎提 Issue，我不一定能很快回复，先说声抱歉。
-- **这是 AIHOT 的引擎。** 它和 AIHOT 线上跑的是同一份引擎代码，同步时直接从线上导出，不是精心打磨的通用框架。以后 AIHOT 的更新，我会尽量同步过来，但没法保证每一次都同步。模型榜、Codex 重置监控、主题页的大事记这些只对 AI 行业有意义的功能，可安装的 Agent Skill 文件，以及 AIHOT 自己的运营工具，只留在 AIHOT 上；开源版给 Agent 的入口是 MCP 和站点上的 `/agent` 页面。
-- **里面没有 AIHOT 的信源名单和运营数据。** 仓库带了 18 个公开的海外 AI 资讯源做示范，够你跑起来看效果；真正的信源，要换成你自己行业的。
-- **请不要用 AIHOT 的名字和 Logo。** 换上你自己的名字，它就是你的站。
-
-## 它是怎么工作的
+## Cómo funciona
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/assets/how-dark.png">
-  <img src="docs/assets/how-light.png" alt="六步：采集、预筛、两次评分、写作、聚簇、热点与成刊" width="100%">
+  <img src="docs/assets/how-light.png" alt="Seis etapas: recolección, prefiltro, doble calificación, redacción, agrupación, tendencias y boletines" width="100%">
 </picture>
 
-一条资料从信源进来，先判重，再预筛；可能重要的独立打两次分，写好中文标题和摘要，和别的报道聚成事件，算进热度。X 帖子没有正文或只有链接时，保留原帖的链接和图片，不调用写作或翻译模型。分数过了门槛、又不是精选里已有新闻的重复，才进精选；日报按规则编出当天要闻，周报、月报再从日报里汇编。每一步的提示词都在 [`industry/prompts/`](industry/prompts/)，改标准不用改代码。详见 [精选与校准](docs/selection.md)。
+Una nota llega desde su fuente, se revisa que no esté duplicada y pasa por un prefiltro que solo pregunta si pertenece a la cobertura de Latido. Las que podrían importar se califican dos veces de forma independiente con la misma rúbrica, reciben titular y resumen, se agrupan con otras coberturas del mismo hecho y suman a su temperatura. Una nota entra a la selección únicamente si su calificación supera el umbral de su nivel de fuente y no repite algo que ya se seleccionó. El boletín diario se arma por reglas con lo más importante del día, mientras que el semanal y el mensual se construyen a partir de los diarios. Los prompts de cada paso están en [`industry/prompts/`](industry/prompts/), de modo que cambiar el criterio no exige tocar código; el detalle está en [Selección y calibración](docs/selection.md).
 
-### 聚簇与热点
+### Agrupación y temperatura
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/assets/cluster-dark.png">
-  <img src="docs/assets/cluster-light.png" alt="五个来源的报道聚成一个事件，事件进入当前热点榜" width="100%">
+  <img src="docs/assets/cluster-light.png" alt="Las coberturas de cinco fuentes se agrupan en un solo evento, que entra a la lista de tendencias" width="100%">
 </picture>
 
-同一件事，官网发一篇、媒体转十篇、X 上吵一天，读者只需要看到一次。AIHOT 把它们聚成一个**事件**：先用标题摘要的向量（没配向量服务时比文字重合度）在最近两周里找候选，再让模型判断是同一件事、后续进展，还是两件事；拿不准的合并，写入前再让模型复核一遍（复核可以单独换一家模型，设 `GROUP_REVIEW_MODEL`）。
+Un mismo hecho suele aparecer muchas veces: lo anuncia la empresa, lo replican diez medios y en redes se discute todo el día, aunque el lector solo necesita verlo una vez. Latido busca candidatos de las últimas dos semanas comparando los vectores del titular y el resumen (o, sin servicio de embeddings, la coincidencia de texto), y después le pide a un modelo que decida si se trata del mismo hecho, de una continuación o de dos historias distintas. Ante la duda agrupa, y antes de redactar un modelo vuelve a revisar la unión, que puede hacerse con otro proveedor definiendo `GROUP_REVIEW_MODEL`. Las correcciones manuales nunca se sobrescriben.
 
-**热度**按事件算，不按文章算：48 小时内，每个独立来源只算一次，24 小时减半。重复抓取不会多算，一家媒体发十篇也只算一次，所以排在前面的，是真正有很多人在说的事。
+La **temperatura** se calcula por evento y no por nota: dentro de 48 horas cada fuente independiente cuenta una sola vez y su peso se reduce a la mitad cada 24 horas. Las capturas repetidas no suman y un medio que publica diez notas sobre lo mismo sigue contando como uno, así que arriba queda lo que mucha gente distinta está contando de verdad.
 
-### 速度
-
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/perf-dark.png">
-  <img src="docs/assets/perf-light.png" alt="AIHOT 线上实测：页面中位数 10 毫秒，95% 在 50 毫秒内；接口中位数 6 毫秒，95% 在 12 毫秒内；文章页 95% 在 14 毫秒内" width="100%">
-</picture>
-
-## 你会得到什么
+## Qué incluye
 
 | | |
 |---|---|
-| **六种信源** | RSS、网页列表、JSON 接口、X 账号、微信公众号，以及你自己脚本推送进来的内容。信源分三级（官方一手、官方账号与准官方、媒体与个人），各级入选门槛不同；抓取频率按产出自动调整 |
-| **精选** | 预筛，同一份评分标准独立打两次分，再按信源分级的门槛决定入选；同一条新闻只占一条，换个说法的重复不进。提示词和门槛全部公开，全部可以改；用你自己标注的样本在 SelectBench 里校准 |
-| **写作** | 中文标题、答案先行的摘要、推荐理由，外文全文翻译；分类、标签和新闻事实单独抽取；防止模型把原文没提到的公司写进标题 |
-| **聚簇** | 不同来源报道的同一件事聚成一个事件，后续进展挂在同一个事件下，事件页有综述；进展和报道时间线可一起切换“最新在前”或“最早在前”；人工改过的归属不会被覆盖 |
-| **热点** | 按事件算热度：独立来源越多越靠前，X 上的讨论也算进来；和 6 小时前比，涨得快的标上升，新出现的标“新” |
-| **日报、周报、月报** | 每天出日报（默认 08:00），按规则编出当天要闻：一件事一条，报过的事只在有新进展时跟进，不调模型。每周一出周报、每月 1 日出月报（默认 10:00、10:30），从日报里汇编，模型只写总述和栏目导读。几点出刊在 `site/site.ts` 的 `EDITION_TIMES` 里改 |
-| **主题与搜索** | 公司、方向、内容形态三类主题页；标题摘要搜索和全文相关搜索 |
-| **阅读设置** | 深浅色外观、网站默认字体或浏览器默认字体；收藏和阅读设置只保存在本机，可以导出、导入备份 |
-| **给 Agent 用** | RSS（精选、全部、全文、日报、周报、月报）、公开 API、MCP、Agent Markdown、`llms.txt`，同一份内容给人看也给 Agent 用 |
-| **后台** | 信源管理与试抓、内容诊断与人工评分更正、精选评测、每一步单独换模型、付费服务的预算熔断、运行记录与告警 |
+| **Fuentes** | RSS, páginas de listado, APIs JSON, cuentas de X y contenido que tus propios scripts envían. Las fuentes se organizan en tres niveles (oficiales de primera mano; cuentas oficiales y semioficiales; medios y personas), cada uno con su propio umbral. La frecuencia de lectura se ajusta sola al ritmo de publicación de cada fuente |
+| **Selección** | Prefiltro, dos calificaciones independientes con la misma rúbrica y un umbral según el nivel de la fuente. Una noticia ocupa un solo lugar y la misma noticia redactada de otra forma no vuelve a entrar. Prompts y umbrales son públicos y se calibran con muestras etiquetadas |
+| **Redacción** | Titulares informativos, resúmenes que responden primero, motivo para leer y traducción al español de las fuentes en inglés; categorías, etiquetas y datos del hecho se extraen por separado, con controles para que el modelo no cite empresas que la nota original no menciona |
+| **Agrupación** | Las coberturas del mismo hecho se convierten en un evento con sus continuaciones y una síntesis en su página; la línea de tiempo se ordena de la más reciente a la más antigua o al revés |
+| **Tendencias** | Temperatura por evento, que sube con cada fuente independiente; comparado con seis horas antes, lo que crece rápido se marca al alza y lo recién llegado como nuevo |
+| **Boletines** | *Latido diario* todos los días a las 08:00 (hora de la Ciudad de México), armado por reglas y sin llamadas al modelo; semanal los lunes a las 10:00 y mensual el día 1 a las 10:30, donde el modelo solo redacta el panorama y las introducciones de sección. Los horarios se cambian en `EDITION_TIMES` de [`site/site.ts`](site/site.ts) |
+| **Temas y búsqueda** | Páginas de temas por empresa, tecnología y tipo de noticia; búsqueda por titular y resumen, y búsqueda por relevancia en el texto completo |
+| **Lectura** | Modo claro y oscuro con la paleta carmesí de Latido; los guardados y las preferencias se quedan en el dispositivo y se pueden exportar e importar |
+| **Para agentes de IA** | RSS (selección, todo, texto completo, diario, semanal, mensual), API pública, MCP con el prefijo `latido_`, Markdown para agentes y `llms.txt`: el mismo contenido para personas y para máquinas |
+| **Panel** | Gestión y prueba de fuentes, diagnóstico de contenido y corrección manual de calificaciones, evaluación de la selección, un modelo distinto para cada paso, límites de presupuesto para servicios de pago, historial de ejecuciones y alertas |
 
-## 看一眼
+## Cobertura
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/shots-dark.png">
-  <img src="docs/assets/shots-light.png" alt="首页的每日精选，关于页的信源河" width="100%">
-</picture>
+| Categoría | Qué entra |
+|---|---|
+| Inteligencia artificial | Modelos, asistentes, agentes y funciones de IA: lanzamientos, capacidades, precios y resultados |
+| Productos y gadgets | Smartphones, electrónica de consumo, apps y plataformas, incluida su llegada a México y sus precios |
+| Negocios y startups | Resultados, rondas de inversión, adquisiciones, alianzas, nombramientos, fintech y comercio electrónico |
+| Regulación y política digital | Leyes, autoridades, multas, licitaciones, impuestos digitales y protección de datos |
+| Ciberseguridad | Ataques, filtraciones, fraudes digitales y vulnerabilidades con hallazgos concretos |
+| Videojuegos | Industria, consolas, estudios y lanzamientos |
+| Guías y análisis | Reseñas, comparativas, explicaciones, entrevistas y opinión con argumento |
 
-<p align="center"><sub>截图来自用示范信源跑起来的本地站，站名是默认的 MyHOT。</sub></p>
+Las fuentes combinan blogs oficiales (OpenAI, Google, NVIDIA, Microsoft, Apple, Samsung México), medios mexicanos y latinoamericanos (Expansión, El Universal, DPL News, Bloomberg Línea, LatamList, Contxto, Infobae, El Tiempo, Clarín, La Nación, entre otros) y referencias internacionales como TechCrunch, The Verge, Rest of World o BleepingComputer. La lista completa está en [`industry/sources.json`](industry/sources.json).
 
-## 跑起来
+## Ponlo en marcha
 
-想创建自己的独立站点，可以先点 [Use this template](https://github.com/KKKKhazix/AIHOT/generate)，再克隆你生成的仓库。想持续合并上游更新或贡献代码，建议先 Fork。下面的命令适合直接试用。
+Necesitas [Docker](https://docs.docker.com/get-started/get-docker/), [Node.js 24](https://nodejs.org/es/download) para ejecutar `init-env`, que genera la configuración, y una clave de cualquier API de modelos compatible con OpenAI (DeepSeek, Qwen, OpenRouter, etc.).
 
-需要 [Docker](https://docs.docker.com/get-started/get-docker/)、[Node.js 24](https://nodejs.org/en/download)（运行 `init-env` 生成配置要用），和一个 OpenAI 兼容的模型 API Key（DeepSeek、千问、智谱都可以）。
-
-`init-env` 默认按 DeepSeek 配置。用千问、智谱等别家，照 `.env.example` 里的例子改 `.env` 的 `LLM_BASE_URL`、`LLM_MODEL` 和 `LLM_EXTRA_JSON`；用推理模型（先想再答）时，还要设 `LLM_REASONING_TOKENS` 给推理留出输出额度。
+`init-env` configura DeepSeek de forma predeterminada. Para otro proveedor cambia `LLM_BASE_URL`, `LLM_MODEL` y `LLM_EXTRA_JSON` en `.env` siguiendo los ejemplos de `.env.example`; con un modelo de razonamiento define también `LLM_REASONING_TOKENS` para dejarle espacio a su razonamiento.
 
 ```bash
-git clone https://github.com/KKKKhazix/AIHOT.git myhot
-cd myhot
-node scripts/init-env.ts --llm-key <你的模型 API Key>
+git clone https://github.com/PandiCloudDev/latido.git
+cd latido
+node scripts/init-env.ts --llm-key <tu clave de la API del modelo>
 docker compose up -d --build
 ```
 
-打开 <http://localhost:3000>。后台在 `/admin`，管理员密码在 `.env` 的 `ADMIN_PASSWORD` 里。一两分钟后开始有内容，第一次导入的资料大约半小时处理完。
+Abre <http://localhost:3000>. El panel está en `/admin` y su contraseña es `ADMIN_PASSWORD` en `.env`. El contenido empieza a aparecer en uno o dos minutos y la primera importación tarda cerca de media hora en procesarse.
 
-机器上没有 Node、服务器在中国大陆、要配域名和 HTTPS，或者不用 Docker、直接在 Linux、macOS 上跑（Windows 用 WSL2），见 [部署](docs/deploy.md)。
+Para dominios y HTTPS, para servidores sin Node o para ejecutarlo directamente en Linux o macOS sin Docker, consulta [Despliegue](docs/deploy.md). Latido corre en producción sobre un VPS de Hostinger con Docker Compose.
 
-站点跑起来后，打开 `/agent` 可以复制 MCP、RSS 或 API 的接入方式；只能读网页的 Agent 从 `/api/v1/agent` 开始；接口说明在 `/openapi-v1.json`。
+Con el sitio arriba, la página `/agent` explica cómo conectarse por MCP, RSS o API; los agentes que solo leen páginas web empiezan en `/api/v1/agent` y la descripción de la API está en `/openapi-v1.json`.
 
-## 把它改成你的行业
+## Adáptalo a otro sector
 
-最省事的办法：打开你的 Agent（Claude Code、Codex 都可以），把这个仓库交给它，然后说：
+El mismo motor sirve para cualquier sector, ya sea energía, salud, legal o finanzas. La forma más sencilla es abrir un agente de programación (Claude Code o Codex), darle este repositorio y pedirle:
 
 ```text
-请读 AGENTS.md 和 docs/customize.md，把这个站改成「XX 行业」的热点站。
-我关心的是：……（写你想盯的信源、你觉得什么消息重要、什么不重要，越具体越好）。
-改完帮我跑 npm run typecheck、npm test 和 node scripts/smoke.ts，并告诉我还需要我自己决定哪些事。
+Lee AGENTS.md y docs/customize.md y convierte este sitio en un radar de noticias del sector "XX".
+Lo que me importa: … (las fuentes que quieres seguir, qué consideras noticia y qué consideras ruido; entre más específico, mejor).
+Al terminar ejecuta npm run typecheck, npm test y node scripts/smoke.ts, y dime qué decisiones me siguen tocando a mí.
 ```
 
-要改的东西几乎都在 [`site/`](site/) 和 [`industry/`](industry/) 这两个文件夹里，代码基本不用动：
+Casi todo lo que hay que cambiar está en las carpetas [`site/`](site/) e [`industry/`](industry/), y el código en sí rara vez se toca:
 
-| 文件 | 改什么 |
+| Archivo | Qué se cambia |
 |---|---|
-| `site/site.ts` | 站名、行业词、出刊时间、首页文案、关于页、条目与日报周报月报上的说法、公开接口的分类 |
-| `industry/taxonomy.ts`、`industry/topics.json` | 分类、标签、主题 |
-| `industry/sources.json` | 首次启动时导入的信源 |
-| `industry/prompts/` | 精选标准和写作要求。**你的行业 KnowHow，就写在这里** |
-| `industry/selection.ts` | 入选门槛 |
-| `site/models.ts` | 每一步默认用哪个模型（不改也行：都用 `.env` 里配的那一个） |
-| `site/brand/`、`site/pages/`、`site/public/`、`site/changelog.json` | 图标与 Logo，使用规则和隐私说明，`robots.txt` 这类发布在网站根目录的文件，更新日志 |
-| `modules/` | 框架里没有、只有你的站要的功能，做成模块放在这里，见 [架构](docs/architecture.md#模块) 的“模块” |
+| `site/site.ts` | Nombre, términos del sector, horarios de los boletines, textos de portada y de "Acerca de", forma de nombrar notas y boletines, categorías de las interfaces públicas |
+| `industry/taxonomy.ts`, `industry/topics.json` | Categorías, etiquetas y temas |
+| `industry/sources.json` | Fuentes que se importan en el primer arranque |
+| `industry/prompts/` | El criterio de selección y las reglas de redacción. **Aquí va el conocimiento del sector** |
+| `industry/selection.ts` | Umbrales de selección |
+| `site/models.ts` | Qué modelo usa cada paso (opcional; si no, todos usan el de `.env`) |
+| `site/brand/`, `site/pages/`, `site/public/`, `site/changelog.json` | Íconos y logotipo, términos de uso y aviso de privacidad, archivos en la raíz del sitio como `robots.txt`, registro de cambios |
+| `modules/` | Funciones que solo necesita tu sitio, como módulos; ver "Módulos" en [Arquitectura](docs/architecture.md#módulos) |
 
-最值得花时间的是评分标准（`industry/prompts/selection-score.md`）和门槛：拿一两百条你自己标注过的资料，用 `scripts/eval-selection.ts` 跑一遍，看它选得准不准，再回去改。怎么做写在 [精选与校准](docs/selection.md) 里。
+Lo que más vale la pena trabajar es la rúbrica de calificación (`industry/prompts/selection-score.md`) y los umbrales: toma entre cien y doscientas notas que hayas etiquetado tú, pásalas por `scripts/eval-selection.ts`, revisa qué tan bien selecciona y ajusta. El procedimiento está en [Selección y calibración](docs/selection.md).
 
-## 文档
+## Documentación
 
-| 文档 | 内容 |
+| Documento | Contenido |
 |---|---|
-| [把它改成你的行业](docs/customize.md) | 站名、分类、主题、信源、提示词、门槛、模型、品牌，一步一步来 |
-| [信源](docs/sources.md) | 六种信源怎么配，分级和全文，抓取频率，旧文和存档，固定起点 `publishedAfter`，外部推送接口 |
-| [精选与校准](docs/selection.md) | 一条资料怎么变成精选、怎么编进日报周报月报，怎么用自己的样本校准 |
-| [事件归组与关系评测](docs/grouping.md) | 事件关系怎么判断，怎么用自己标注的成对样本评测 |
-| [综述评测](docs/story-digest-evaluation.md) | 改事件综述提示词前，怎么在同一批事件上并排比较 |
-| [部署](docs/deploy.md) | Docker、域名和 HTTPS、中国大陆、更新、备份、花多少钱，不用 Docker 时在 Linux、macOS（Windows 用 WSL2）上怎么跑 |
-| [架构](docs/architecture.md) | 三个进程、几条不变的规则、目录、模块、数据库迁移、对外出口、测试 |
+| [Adaptarlo a otro sector](docs/customize.md) | Nombre, categorías, temas, fuentes, prompts, umbrales, modelos y marca, paso a paso |
+| [Fuentes](docs/sources.md) | Cómo se configuran los tipos de fuente, niveles y texto completo, frecuencia de lectura, notas antiguas y archivos, punto de partida fijo con `publishedAfter` e interfaz de envío externo |
+| [Selección y calibración](docs/selection.md) | Cómo una nota llega a la selección y a los boletines, y cómo calibrar con tus propias muestras |
+| [Agrupación de eventos](docs/grouping.md) | Cómo se decide la relación entre eventos y cómo evaluarla con pares etiquetados |
+| [Evaluación de síntesis](docs/story-digest-evaluation.md) | Cómo comparar versiones del prompt de síntesis sobre los mismos eventos |
+| [Despliegue](docs/deploy.md) | Docker, dominio y HTTPS, actualizaciones, respaldos, costos y ejecución sin Docker |
+| [Arquitectura](docs/architecture.md) | Tres procesos, reglas que no cambian, directorios, módulos, migraciones, salidas públicas y pruebas |
 
-技术栈：Node.js 24 · TypeScript · React Router（服务端渲染）· Fastify · PostgreSQL · pg-boss · Tailwind CSS · Docker Compose。
+Tecnologías: Node.js 24 · TypeScript · React Router (renderizado en servidor) · Fastify · PostgreSQL · pg-boss · Tailwind CSS · Docker Compose.
 
-## 交流与贡献
+## Contribuir
 
-部署和使用问题到 [问答区](https://github.com/KKKKhazix/AIHOT/discussions/categories/q-a)，新想法到 [想法交流区](https://github.com/KKKKhazix/AIHOT/discussions/categories/ideas)，欢迎在 [作品展示区](https://github.com/KKKKhazix/AIHOT/discussions/categories/show-and-tell) 分享你做出的行业热点站。
+Para reportar un error o proponer una función, [abre un issue](https://github.com/PandiCloudDev/latido/issues/new/choose). Antes de cambiar código lee la [guía de contribución](CONTRIBUTING.md), y reporta las vulnerabilidades de seguridad por el [canal privado](SECURITY.md). Las sugerencias de fuentes de México, Colombia, Argentina, Chile y Perú son especialmente bienvenidas.
 
-发现 Bug 或有明确的功能建议，可以 [提交 Issue](https://github.com/KKKKhazix/AIHOT/issues/new/choose)。准备改代码前，先看 [贡献说明](CONTRIBUTING.md)；安全漏洞请走 [私密报告入口](SECURITY.md)。
+## Créditos
 
-## 最后
+Latido es un proyecto de [Pandi.Cloud](https://pandi.cloud), desarrollador mexicano independiente sin vínculos con ninguna empresa editorial. Está construido sobre [AIHOT](https://github.com/KKKKhazix/AIHOT), el motor de código abierto creado por 数字生命卡兹克 (Khazix) bajo licencia MIT, adaptado y depurado para el español y para el mercado latinoamericano. Latido no usa el nombre ni el logotipo de AIHOT.
 
-AIHOT 曾经只是我无数个深夜里，一个很小、很小的念头。
+## Licencia
 
-我不知道它会被改成什么样子，会走到多远的地方。但这可能就是开源最浪漫的地方。
-
-剩下的路，就交给你们了。
-
-<p align="right">—— 数字生命卡兹克</p>
-
-## 许可
-
-代码使用 [MIT 许可证](LICENSE)。AIHOT 的名字和 Logo 不在许可范围内。字体有自己的许可，见 [NOTICE](NOTICE)。
+El código se distribuye bajo la [licencia MIT](LICENSE). El nombre y el logotipo de Latido no están cubiertos por la licencia. Las fuentes tipográficas tienen sus propias licencias; consulta [NOTICE](NOTICE).

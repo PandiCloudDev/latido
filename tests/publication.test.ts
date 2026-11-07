@@ -1,7 +1,7 @@
 // Public scope and sync through the real api routes: a licence revocation or a withdrawal reaches
 // every exit, reports stop quoting withdrawn items, the hot board drops a withdrawn item at once, item
 // pages follow one rule, a withdrawal next to an unresolved selection leaves new snapshots at once,
-// snapshots answer conditional requests, and browsing 全部动态 leaves out low scores that a search still finds.
+// snapshots answer conditional requests, and browsing "Todo" leaves out low scores that a search still finds.
 import { tag } from "./setup.ts";
 import assert from "node:assert/strict";
 import { randomUUID } from "node:crypto";

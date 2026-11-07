@@ -4,6 +4,7 @@
 import { SCHEDULED_AHEAD_MS } from "../content/materials.ts";
 import { sql } from "../db.ts";
 import { budgetMessage } from "../providers/receipts.ts";
+import { tr } from "@aihot/site/locale";
 
 /** How far back a source's own output is read to learn how often it produces something. */
 export const RHYTHM_WINDOW_DAYS = 90;
@@ -62,19 +63,19 @@ export interface QuietSource extends SourceHealthRow {
   quiet_days: number | null;
 }
 
-export const SOURCE_USE_NAMES: Record<string, string> = { editorial: "编辑内容", hot_signal: "热度信号" };
+export const SOURCE_USE_NAMES: Record<string, string> = { editorial: tr("编辑内容", "Contenido editorial"), hot_signal: tr("热度信号", "Señal de temperatura") };
 
 /** A fixable source problem. */
 export type SourceProblem = "failing" | "unstable" | "undated" | "revisions" | "details";
 /** Each fixable problem as it is listed, per source: `action` is for the daily follow-up. */
 export const SOURCE_PROBLEMS: { problem: SourceProblem; title: string; describe: (s: SourceHealthRow) => string; observedAt: (s: SourceHealthRow) => Date | null; action: string }[] = [
-  { problem: "failing", observedAt: s => s.last_failed_at, title: "连续抓取失败", describe: s => `连续失败 ${s.fail_count} 次${s.last_error ? `，${s.last_error}` : ""}`, action: "转给 AI 检查抓取错误" },
-  { problem: "unstable", observedAt: s => s.last_unusable_at, title: "反复读不出条目", describe: s => `近 7 天 ${s.unusable}/${s.runs} 次抓到了页面却没解析出条目`, action: "即使最近成功也需检查，避免继续漏收" },
-  { problem: "undated", observedAt: s => s.last_undated_at, title: "文章缺发布时间", describe: s => `近 7 天缺发布时间 ${s.undated} 篇`,
-    action: "缺时间可能让新闻按历史文章处理" },
-  { problem: "revisions", observedAt: s => s.last_repeated_at, title: "文章反复修订", describe: s => `近 7 天反复修订 ${s.repeated} 篇`,
-    action: "需核对正文是否混入变化内容" },
-  { problem: "details", observedAt: s => s.last_detail_failure_at, title: "详情补全失败", describe: s => `近 7 天失败 ${s.detail_failures}/${s.detail_attempts} 页`, action: "查看抓取记录中的详情地址与错误" },
+  { problem: "failing", observedAt: s => s.last_failed_at, title: tr("连续抓取失败", "Lecturas fallidas consecutivas"), describe: s => tr(`连续失败 ${s.fail_count} 次${s.last_error ? `，${s.last_error}` : ""}`, `${s.fail_count} fallas seguidas${s.last_error ? `; ${s.last_error}` : ""}`), action: tr("转给 AI 检查抓取错误", "Pásaselo a la IA para revisar los errores de lectura") },
+  { problem: "unstable", observedAt: s => s.last_unusable_at, title: tr("反复读不出条目", "No se obtienen entradas de forma repetida"), describe: s => tr(`近 7 天 ${s.unusable}/${s.runs} 次抓到了页面却没解析出条目`, `En 7 días, ${s.unusable}/${s.runs} lecturas obtuvieron la página pero ninguna entrada`), action: tr("即使最近成功也需检查，避免继续漏收", "Revísala aunque haya funcionado hace poco, para no seguir perdiendo notas") },
+  { problem: "undated", observedAt: s => s.last_undated_at, title: tr("文章缺发布时间", "Notas sin fecha de publicación"), describe: s => tr(`近 7 天缺发布时间 ${s.undated} 篇`, `${s.undated} notas sin fecha de publicación en 7 días`),
+    action: tr("缺时间可能让新闻按历史文章处理", "Sin fecha, una noticia puede tratarse como nota histórica") },
+  { problem: "revisions", observedAt: s => s.last_repeated_at, title: tr("文章反复修订", "Notas con revisiones repetidas"), describe: s => tr(`近 7 天反复修订 ${s.repeated} 篇`, `${s.repeated} notas revisadas varias veces en 7 días`),
+    action: tr("需核对正文是否混入变化内容", "Verifica si al cuerpo se le cuela contenido cambiante") },
+  { problem: "details", observedAt: s => s.last_detail_failure_at, title: tr("详情补全失败", "Falla el completado de detalles"), describe: s => tr(`近 7 天失败 ${s.detail_failures}/${s.detail_attempts} 页`, `${s.detail_failures}/${s.detail_attempts} páginas fallidas en 7 días`), action: tr("查看抓取记录中的详情地址与错误", "Revisa las direcciones de detalle y los errores en el historial de lecturas") },
 ];
 
 /** A run error that is the network or the origin's answer, not our reading of the page (fetch_runs.error, 10-01..11-01). */

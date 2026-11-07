@@ -21,7 +21,7 @@ function TrendMark({ trend }: { trend: HotStripEntry["trend"] }) {
 
 /**
  * The top of the hot ranking on the home page, kept quiet: a live dot, coloured ranks and titles, then
- * columns of fixed width so every row lines up — who is talking (精选组 faces, from sm), "N 热度" and an arrow for
+ * columns of fixed width so every row lines up — who is talking (selection group faces, from sm), "N de temperatura" and an arrow for
  * where it is heading. The whole row lights up on hover. Phones show the top three in one line each, so
  * the feed starts on the first screen.
  */

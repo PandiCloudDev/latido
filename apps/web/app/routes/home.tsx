@@ -37,7 +37,7 @@ export default function Home() {
   const title = filters.tag ? `#${filters.tag}` : "Destacadas";
   return (
     <div className="pb-6">
-      {/* Phones: the bar (精选 | 全部, filter, search), the filter in use, today's hot topics, the feed. */}
+      {/* Phones: the bar ("Selección" | "Todo", filter, search), the filter in use, today's hot topics, the feed. */}
       <FeedBar base="/" category={filters.category} channel={filters.channel} />
       <ActiveFilters base="/" category={filters.category} channel={filters.channel} tag={filters.tag} />
       <div className="hidden lg:block">
