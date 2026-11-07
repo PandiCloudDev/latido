@@ -11,7 +11,7 @@ import { AdminPage, Button, Card, Empty, Field, Input, Select, Textarea } from "
 export const meta: Route.MetaFunction = () => [{ title: `Nueva fuente · ${SITE.name} Panel` }];
 
 const TEMPLATES: Record<string, Record<string, unknown>> = {
-  rss: { feedUrl: "https://example.com/feed.xml" },
+  rss: {},
   web_list: { url: "https://example.com/blog", baseUrl: "https://example.com", itemSelector: "article", linkSelector: "a", titleSelector: "h2", allowUrlPrefixes: ["https://example.com/blog/"] },
   json_list: { url: "https://example.com/api/posts", mode: "json_api", method: "GET", itemsPath: "data.items", titlePaths: ["title"], urlTemplate: "{raw:url}", summaryPaths: ["summary"] },
   x_search: { query: "from:handle -filter:replies", searchType: "Latest" },
@@ -24,6 +24,7 @@ export default function NewSource() {
   const navigate = useNavigate();
   const { run, pending } = useAdminAction();
   const [form, setForm] = useState({ id: "", name: "", kind: "rss", tier: "T2", selection_class: "", participation_mode: "editorial", interval_minutes: 30, first_party: false, site_fulltext: SOURCE_DEFAULTS.siteFulltext, syndicate_fulltext: false, tags: "" });
+  const [rssUrl, setRssUrl] = useState("");
   const [config, setConfig] = useState(JSON.stringify(TEMPLATES.rss, null, 2));
   const [error, setError] = useState<string | null>(null);
   const [preview, setPreview] = useState<AdminSourcePreview | null>(null);
@@ -32,7 +33,17 @@ export default function NewSource() {
   const parsed = () => {
     try {
       setError(null);
-      return JSON.parse(config) as Record<string, unknown>;
+      const options: unknown = JSON.parse(config);
+      if (!options || typeof options !== "object" || Array.isArray(options)) throw new Error("Usa un objeto de configuración.");
+      if (form.kind !== "rss") return options as Record<string, unknown>;
+      try {
+        const url = new URL(rssUrl.trim());
+        if (!["http:", "https:"].includes(url.protocol) || url.username || url.password) throw new Error();
+        return { ...options, feedUrl: url.href };
+      } catch {
+        setError("Pega una URL de RSS válida (HTTP o HTTPS, sin credenciales).");
+        return null;
+      }
     } catch (e) {
       setError(`La configuración no es JSON válido: ${(e as Error).message}`);
       return null;
@@ -97,9 +108,25 @@ export default function NewSource() {
             </div>
           </div>
           <div className="mt-4">
-            <Field label="Configuración de recolección (JSON)">
-              <Textarea className="font-mono !text-[12px]" rows={10} value={config} onChange={(e) => setConfig(e.target.value)} spellCheck={false} />
-            </Field>
+            {form.kind === "rss" && (
+              <Field label="URL del RSS" hint="Pega la dirección del feed y usa Previsualizar antes de crear la fuente.">
+                <Input type="url" value={rssUrl} onChange={(e) => { setRssUrl(e.target.value); setPreview(null); }} placeholder="https://medio.mx/feed.xml" />
+              </Field>
+            )}
+            {form.kind === "rss" ? (
+              <details className="mt-3">
+                <summary className="cursor-pointer text-[13px] text-ink-3">Opciones avanzadas de RSS</summary>
+                <div className="mt-2">
+                  <Field label="Opciones adicionales (JSON)" hint="La URL se toma del campo de arriba.">
+                    <Textarea className="font-mono !text-[12px]" rows={5} value={config} onChange={(e) => setConfig(e.target.value)} spellCheck={false} />
+                  </Field>
+                </div>
+              </details>
+            ) : (
+              <Field label="Configuración de recolección (JSON)">
+                <Textarea className="font-mono !text-[12px]" rows={10} value={config} onChange={(e) => setConfig(e.target.value)} spellCheck={false} />
+              </Field>
+            )}
             {error && <div className="mt-1 text-[12.5px] text-hot">{error}</div>}
           </div>
           {duplicate && (

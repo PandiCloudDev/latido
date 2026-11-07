@@ -7,25 +7,26 @@ import { siteUrl } from "./links.ts";
 import { sql } from "../db.ts";
 import { serverModules, type LlmsLines } from "../modules.ts";
 import { feedMeta } from "./feeds.ts";
-import { TOPIC_GROUPS, TOPICS, topicPageCounts } from "./topics.ts";
+import { TOPIC_GROUPS, listTopicDefinitions, topicPageCounts } from "./topics.ts";
 
 /**
  * Discovery only needs to know whether an entry exists, not count its entire history, and which topics are
  * indexed; and what the site's modules add.
  */
 export async function loadLlmsAvailability() {
-  const [[row], counts, extra] = await Promise.all([
+  const [[row], counts, extra, topics] = await Promise.all([
     sql<{ hasDailies: boolean; hasWeekly: boolean; hasMonthly: boolean }[]>`
       SELECT EXISTS (SELECT 1 FROM reports WHERE kind = 'daily') AS "hasDailies",
              EXISTS (SELECT 1 FROM reports WHERE kind = 'weekly') AS "hasWeekly",
              EXISTS (SELECT 1 FROM reports WHERE kind = 'monthly') AS "hasMonthly"`,
     topicPageCounts(new Date()),
     Promise.all(serverModules().map(async (m) => (await m.llms?.()) ?? {})),
+    listTopicDefinitions(),
   ]);
   const indexed = new Set(counts.filter((c) => c.indexable).map((c) => c.slug));
   return {
     ...row!,
-    topics: TOPICS.filter((t) => indexed.has(t.slug)).map((t) => ({ slug: t.slug, name: t.name, definition: t.definition })),
+    topics: topics.filter((t) => indexed.has(t.slug)).map((t) => ({ slug: t.slug, name: t.name, definition: t.definition })),
     tools: [...MCP_TOOLS.map((t) => t.name), ...serverModules().flatMap((m) => m.agent?.abilities ?? []).map((a) => mcpToolName(a.mcp.tool))],
     modules: {
       api: extra.flatMap((l) => l.api ?? []),

@@ -192,6 +192,8 @@ export interface ServerModule {
   on?: Partial<EngineHooks>;
   /** Topic pages (publication/topics.ts). */
   topics?: {
+    /** Topic definitions maintained outside the static industry pack. */
+    additional?: () => Promise<Topic[]>;
     /**
      * Its part of a topic page, under its name in TopicPage.modules; its web module draws it. The page names
      * reports only as they are now, so withdrawals and corrections apply although the index is a minute old.

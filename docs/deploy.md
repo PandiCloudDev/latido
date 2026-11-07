@@ -78,9 +78,19 @@ Si una migración nueva encuentra un bloqueo prolongado, informa el nombre del a
 
 Aquí se anotan, de la más reciente a la más antigua, las actualizaciones de Latido que requieran migraciones, variables de entorno nuevas o cambios en archivos propios del sitio, y en particular las que borren datos existentes.
 
+- **Noviembre de 2026, configuración editorial**: migraciones aditivas para suscripciones y registro de envíos. La publicidad y el boletín por correo empiezan desactivados. Para activar el boletín, sigue los pasos de abajo.
 - **Noviembre de 2026, lanzamiento**: identidad visual de Latido, sitio en español para México y Latinoamérica y fuentes iniciales. No requiere pasos adicionales sobre una instalación nueva.
 
 Las notas de actualización anteriores corresponden al motor AIHOT (versiones de la interfaz pública 3.0.0 y 4.0.0 y sincronizaciones de octubre de 2026) y se conservan en el [`docs/deploy.md` del repositorio original](https://github.com/KKKKhazix/AIHOT/blob/main/docs/deploy.md). Al integrar una actualización del motor, consulta ahí los cambios que afecten a `site/` o `industry/` y anota en esta sección los que apliquen a Latido.
+
+### Boletín semanal por correo
+
+1. Configura en `.env` el relay y su remitente: `LATIDO_SMTP_HOST`, `LATIDO_SMTP_PORT` (587 con STARTTLS o 465 con TLS), `LATIDO_SMTP_USER`, `LATIDO_SMTP_PASSWORD` y `LATIDO_SMTP_FROM` (una sola dirección autorizada). Los procesos API y worker leen estos valores; no los pongas en GitHub. Recrea ambos servicios tras modificar las variables.
+2. En **Configuración editorial**, usa **Enviar prueba** con una dirección propia. Comprueba que llega y que el remitente autentica correctamente el dominio. La prueba no registra la dirección.
+3. Revisa y publica el aviso de privacidad con el manejo de las suscripciones, el proveedor que transporta el correo y la retención de los respaldos. Luego activa el formulario y los envíos desde ese mismo panel. El worker empieza con las próximas ediciones generadas tras la activación y las envía solo a direcciones confirmadas antes de cada edición.
+4. El enlace de confirmación dura 48 horas. Las solicitudes vencidas se eliminan en la limpieza diaria. Una baja borra el correo de la lista activa y el registro asociado a esa suscripción. La lista forma parte de los respaldos de PostgreSQL: limita el acceso y aplica la retención del aviso. Tras una restauración, verifica las bajas posteriores al respaldo antes de reactivar los envíos.
+
+El panel muestra conteos de confirmaciones y entregas aceptadas o fallidas, sin listar direcciones. Un fallo o interrupción durante el envío no vuelve a intentar esa copia automáticamente, porque el relay podría haberla aceptado. El RSS del boletín funciona aunque el correo esté desactivado.
 
 ### Respaldos
 

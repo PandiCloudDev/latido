@@ -6,7 +6,7 @@ import { CATEGORY_LABELS } from "@aihot/contracts/taxonomy";
 import { beijingDate } from "@aihot/contracts/time";
 import { loadItemOgCard, loadItemShare } from "@aihot/backend/publication/og";
 import { loadReport, type ReportKind } from "@aihot/backend/publication/reports";
-import { findTopic, TOPIC_GROUPS, TOPICS } from "@aihot/backend/publication/topics";
+import { listTopicDefinitions, TOPIC_GROUPS } from "@aihot/backend/publication/topics";
 import { loadStoryDetail, resolveStory } from "@aihot/backend/publication/stories";
 import { ogEtag, renderOg, type OgCard } from "@aihot/backend/media/og";
 import { posterEtag, renderPoster, type Poster } from "@aihot/backend/media/poster";
@@ -14,10 +14,7 @@ import { CARDS, ITEM_COPY, REPORTS, subjectAfter, withSubject } from "@aihot/sit
 import { config } from "@aihot/backend/config";
 
 /** The pages' share cards: the site's texts, and the topic count of the topic list. */
-const PAGES: Record<string, OgCard> = {
-  ...CARDS,
-  topics: { kicker: "Temas", title: `${TOPICS.length} temas en seguimiento`, subtitle: `${TOPIC_GROUPS.map((g) => g.name).join(" y ")}.` },
-};
+const PAGES: Record<string, OgCard> = CARDS;
 
 /**
  * Article, event and report images carry editable content. A reader may keep a copy for five
@@ -43,6 +40,10 @@ export function registerOg(app: FastifyInstance) {
 
   app.get("/og/pages/:file", async (req, reply) => {
     const name = (req.params as { file: string }).file.replace(/\.png$/, "");
+    if (name === "topics" && (req.params as { file: string }).file.endsWith(".png")) {
+      const count = (await listTopicDefinitions()).length;
+      return send(req, reply, { kicker: "Temas", title: `${count} temas en seguimiento`, subtitle: `${TOPIC_GROUPS.map((g) => g.name).join(" y ")}.` }, 60);
+    }
     const card = Object.hasOwn(PAGES, name) ? PAGES[name] : undefined;
     if (!card || !(req.params as { file: string }).file.endsWith(".png")) return notFound(reply);
     return send(req, reply, card, 86400);
@@ -94,9 +95,9 @@ export function registerOg(app: FastifyInstance) {
 
   app.get("/og/topics/:file", async (req, reply) => {
     const file = (req.params as { file: string }).file;
-    const t = file.endsWith(".png") ? findTopic(file.slice(0, -4)) : null;
+    const t = file.endsWith(".png") ? (await listTopicDefinitions()).find((topic) => topic.slug === file.slice(0, -4)) : null;
     if (!t) return notFound(reply);
-    return send(req, reply, { kicker: `Tema · ${TOPIC_GROUPS.find((g) => g.key === t.group)?.name ?? ""}`, title: `${t.name}: lo más reciente`, subtitle: t.definition }, 86400);
+    return send(req, reply, { kicker: `Tema · ${TOPIC_GROUPS.find((g) => g.key === t.group)?.name ?? ""}`, title: `${t.name}: lo más reciente`, subtitle: t.definition }, 60);
   });
 
   app.get("/og/stories/:file", async (req, reply) => {

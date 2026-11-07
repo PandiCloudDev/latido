@@ -2,7 +2,7 @@ import { useLoaderData } from "react-router";
 import type { Route } from "./+types/report-latest";
 import { REPORT_NAMES, reportDateLabel, type ReportLatestPage } from "@aihot/contracts/site";
 import { REPORTS, subjectAfter, withSubject } from "@aihot/site";
-import { cachedPage, loadOr404 } from "../lib/api.server";
+import { apiGet, cachedPage, loadOr404 } from "../lib/api.server";
 import { pageReuse } from "../lib/page-reuse";
 import { pageMeta, reportLd } from "../lib/seo";
 import { beijingDate } from "@aihot/contracts/time";
@@ -10,6 +10,8 @@ import { EmptyState } from "../components/ui/Page";
 import { ReportLayout } from "../features/report/ReportLayout";
 import { ReportPaper, reportOutline } from "../features/report/ReportPaper";
 import { feedLink, kindFromPath } from "../features/report/format";
+import type { EditorialDisplay } from "@aihot/editorial-controls/types";
+import { WeeklySignup } from "@aihot/editorial-controls/public";
 import type { Screen } from "../components/shell/screens";
 
 export const handle: Screen = { tab: "daily", name: "Boletín diario" };
@@ -18,8 +20,11 @@ export const { clientLoader, shouldRevalidate } = pageReuse<typeof loader>();
 
 export async function loader({ request }: Route.LoaderArgs) {
   const kind = kindFromPath(new URL(request.url).pathname);
-  const { index, report } = await loadOr404<ReportLatestPage>(`/api/site/reports/${kind}/latest-page`, { signal: request.signal });
-  return cachedPage(600, { kind, report, index, today: beijingDate(Date.now()) });
+  const [{ index, report }, editorial] = await Promise.all([
+    loadOr404<ReportLatestPage>(`/api/site/reports/${kind}/latest-page`, { signal: request.signal }),
+    kind === "weekly" ? apiGet<EditorialDisplay>("/api/site/editorial-display", { signal: request.signal }).catch(() => null) : null,
+  ]);
+  return cachedPage(kind === "weekly" ? 60 : 600, { kind, report, index, today: beijingDate(Date.now()), signupUrl: editorial?.signupUrl ?? null });
 }
 
 export function meta({ loaderData, location }: Route.MetaArgs) {
@@ -39,9 +44,10 @@ export function meta({ loaderData, location }: Route.MetaArgs) {
 }
 
 export default function ReportLatestPage() {
-  const { kind, report, index, today } = useLoaderData<typeof loader>();
+  const { kind, report, index, today, signupUrl } = useLoaderData<typeof loader>();
   return (
     <ReportLayout kind={kind} index={index} current={report?.key ?? null} today={today} outline={report ? reportOutline(report) : []}>
+      {kind === "weekly" && signupUrl && <WeeklySignup signupUrl={signupUrl} onWeeklyPage />}
       {report ? <ReportPaper report={report} index={index} /> : <EmptyState title={`Aún no se publica el ${REPORT_NAMES[kind].toLowerCase()}`}>Aparecerá aquí cuando salga el primer número.</EmptyState>}
     </ReportLayout>
   );

@@ -39,6 +39,7 @@ const nav = (): Array<{ group: string; items: AdminNavEntry[] }> => [
     items: [
       { to: "/admin/content", label: "Diagnóstico de notas" },
       { to: "/admin/sources", label: "Fuentes", count: "sources", tone: "bad" },
+      { to: "/admin/editorial", label: "Configuración editorial" },
       { to: "/admin/feedback", label: "Comentarios", count: "feedback", tone: "accent" },
     ],
   },
