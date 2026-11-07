@@ -1,3 +1,4 @@
+import { tr } from "@aihot/site/locale";
 // Story digest: rewritten incrementally as reports arrive; contradictions with earlier reporting are
 // stated explicitly. Latest progress is bound to a current public report, not generated independently.
 import { z } from "zod";
@@ -30,10 +31,14 @@ export const byReportTime = (a: { at: Date }, b: { at: Date }) => a.at.getTime()
  */
 export function buildStoryDigestInput(story: { title: string; digest: string | null }, reports: Omit<DigestReport, "story_id">[], opts: { corrected: boolean; knownArticleIds?: string[] }) {
   const known = new Set(opts.knownArticleIds ?? []);
-  const lines = reports.slice(-40).map((r) => `${opts.corrected || known.has(r.id) ? "" : "【新】"}报道 ${r.id}｜事实 ${r.fact_id}｜${beijingDate(r.at)} ${beijingTime(r.at)}｜${r.source_name}${r.first_party ? "（一手）" : ""}｜${r.title}｜${r.summary ?? ""}\n事实条件与来源证据：${JSON.stringify(digestFactEvidence(r))}`);
+  const lines = reports.slice(-40).map((r) => tr(
+    `${opts.corrected || known.has(r.id) ? "" : "【新】"}报道 ${r.id}｜事实 ${r.fact_id}｜${beijingDate(r.at)} ${beijingTime(r.at)}｜${r.source_name}${r.first_party ? "（一手）" : ""}｜${r.title}｜${r.summary ?? ""}\n事实条件与来源证据：${JSON.stringify(digestFactEvidence(r))}`,
+    `${opts.corrected || known.has(r.id) ? "" : "【Nueva】"}Nota ${r.id} | Hecho ${r.fact_id} | ${beijingDate(r.at)} ${beijingTime(r.at)} | ${r.source_name}${r.first_party ? " (fuente directa)" : ""} | ${r.title} | ${r.summary ?? ""}\nCondiciones del hecho y evidencia de la fuente: ${JSON.stringify(digestFactEvidence(r))}`));
   return opts.corrected
-    ? `事件当前标题：${story.title}\n\n报道内容或事实证据经过更正。请只依据下面这些报道的当前内容重写综述，不要沿用以前版本的说法。\n报道（按时间）：\n${lines.join("\n")}`
-    : `事件当前标题：${story.title}\n${story.digest ? `上一版综述：${story.digest}\n` : ""}\n报道（按时间，标【新】的是上一版之后的新报道）：\n${lines.join("\n")}`;
+    ? tr(`事件当前标题：${story.title}\n\n报道内容或事实证据经过更正。请只依据下面这些报道的当前内容重写综述，不要沿用以前版本的说法。\n报道（按时间）：\n${lines.join("\n")}`,
+      `Título actual del evento: ${story.title}\n\nEl contenido de las notas o la evidencia de los hechos se corrigió. Reescribe el panorama solo con el contenido actual de estas notas, sin retomar lo que decían versiones anteriores.\nNotas (en orden cronológico):\n${lines.join("\n")}`)
+    : tr(`事件当前标题：${story.title}\n${story.digest ? `上一版综述：${story.digest}\n` : ""}\n报道（按时间，标【新】的是上一版之后的新报道）：\n${lines.join("\n")}`,
+      `Título actual del evento: ${story.title}\n${story.digest ? `Panorama anterior: ${story.digest}\n` : ""}\nNotas (en orden cronológico; las marcadas 【Nueva】 llegaron después del panorama anterior):\n${lines.join("\n")}`);
 }
 
 /**

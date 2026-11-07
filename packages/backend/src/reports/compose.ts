@@ -78,7 +78,7 @@ async function saveReport(kind: ReportKind, key: string, start: Date, end: Date,
 /** "10 月 4 日 08:00": one end of a quiet issue's window, as its lead paragraph names it. */
 function windowPoint(at: Date): string {
   const day = beijingDate(at);
-  return `${Number(day.slice(5, 7))} 月 ${Number(day.slice(8, 10))} 日 ${beijingTime(at)}`;
+  return `${Number(day.slice(8, 10))}/${Number(day.slice(5, 7))} ${beijingTime(at)}`;
 }
 
 /**
@@ -152,7 +152,7 @@ export function periodPrompt(kind: "weekly" | "monthly", startDate: string, endD
       sections: introduced.length ? promptText("report-period-sections", { columns: LOCALE.language === "zh" ? introduced.map((l) => `「${l}」`).join("") : introduced.map((l) => `"${l}"`).join(", ") }) : promptText("report-period-no-sections"),
       sectionsExample: introduced.length ? `{"${introduced[0]}": "..."}` : "{}",
     }),
-    user: `本期：${startDate} 至 ${endDateInclusive}\n${list}`,
+    user: `Este número: del ${startDate} al ${endDateInclusive}\n${list}`,
   };
 }
 
@@ -242,7 +242,7 @@ async function composePeriod(kind: "weekly" | "monthly", key: string, startDate:
   const [lead] = top as [Candidate, ...Candidate[]];
   const content = {
     kind,
-    title: kind === "weekly" ? `${SITE.name} 周报 · ${key}` : `${SITE.name} 月报 · ${key}`,
+    title: kind === "weekly" ? `${SITE.name} — Boletín semanal · ${key}` : `${SITE.name} — Boletín mensual · ${key}`,
     ...(kind === "weekly" ? { isoLabel: key } : { monthLabel: key }),
     periodStart: startDate,
     periodEnd: endDateInclusive,

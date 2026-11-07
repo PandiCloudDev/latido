@@ -19,23 +19,23 @@ export interface NavItem {
 
 const SECTIONS: Array<{ title: string; items: NavItem[] }> = [
   {
-    title: "内容",
+    title: "Contenido",
     items: [
-      { to: "/", label: "精选", icon: IconBolt, end: true },
-      { to: "/all", label: subjectAfter("全部", "动态"), icon: IconList },
-      { to: "/hot", label: "热点榜", icon: IconFlame },
-      { to: "/daily", label: withSubject("日报"), icon: IconDoc },
-      { to: "/topics", label: "主题", icon: IconGrid },
-      { to: "/starred", label: "收藏", icon: IconBookmark },
+      { to: "/", label: "Destacadas", icon: IconBolt, end: true },
+      { to: "/all", label: "Todas las notas", icon: IconList },
+      { to: "/hot", label: "Lo más comentado", icon: IconFlame },
+      { to: "/daily", label: withSubject("Boletín diario"), icon: IconDoc },
+      { to: "/topics", label: "Temas", icon: IconGrid },
+      { to: "/starred", label: "Guardar", icon: IconBookmark },
     ],
   },
   {
-    title: "更多",
+    title: "Más",
     items: [
-      { to: "/agent", label: "Agent 接入", icon: IconPlug },
-      { to: "/about", label: "关于", icon: IconHeart },
-      { to: "/changelog", label: "更新日志", icon: IconHistory, changelog: true },
-      { to: "/feedback", label: "反馈", icon: IconMessage },
+      { to: "/agent", label: "Conecta tu agente", icon: IconPlug },
+      { to: "/about", label: "Acerca de", icon: IconHeart },
+      { to: "/changelog", label: "Novedades", icon: IconHistory, changelog: true },
+      { to: "/feedback", label: "Comentarios", icon: IconMessage },
     ],
   },
 ];
@@ -44,8 +44,8 @@ const SECTIONS: Array<{ title: string; items: NavItem[] }> = [
 export const inNav = (to: string) => !(NAV.hidden as readonly string[]).includes(to);
 
 const UP = {
-  "/hot": { name: "热点榜", back: "热点", tab: "hot" },
-  "/topics": { name: "主题", back: "全部主题", tab: "me" },
+  "/hot": { name: "Lo más comentado", back: "Lo más comentado", tab: "hot" },
+  "/topics": { name: "Temas", back: "Todos los temas", tab: "me" },
 } as const;
 
 /**
@@ -54,7 +54,7 @@ const UP = {
  * phone tab it sits under, `crumbs` its breadcrumb after the site's home.
  */
 export function navUp(entry: keyof typeof UP): { to: string; name: string; back: string; tab: TabKey; crumbs: Array<{ name: string; path: string }> } {
-  if (!inNav(entry)) return { to: "/", name: "精选", back: "精选", tab: "featured", crumbs: [] };
+  if (!inNav(entry)) return { to: "/", name: "Destacadas", back: "Destacadas", tab: "featured", crumbs: [] };
   return { to: entry, ...UP[entry], crumbs: [{ name: UP[entry].name, path: entry }] };
 }
 
@@ -95,7 +95,7 @@ export function activeSidebarItem(items: readonly NavItem[], pathname: string): 
 }
 
 /**
- * The phone tab bar: 全部 lives beside 精选 as a switch, 热点 and 日报 are tabs, and "我的" at /more holds
+ * The phone tab bar: 全部 lives beside 精选 as a switch, 热点 and 日报 are tabs, and "Más" at /more holds
  * 收藏, 外观, the tools and the site's own pages. Which tab a page sits under is declared by the page
  * itself (components/shell/screens.ts).
  */
@@ -116,10 +116,10 @@ export interface Tab {
 }
 
 const ENGINE_TABS: Tab[] = [
-  { key: "featured", to: "/", label: "精选", icon: IconBolt },
-  { key: "hot", to: "/hot", label: "热点", icon: IconFlame },
-  { key: "daily", to: "/daily", label: "日报", icon: IconDoc },
-  { key: "me", to: "/more", label: "我的", icon: IconUser, changelog: true },
+  { key: "featured", to: "/", label: "Destacadas", icon: IconBolt },
+  { key: "hot", to: "/hot", label: "Lo más comentado", icon: IconFlame },
+  { key: "daily", to: "/daily", label: "Boletín diario", icon: IconDoc },
+  { key: "me", to: "/more", label: "Más", icon: IconUser, changelog: true },
 ];
 
 /** The tab bar: the engine's, the modules' before 我的. */
@@ -135,7 +135,7 @@ export function rail(): Tab[] {
   const all = tabs();
   if (!inNav("/all")) return all;
   const at = all.findIndex((t) => t.key === "featured") + 1;
-  return [...all.slice(0, at), { key: "all", to: "/all", label: "全部", icon: IconList }, ...all.slice(at)];
+  return [...all.slice(0, at), { key: "all", to: "/all", label: "Todo", icon: IconList }, ...all.slice(at)];
 }
 
 /** A rail entry is lit on its pages; 我的 also on the pages that sit under it on phones. */

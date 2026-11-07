@@ -113,14 +113,14 @@ export function describeReport(r: ReportView, label: string, extra = "", summary
   }
   return [
     `【${label}】${extra}`,
-    `标题：${r.title}`,
-    `来源：${r.source}${r.firstParty ? "（当事方/官方）" : ""}｜发布时间：${describePublicationTime(r.at, r.publicationTime)}`,
-    `摘要：${(r.summary ?? "").slice(0, summaryLimit) || "（无）"}`,
-    r.scope && r.scope !== "unknown" ? `资料范围：${r.scope === "composite" ? "多个独立发生的综合稿" : "单一具体发生或议题"}` : null,
+    tr(`标题：${r.title}`, `Título: ${r.title}`),
+    tr(`来源：${r.source}${r.firstParty ? "（当事方/官方）" : ""}｜发布时间：${describePublicationTime(r.at, r.publicationTime)}`, `Fuente: ${r.source}${r.firstParty ? " (parte involucrada/oficial)" : ""} | Publicación: ${describePublicationTime(r.at, r.publicationTime)}`),
+    tr(`摘要：${(r.summary ?? "").slice(0, summaryLimit) || "（无）"}`, `Resumen: ${(r.summary ?? "").slice(0, summaryLimit) || "(ninguno)"}`),
+    r.scope && r.scope !== "unknown" ? tr(`资料范围：${r.scope === "composite" ? "多个独立发生的综合稿" : "单一具体发生或议题"}`, `Alcance del material: ${r.scope === "composite" ? "recopilación de varios hechos independientes" : "un solo hecho o tema concreto"}`) : null,
     f && (f.subject || f.action || f.object)
-      ? `事实要素：主体=${f.subject || "?"}；动作=${f.action || "?"}；对象=${f.object || "?"}；日期=${f.occurredAt || "未知"}`
+      ? tr(`事实要素：主体=${f.subject || "?"}；动作=${f.action || "?"}；对象=${f.object || "?"}；日期=${f.occurredAt || "未知"}`, `Elementos del hecho: sujeto=${f.subject || "?"}; acción=${f.action || "?"}; objeto=${f.object || "?"}; fecha=${f.occurredAt || "desconocida"}`)
       : null,
-    r.sourceText ? `【原文证据】\n${r.sourceText.slice(0, GROUP_BODY_CHARS)}\n【原文证据结束】` : null,
+    r.sourceText ? tr(`【原文证据】\n${r.sourceText.slice(0, GROUP_BODY_CHARS)}\n【原文证据结束】`, `【Evidencia del original】\n${r.sourceText.slice(0, GROUP_BODY_CHARS)}\n【Fin de la evidencia del original】`) : null,
   ]
     .filter(Boolean)
     .join("\n");

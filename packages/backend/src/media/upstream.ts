@@ -32,7 +32,7 @@ export function upstreamAllowed(now = Date.now()): { ok: true } | { ok: false; r
 }
 
 function trip(window: "minute" | "day", now: number): { ok: false; reason: string } {
-  const reason = window === "minute" ? `图片代理上游流量超过每分钟 ${MINUTE_BUDGET / 1e6} MB` : `图片代理上游流量超过当日 ${DAY_BUDGET / 1e9} GB`;
+  const reason = window === "minute" ? `El tráfico del proxy de imágenes superó ${MINUTE_BUDGET / 1e6} MB por minuto` : `El tráfico del proxy de imágenes superó ${DAY_BUDGET / 1e9} GB en el día`;
   if (tripped !== window) {
     tripped = window;
     void sql`INSERT INTO settings (key, value, updated_by) VALUES ('egress.imgproxy', ${sql.json({ window, reason, at: new Date(now).toISOString(), dayBytes: day.bytes })}, 'api')
@@ -52,5 +52,5 @@ export function recordUpstream(bytes: number, now = Date.now()): void {
 export async function upstreamFindings(now = Date.now()): Promise<Finding[]> {
   const [img] = await sql<{ value: { window: string; reason: string }; updated_at: Date }[]>`SELECT value, updated_at FROM settings WHERE key = 'egress.imgproxy'`;
   if (!img || img.value.window !== "day" || now - img.updated_at.getTime() >= 86400_000) return [];
-  return [{ key: "egress.imgproxy", level: "later", title: "图片代理今天的流量额度用完了，未缓存的图片到零点前显示不出来", detail: String(img.value.reason) }];
+  return [{ key: "egress.imgproxy", level: "later", title: "El proxy de imágenes agotó su cuota de hoy; las imágenes sin caché no se verán hasta la medianoche", detail: String(img.value.reason) }];
 }

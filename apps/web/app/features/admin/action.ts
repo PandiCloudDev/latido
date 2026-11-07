@@ -48,14 +48,14 @@ export function useAdminAction() {
         }
         const text = await res.text();
         const json = text ? JSON.parse(text) : null;
-        if (!res.ok) throw new AdminError(json?.detail ?? `请求失败（${res.status}）`);
+        if (!res.ok) throw new AdminError(json?.detail ?? `Error en la solicitud (${res.status})`);
         keys.current.delete(label);
         if (opts.success) toast(opts.success, "ok");
         if (opts.revalidate !== false) revalidator.revalidate();
         // null means failure to callers; an empty success (204) is an empty object.
         return (json ?? {}) as T;
       } catch (error) {
-        toast(error instanceof AdminError ? error.message : "网络错误，请稍后再试", "error");
+        toast(error instanceof AdminError ? error.message : "Error de red; inténtalo más tarde", "error");
         return null;
       } finally {
         setPending(null);

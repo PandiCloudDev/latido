@@ -1,3 +1,4 @@
+import { tr } from "@aihot/site/locale";
 // One piece of news, one card. A card is what a reader sees; everything else in grouping is a guess at
 // which reports belong together, made once, as they arrive, against a fact's first report. So the
 // moment a report is about to open a new card, it is compared directly with the cards around it, as a
@@ -53,7 +54,7 @@ export async function readerOf(articleId: string): Promise<Reader | null> {
 }
 
 /** Why a report stays out of 精选: the title is what the reader has already seen. */
-export const alreadyOnCard = (title: string) => `读者已在精选看过同一条新闻：${title}`;
+export const alreadyOnCard = (title: string) => tr(`读者已在精选看过同一条新闻：${title}`, `El lector ya vio esta noticia en destacadas: ${title}`);
 
 /** The review model reads the pair the other way round. */
 async function sameNews(reader: Reader, card: CardRow): Promise<boolean> {

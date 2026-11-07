@@ -1,3 +1,4 @@
+import { tr } from "@aihot/site/locale";
 // Operator settings: about-page QR codes (replaced without a release), notification targets
 // (switching a group on records enabled_at so older content is never back-filled) and per-service
 // request budgets (the circuit breaker paid calls check before sending).
@@ -15,10 +16,10 @@ const MAX_QR_BYTES = 2 * 1024 * 1024;
 
 export async function replaceContactQr(input: { slot: keyof ContactSettings; data: Buffer }, actor: string) {
   if (input.slot !== "wechatQr" && input.slot !== "feishuQr") throw new Error("unknown slot");
-  if (input.data.length > MAX_QR_BYTES) throw new Error("二维码图片最大 2MB");
+  if (input.data.length > MAX_QR_BYTES) throw new Error(tr("二维码图片最大 2MB", "La imagen del QR debe pesar máximo 2 MB"));
   const meta = await sharp(input.data).metadata().catch(() => null);
-  if (!meta || !["png", "jpeg", "webp"].includes(meta.format ?? "")) throw new Error("需要 PNG、JPG 或 WebP 图片");
-  if ((meta.width ?? 0) < 120 || (meta.height ?? 0) < 120) throw new Error("图片太小，二维码可能扫不出来");
+  if (!meta || !["png", "jpeg", "webp"].includes(meta.format ?? "")) throw new Error(tr("需要 PNG、JPG 或 WebP 图片", "Se necesita una imagen PNG, JPG o WebP"));
+  if ((meta.width ?? 0) < 120 || (meta.height ?? 0) < 120) throw new Error(tr("图片太小，二维码可能扫不出来", "La imagen es muy pequeña; el QR podría no leerse"));
   const ext = meta.format === "jpeg" ? "jpg" : meta.format!;
   const name = `qr-${input.slot === "wechatQr" ? "wechat" : "feishu"}-${sha256(input.data).slice(0, 8)}.${ext}`;
   const dir = path.join(config.dataDir, "uploads");

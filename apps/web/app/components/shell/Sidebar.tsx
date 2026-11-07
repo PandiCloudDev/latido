@@ -33,7 +33,7 @@ function SideLink({ item, dot, active }: { item: NavItem; dot: boolean; active: 
         <Icon size={17} />
       </span>
       <span className="min-w-0 truncate">{item.label}</span>
-      {dot && item.changelog && <span className="ml-auto size-1.5 shrink-0 rounded-full bg-hot" aria-label="有新的更新" />}
+      {dot && item.changelog && <span className="ml-auto size-1.5 shrink-0 rounded-full bg-hot" aria-label="Hay novedades" />}
     </IntentLink>
   );
 }
@@ -48,10 +48,10 @@ function Rail({ dot }: { dot: boolean }) {
   const { tab, home } = useScreen();
   return (
     <aside className="scrollbar-thin sticky top-0 hidden h-dvh w-16 shrink-0 flex-col items-center border-r border-line bg-sidebar px-1.5 pb-[max(14px,env(safe-area-inset-bottom))] pt-5 lg:flex wide:hidden short:overflow-y-auto short:pt-3">
-      <Link to="/" className="mb-3 flex size-11 shrink-0 items-center justify-center text-accent short:mb-1" aria-label={`${SITE.name} 首页`}>
+      <Link to="/" className="mb-3 flex size-11 shrink-0 items-center justify-center text-accent short:mb-1" aria-label={`Portada de ${SITE.name}`}>
         <RingMark className="size-7" />
       </Link>
-      <nav className="flex w-full flex-col gap-1" aria-label="主导航">
+      <nav className="flex w-full flex-col gap-1" aria-label="Navegación principal">
         {rail().map((t) => {
           const on = railIsActive(t, pathname, tab ?? home);
           const Icon = t.icon;
@@ -68,7 +68,7 @@ function Rail({ dot }: { dot: boolean }) {
                 <Icon size={20} />
               </span>
               <span className="max-w-full truncate">{t.label}</span>
-              {dot && t.changelog && <span className="absolute right-2 top-2 size-1.5 rounded-full bg-hot" aria-label="有新的更新" />}
+              {dot && t.changelog && <span className="absolute right-2 top-2 size-1.5 rounded-full bg-hot" aria-label="Hay novedades" />}
             </IntentLink>
           );
         })}
@@ -86,10 +86,10 @@ export function Sidebar({ changelogVersion }: { changelogVersion: string | null 
     <>
       <Rail dot={dot} />
       <aside className="scrollbar-thin sticky top-0 hidden h-dvh w-[180px] shrink-0 flex-col border-r border-line bg-sidebar px-3 pb-[max(14px,env(safe-area-inset-bottom))] pt-6 wide:flex short:overflow-y-auto">
-        <Link to="/" className="mb-4 flex h-[50px] shrink-0 items-center px-1 text-ink" aria-label={`${SITE.name} 首页`}>
+        <Link to="/" className="mb-4 flex h-[50px] shrink-0 items-center px-1 text-ink" aria-label={`Portada de ${SITE.name}`}>
           <Wordmark size={26} />
         </Link>
-        <nav className="scrollbar-thin -mx-1 flex-1 overflow-y-auto px-1 short:flex-none short:overflow-visible" aria-label="主导航">
+        <nav className="scrollbar-thin -mx-1 flex-1 overflow-y-auto px-1 short:flex-none short:overflow-visible" aria-label="Navegación principal">
           {sidebar().map((section) => {
             // Only the most specific entry of a section is lit, so a detail page does not light the list above it too.
             const lit = activeSidebarItem(section.items, pathname);
@@ -114,7 +114,7 @@ export function Sidebar({ changelogVersion }: { changelogVersion: string | null 
               className="mx-1 flex h-[34px] items-center justify-center gap-1.5 rounded-full border border-line text-[12.5px] text-ink-3 transition-colors hover:bg-bg-sunk hover:text-ink touch:h-11"
             >
               <IconGithub size={14} />
-              GitHub 开源
+              Código abierto en GitHub
             </a>
           )}
           <ThemeSwitch className="mx-1 touch:h-11" />

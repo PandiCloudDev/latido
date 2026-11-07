@@ -13,6 +13,7 @@ import { after, before, test } from "node:test";
 import * as cheerio from "cheerio";
 import { reportDateLabel, type FeedItemSummary, type ReportCitation, type ReportDetail, type ReportKind, type SiteItemDetail, type StoryDetail } from "@aihot/contracts/site";
 import { SITE, withSubject } from "@aihot/site";
+import { LOCALE, tr } from "@aihot/site/locale";
 import { articleLd, readFilters, reportLd } from "../apps/web/app/lib/seo.ts";
 import { startWebServer, type WebServer } from "../apps/web/tests/web-server.ts";
 
@@ -73,16 +74,16 @@ test("ordinary feed pages remain indexable and normalize ignored parameters", as
     const $ = await page(requested!);
     assert.equal($("meta[name=robots]").attr("content"), undefined);
     assert.equal($("link[rel=canonical]").attr("href"), `${web.origin}${canonical}`);
-    if (canonical?.includes("page=2")) assert.match($("title").text(), /第 2 页/);
+    if (canonical?.includes("page=2")) assert.match($("title").text(), /página 2/);
   }
 });
 
 // Chinese readers search issues by the date as they write it ("10月4日 AI 新闻"), not by the key.
-for (const [kind, label, date] of [["daily", "日报", "10月4日"], ["weekly", "周报", "9月28日—10月4日"], ["monthly", "月报", "2026年10月"]] as const) {
+for (const [kind, label, date] of [["daily", "Boletín diario", tr("10月4日", "4 de octubre")], ["weekly", "Boletín semanal", tr("9月28日—10月4日", "28 de septiembre—4 de octubre")], ["monthly", "Boletín mensual", "octubre de 2026"]] as const) {
   test(`${kind} issue metadata describes its visible lead while the permanent entry keeps its title`, async () => {
     const r = report(kind);
     const $ = await page(`/${kind}/${r.key}`);
-    const title = `${withSubject(label)}｜${date}：${r.lead!.title}`;
+    const title = `${withSubject(label)} | ${date}: ${r.lead!.title}`;
     assert.equal($("title").text(), `${title} · ${SITE.name}`);
     assert.equal($("meta[property='og:title']").attr("content"), title);
     assert.ok($("main").text().includes(r.lead!.title));
@@ -95,11 +96,11 @@ for (const [kind, label, date] of [["daily", "日报", "10月4日"], ["weekly", 
   });
 }
 
-test("an issue's date reads as Chinese readers write it, across months and years", () => {
-  assert.equal(reportDateLabel("daily", "2026-10-17"), "10月17日");
-  assert.equal(reportDateLabel("weekly", "2026-W42"), "10月12日—18日");
-  assert.equal(reportDateLabel("weekly", "2026-W53"), "12月28日—1月3日");
-  assert.equal(reportDateLabel("monthly", "2026-01"), "2026年1月");
+test("an issue's date reads as Spanish readers write it, across months and years", { skip: LOCALE.language !== "es" && "es profile labels" }, () => {
+  assert.equal(reportDateLabel("daily", "2026-10-17"), "17 de octubre");
+  assert.equal(reportDateLabel("weekly", "2026-W42"), "12—18 de octubre");
+  assert.equal(reportDateLabel("weekly", "2026-W53"), "28 de diciembre—3 de enero");
+  assert.equal(reportDateLabel("monthly", "2026-01"), "enero de 2026");
 });
 
 test("a report without an edited lead uses only a still-public visible highlight", () => {

@@ -12,7 +12,7 @@ const useIsoLayoutEffect = typeof window === "undefined" ? useEffect : useLayout
 export interface BackTarget {
   /** Where back goes when this page was opened directly (no page of ours behind it). */
   to: string;
-  /** What the button says then; otherwise it names the page behind, or reads "返回". */
+  /** What the button says then; otherwise it names the page behind, or reads "Volver". */
   label: string;
 }
 
@@ -76,7 +76,7 @@ function BackButton({ to, label }: BackTarget) {
   useIsoLayoutEffect(() => {
     if (historyIndex() === 0) return setText(label);
     const behind = previousScreen();
-    setText(behind ? behind : "返回");
+    setText(behind ? behind : "Volver");
   }, [key, label]);
   return (
     <button

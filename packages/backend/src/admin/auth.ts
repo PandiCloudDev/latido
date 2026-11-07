@@ -1,3 +1,4 @@
+import { tr } from "@aihot/site/locale";
 // Admin identity: the admin password (ADMIN_PASSWORD), or optionally Feishu OAuth with an allowlist of
 // union_ids / emails; opaque sessions stored hashed, and an audit trail for every manual change.
 // Development may impersonate an admin with DEV_AUTH_ROLE=admin; production refuses to start with it.
@@ -164,7 +165,7 @@ async function createSession(userId: number, userAgent: string | undefined, auth
 export async function completeLogin(code: string, state: string, stateCookie: string | undefined, userAgent: string | undefined) {
   const expected = unsign(stateCookie);
   const given = unsign(state);
-  if (!expected || !given || expected !== given) throw new LoginRejected("登录状态已失效，请重新登录");
+  if (!expected || !given || expected !== given) throw new LoginRejected(tr("登录状态已失效，请重新登录", "La sesión expiró; vuelve a entrar"));
   // What follows the random part is the path (safeReturn, signed), which may itself hold a "|".
   const returnTo = given.includes("|") ? given.slice(given.indexOf("|") + 1) : SIGN_IN_HOME;
   const { user: u, appId } = await feishuUser(code);
@@ -174,7 +175,7 @@ export async function completeLogin(code: string, state: string, stateCookie: st
   const claims: FeishuClaims = { appId, unionId, email };
   const auth: SessionAuth = { method: "feishu", claims, binding: sessionBinding("feishu", claims, secret()) };
   const allowed = (unionId && config.adminUnionIds.includes(unionId)) || (email && config.adminEmails.includes(email));
-  if (!allowed) throw new LoginRejected("这个飞书账号没有后台权限");
+  if (!allowed) throw new LoginRejected(tr("这个飞书账号没有后台权限", "Esta cuenta de Feishu no tiene acceso al panel"));
   const [existing] = await sql<{ id: number }[]>`
     SELECT id FROM admin_users WHERE (${unionId}::text IS NOT NULL AND feishu_union_id = ${unionId}) OR (${email}::text IS NOT NULL AND email = ${email}) LIMIT 1`;
   const [user] = existing
@@ -192,10 +193,10 @@ const PASSWORD_ADMIN = "admin@local";
 /** Password sign-in: a constant-time comparison of digests, so the length leaks nothing either. */
 export async function passwordLogin(password: string, returnTo: string, userAgent: string | undefined) {
   const expected = config.adminPassword;
-  if (!expected || expected.length < 12) throw new LoginRejected("还没有设置管理员密码（环境变量 ADMIN_PASSWORD，至少 12 位）");
+  if (!expected || expected.length < 12) throw new LoginRejected(tr("还没有设置管理员密码（环境变量 ADMIN_PASSWORD，至少 12 位）", "Aún no hay contraseña de administrador (variable ADMIN_PASSWORD, mínimo 12 caracteres)"));
   const given = createHmac("sha256", "admin-password").update(password).digest();
   const wanted = createHmac("sha256", "admin-password").update(expected).digest();
-  if (!timingSafeEqual(given, wanted)) throw new LoginRejected("密码不对");
+  if (!timingSafeEqual(given, wanted)) throw new LoginRejected(tr("密码不对", "Contraseña incorrecta"));
   const auth: SessionAuth = { method: "password", claims: null, binding: sessionBinding("password", expected, secret()) };
   const [user] = await sql<{ id: number }[]>`
     INSERT INTO admin_users (email, display_name, last_login_at) VALUES (${PASSWORD_ADMIN}, '管理员', now())
