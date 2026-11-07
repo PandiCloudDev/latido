@@ -1,13 +1,15 @@
-import { Link, redirect, useLoaderData } from "react-router";
+import { redirect, useLoaderData } from "react-router";
 import type { Route } from "./+types/home";
 import type { TimelineResponse } from "@aihot/contracts/site";
-import { cachedPage, loadOr404 } from "../lib/api.server";
+import { apiGet, cachedPage, loadOr404 } from "../lib/api.server";
 import { pageReuse } from "../lib/page-reuse";
 import { filterParams, hasFeedFilters, itemListLd, listPath, pageMeta, readFilters, siteLd } from "../lib/seo";
 import { inNav } from "../components/shell/nav";
 import type { Screen } from "../components/shell/screens";
 import { Timeline } from "../features/feed/Timeline";
 import { HotTopics } from "../features/feed/HotTopics";
+import type { EditorialDisplay } from "@aihot/editorial-controls/types";
+import { SponsorSlot, WeeklySignup } from "@aihot/editorial-controls/public";
 import { ActiveFilters, CategoryTabs, FeedBar, SearchField } from "../features/feed/Filters";
 
 export const handle: Screen = { tab: "featured", name: "Destacadas" };
@@ -21,9 +23,12 @@ export async function loader({ request }: Route.LoaderArgs) {
   if (q && q.trim()) throw redirect(`/all${url.search}`);
   const filters = readFilters(url.searchParams);
   const upstream = new Headers();
-  const data = await loadOr404<TimelineResponse>(listPath("/api/site/timeline", filterParams(filters)), { responseHeaders: upstream, signal: request.signal });
+  const [data, editorial] = await Promise.all([
+    loadOr404<TimelineResponse>(listPath("/api/site/timeline", filterParams(filters)), { responseHeaders: upstream, signal: request.signal }),
+    !hasFeedFilters(filters) ? apiGet<EditorialDisplay>("/api/site/editorial-display", { signal: request.signal }).catch(() => null) : null,
+  ]);
   // A minute at most, here and on /all: new selections must not wait longer at the edge or in a browser.
-  return cachedPage(60, { data, filters }, upstream);
+  return cachedPage(60, { data, filters, editorial }, upstream);
 }
 
 export function meta({ loaderData }: Route.MetaArgs) {
@@ -33,7 +38,7 @@ export function meta({ loaderData }: Route.MetaArgs) {
 }
 
 export default function Home() {
-  const { data, filters } = useLoaderData<typeof loader>();
+  const { data, filters, editorial } = useLoaderData<typeof loader>();
   const title = filters.tag ? `#${filters.tag}` : "Destacadas";
   return (
     <div className="pb-6">
@@ -48,19 +53,10 @@ export default function Home() {
         </div>
       </div>
 
-      {!hasFeedFilters(filters) && (
-        <section aria-labelledby="latido-weekly" className="mb-5 mt-2 flex flex-wrap items-center justify-between gap-4 rounded-card border border-line border-t-[3px] border-t-editorial-blue bg-surface px-4 py-4 lg:mt-0 lg:px-5">
-          <div>
-            <p className="text-[11px] font-bold uppercase tracking-[0.12em] text-editorial-blue">El boletín de Latido</p>
-            <h2 id="latido-weekly" className="mt-1 text-[20px] font-bold leading-tight text-ink">Lo importante de la semana, en contexto.</h2>
-            <p className="mt-1 text-[14px] text-ink-3">Qué pasó, por qué importa y qué conviene seguir.</p>
-          </div>
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
-            <Link to="/weekly" className="inline-flex min-h-11 items-center rounded-control bg-accent px-4 text-[14px] font-bold text-accent-contrast hover:opacity-90">Leer el boletín semanal</Link>
-            <a href="/feed.xml" className="inline-flex min-h-11 items-center text-[14px] font-bold text-editorial-blue hover:underline">Seguir vía RSS</a>
-          </div>
-        </section>
-      )}
+      {!hasFeedFilters(filters) && <>
+        <WeeklySignup signupUrl={editorial?.signupUrl ?? null} />
+        <SponsorSlot ad={editorial?.ad ?? null} />
+      </>}
 
       {data.hot && inNav("/hot") && <HotTopics entries={data.hot} />}
 

@@ -138,7 +138,7 @@ export function registerSite(app: FastifyInstance) {
   }));
 
   app.get('/api/site/search/suggestions', siteHandler(async (req, reply) => {
-    const body: SearchSuggestions = { topics: topicBrowseLinks(), hot: await hotSearchLinks() };
+    const body: SearchSuggestions = { topics: await topicBrowseLinks(), hot: await hotSearchLinks() };
     return sendJsonWithEtag(req, reply, body, { etagPrefix: 'suggestions', cacheControl: 'public, max-age=30, s-maxage=30, must-revalidate' });
   }));
 

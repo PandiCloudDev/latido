@@ -3,4 +3,6 @@
 // pages' parts. Each list keeps the order its entries appear in on the site.
 import type { ModuleDeclaration } from "@aihot/contracts/modules";
 
-export const MODULES: readonly ModuleDeclaration[] = [];
+import { EDITORIAL_CONTROLS } from "@aihot/editorial-controls/module";
+
+export const MODULES: readonly ModuleDeclaration[] = [EDITORIAL_CONTROLS];

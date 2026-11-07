@@ -1,0 +1,17 @@
+{
+  "name": "@aihot/editorial-controls",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./module": "./module.ts",
+    "./server": "./server.ts",
+    "./types": "./types.ts",
+    "./public": "./web/public.tsx"
+  },
+  "dependencies": {
+    "nodemailer": "10.4.0"
+  },
+  "devDependencies": {
+    "@types/nodemailer": "8.0.2"
+  }
+}

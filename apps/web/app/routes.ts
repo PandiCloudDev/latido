@@ -55,5 +55,6 @@ export default [
     route("admin/selectbench/:runId", "routes/admin/selectbench-run.tsx"),
     route("admin/settings", "routes/admin/settings.tsx"),
     route("admin/audit", "routes/admin/audit.tsx"),
+    ...MODULES.flatMap((m) => (m.adminPages ?? []).map((p) => page(m.name, p))),
   ]),
 ] satisfies RouteConfig;

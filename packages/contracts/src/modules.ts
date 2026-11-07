@@ -29,6 +29,8 @@ export interface ModuleDeclaration {
   name: string;
   /** Public pages, beside the engine's. */
   pages?: Array<ModulePage | ModuleLayout>;
+  /** Pages inside the signed-in admin layout. */
+  adminPages?: ModulePage[];
   /** Matched after the engine's redirects, in this order. */
   redirects?: RedirectRule[];
   /** Paths the api process answers; the web server and the internal router send them there. */

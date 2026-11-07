@@ -1,5 +1,5 @@
 // Topics: stable slugs in three groups (companies, directions, content forms), defined by the industry
-// pack (industry/topics.json) and read from there when the process starts. Which reports a topic takes
+// pack (industry/topics.json) and the site modules. Which reports a topic takes
 // is one SQL predicate, `membership`: a direction or a form takes its tags; a company takes the reports
 // it is a subject of, but not those that only mention it — among several subject companies, its name must
 // appear in the Chinese or the original title. Lists and counts read the selected set one report per
@@ -13,7 +13,7 @@ import path from "node:path";
 import { REPO_ROOT } from "../config.ts";
 import { sql } from "../db.ts";
 import { ENTITIES, entityNames } from "../editorial/vocabulary.ts";
-import { cached, type Cached } from "../lib/cache.ts";
+import { cachedByKey } from "../lib/cache.ts";
 import { sha256, stableJson } from "../lib/ids.ts";
 import { serverModules } from "../modules.ts";
 import { ITEM_COLUMNS, ITEM_FROM, toFeedItemSummary, type ItemRow } from "./items.ts";
@@ -72,15 +72,21 @@ export function findTopic(slug: string): Topic | null {
   return BY_SLUG.get(slug)?.topic ?? null;
 }
 
-const position = (slug: string) => BY_SLUG.get(slug)?.position ?? Number.MAX_SAFE_INTEGER;
-
-export function topicLinks(slugs: string[]): TopicLink[] {
-  return slugs.map((s) => findTopic(s)).filter((t): t is Topic => !!t).map((t) => ({ slug: t.slug, name: t.name }));
+export async function listTopicDefinitions(): Promise<Topic[]> {
+  const additions = await Promise.all(serverModules().flatMap((m) => m.topics?.additional ? [m.topics.additional()] : []));
+  const bySlug = new Map(TOPICS.map((t) => [t.slug, t]));
+  for (const topic of additions.flat()) if (!bySlug.has(topic.slug)) bySlug.set(topic.slug, topic);
+  return [...bySlug.values()];
 }
 
-/** Stable browse links in the same order as the topic directory, without its counts or modules. */
-export function topicBrowseLinks() {
-  return TOPICS.map(({ slug, name, group }) => ({ slug, name, group }));
+export function topicLinks(slugs: string[], topics: Topic[] = TOPICS): TopicLink[] {
+  const bySlug = new Map(topics.map((t) => [t.slug, t]));
+  return slugs.map((s) => bySlug.get(s)).filter((t): t is Topic => !!t).map((t) => ({ slug: t.slug, name: t.name }));
+}
+
+/** Stable browse links in the same order as the topic directory, without its counts. */
+export async function topicBrowseLinks() {
+  return (await listTopicDefinitions()).map(({ slug, name, group }) => ({ slug, name, group }));
 }
 
 /** One membership rule for topic discovery and a single topic's page and count. */
@@ -94,7 +100,7 @@ function topicMatch(tags: ReturnType<typeof sql>, pattern: ReturnType<typeof sql
  * title names it or it is the report's only subject company.
  */
 export function topicMembership(topics: Topic[] = TOPICS) {
-  const rows = topics.map((t) => ({ slug: t.slug, tags: t.tags, pattern: t.pattern, position: position(t.slug) }));
+  const rows = topics.map((t, position) => ({ slug: t.slug, tags: t.tags, pattern: t.pattern, position }));
   return sql`ARRAY(
     SELECT t.slug FROM jsonb_to_recordset(${sql.json(rows)}::jsonb) AS t(slug text, tags text[], pattern text, position int)
     WHERE ${topicMatch(sql`t.tags`, sql`t.pattern`)}
@@ -202,18 +208,18 @@ async function readSeats(now: Date, ids?: string[], topics: Topic[] = TOPICS): P
   }));
 }
 
-async function readIndex(now: Date): Promise<TopicIndex> {
-  const members = (await readSeats(now)).filter((seat) => seat.topics.length > 0);
-  const bySlug = new Map(TOPICS.map((t) => [t.slug, [] as TopicMember[]]));
+async function readIndex(now: Date, topics: Topic[]): Promise<TopicIndex> {
+  const members = (await readSeats(now, undefined, topics)).filter((seat) => seat.topics.length > 0);
+  const bySlug = new Map(topics.map((t) => [t.slug, [] as TopicMember[]]));
   for (const seat of members) for (const slug of seat.topics) bySlug.get(slug)?.push(seat);
   const parts = serverModules().flatMap((m) => (m.topics?.page?.index ? [{ name: m.name, index: m.topics.page.index }] : []));
   return { at: now, bySlug, modules: new Map(await Promise.all(parts.map(async (p) => [p.name, await p.index(members, now)] as const))) };
 }
 
-const indexCache = cached(() => readIndex(new Date()), { freshMs: 60_000, maxStaleMs: 60_000 });
+const indexCache = cachedByKey<Topic[], TopicIndex>(stableJson, (topics) => readIndex(new Date(), topics), { freshMs: 60_000, maxStaleMs: 60_000, maxKeys: 4 });
 
 /** A given `now` reads afresh (tests, a clock other than this minute's). */
-const topicIndex = (now?: Date) => (now ? readIndex(now) : indexCache.get());
+const topicIndex = (topics: Topic[], now?: Date) => (now ? readIndex(now, topics) : indexCache(topics));
 
 const DAY = 86400_000;
 const RECENT_DAYS = 30;
@@ -268,9 +274,10 @@ function summarize(t: Topic, seats: TopicMember[], now: Date, brands: Map<string
 }
 
 export async function listTopicSummaries(): Promise<TopicsResponse> {
-  const [index, brands] = await Promise.all([topicIndex(), companyBrands()]);
-  const live = await currentSeats(TOPICS.flatMap((t) => index.bySlug.get(t.slug)!.slice(0, LATEST_CANDIDATES).map((s) => s.id)), new Date());
-  return { groups: TOPIC_GROUPS, topics: TOPICS.map((t) => summarize(t, index.bySlug.get(t.slug)!, index.at, brands, live)) };
+  const topics = await listTopicDefinitions();
+  const [index, brands] = await Promise.all([topicIndex(topics), companyBrands()]);
+  const live = await currentSeats(topics.flatMap((t) => index.bySlug.get(t.slug)!.slice(0, LATEST_CANDIDATES).map((s) => s.id)), new Date(), topics);
+  return { groups: TOPIC_GROUPS, topics: topics.map((t) => summarize(t, index.bySlug.get(t.slug)!, index.at, brands, live)) };
 }
 
 export interface TopicCount {
@@ -283,9 +290,10 @@ export interface TopicCount {
 
 /** For discovery: every topic's pages and their current content identity. */
 export async function topicPageCounts(now?: Date, revisions = false): Promise<TopicCount[]> {
-  const index = await topicIndex(now);
+  const topics = await listTopicDefinitions();
+  const index = await topicIndex(topics, now);
   const brands = revisions ? await companyBrands() : null;
-  return TOPICS.map((t) => {
+  return topics.map((t) => {
     const seats = index.bySlug.get(t.slug)!;
     let revision: string | undefined;
     if (revisions) {
@@ -305,21 +313,19 @@ export async function topicPageCounts(now?: Date, revisions = false): Promise<To
   });
 }
 
-const poolCounts = new Map<string, Cached<number>>();
-
 /** Every listed report of the topic, selected or not (listed). */
-function poolTotal(t: Topic, now?: Date): Promise<number> {
-  const read = async (at: Date) => (await sql<{ n: number }[]>`SELECT count(*)::int AS n FROM publications p WHERE ${listedCondition(at)} AND ${inTopic(t)}`)[0]?.n ?? 0;
-  if (now) return read(now);
-  let count = poolCounts.get(t.slug);
-  if (!count) poolCounts.set(t.slug, (count = cached(() => read(new Date()), { freshMs: 60_000, maxStaleMs: 60_000 })));
-  return count.get();
+async function readPoolTotal(t: Topic, at: Date): Promise<number> {
+  return (await sql<{ n: number }[]>`SELECT count(*)::int AS n FROM publications p WHERE ${listedCondition(at)} AND ${inTopic(t)}`)[0]?.n ?? 0;
 }
+const poolCounts = cachedByKey<Topic, number>(stableJson, (t) => readPoolTotal(t, new Date()), { freshMs: 60_000, maxStaleMs: 60_000, maxKeys: 256 });
+const poolTotal = (t: Topic, now?: Date) => now ? readPoolTotal(t, now) : poolCounts(t);
 
 export async function loadTopicPage(slug: string, page: number, now?: Date): Promise<TopicPage | null> {
-  const topic = findTopic(slug);
-  if (!topic || !Number.isInteger(page) || page < 1) return null;
-  const index = await topicIndex(now);
+  if (!Number.isInteger(page) || page < 1) return null;
+  const topics = await listTopicDefinitions();
+  const topic = topics.find((t) => t.slug === slug);
+  if (!topic) return null;
+  const index = await topicIndex(topics, now);
   const seats = index.bySlug.get(slug)!;
   const pageCount = Math.max(1, Math.ceil(seats.length / TOPIC_PAGE_SIZE));
   if (page > pageCount) return null;
@@ -357,14 +363,16 @@ const STORY_TOPICS = 6;
 
 /** The topics of a story's reports, most reports first. */
 export async function topicsOfStory(storyId: number, now = new Date()): Promise<TopicLink[]> {
+  const topics = await listTopicDefinitions();
+  const position = new Map(topics.map((t, i) => [t.slug, i]));
   const rows = await sql<{ topics: string[] }[]>`
-    SELECT DISTINCT ON (p.article_id) ${topicMembership()} AS topics
+    SELECT DISTINCT ON (p.article_id) ${topicMembership(topics)} AS topics
     FROM facts f JOIN fact_articles fa ON fa.fact_id = f.id JOIN publications p ON p.article_id = fa.article_id
     JOIN sources s ON s.id = p.source_id
     WHERE f.story_id = ${storyId} AND ${evidenceCondition()} AND ${storyReportCondition(now)}
     ORDER BY p.article_id`;
   const reports = new Map<string, number>();
   for (const r of rows) for (const slug of r.topics) reports.set(slug, (reports.get(slug) ?? 0) + 1);
-  const slugs = [...reports].sort(([a, x], [b, y]) => y - x || position(a) - position(b)).map(([slug]) => slug);
-  return topicLinks(slugs.slice(0, STORY_TOPICS));
+  const slugs = [...reports].sort(([a, x], [b, y]) => y - x || (position.get(a) ?? 0) - (position.get(b) ?? 0)).map(([slug]) => slug);
+  return topicLinks(slugs.slice(0, STORY_TOPICS), topics);
 }
