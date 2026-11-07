@@ -1,5 +1,5 @@
 {
-  "$comment": "Fuentes de Latido: se importan en el primer arranque (scripts/seed.ts); las existentes no se sobrescriben. Niveles: T1 oficial de primera mano (umbral 60), T1_5 medios de referencia y portales propios (65), T2 medios generales y regionales (76). Solo feeds de tecnología: no se usan feeds generales que obliguen a descartar notas pagando llamadas al modelo.",
+  "$comment": "Fuentes de Latido: se importan en el primer arranque (scripts/seed.ts); las existentes no se sobrescriben. Niveles: T1 oficial de primera mano (umbral 60), T1_5 medios de referencia (65), T2 medios generales y regionales (76). Solo feeds de tecnología: no se usan feeds generales que obliguen a descartar notas pagando llamadas al modelo.",
   "sources": [
     {
       "id": "rss-openai-news",
@@ -170,7 +170,7 @@
       "participation_mode": "editorial",
       "interval_minutes": 60,
       "tags": [
-        "Propio",
+        "Medio",
         "México",
         "Tecnología"
       ],
@@ -192,7 +192,7 @@
       "participation_mode": "editorial",
       "interval_minutes": 60,
       "tags": [
-        "Propio",
+        "Medio",
         "México",
         "Tecnología"
       ],
@@ -214,7 +214,7 @@
       "participation_mode": "editorial",
       "interval_minutes": 60,
       "tags": [
-        "Propio",
+        "Medio",
         "México",
         "Tecnología"
       ],
@@ -236,7 +236,7 @@
       "participation_mode": "editorial",
       "interval_minutes": 60,
       "tags": [
-        "Propio",
+        "Medio",
         "México",
         "Tecnología"
       ],
