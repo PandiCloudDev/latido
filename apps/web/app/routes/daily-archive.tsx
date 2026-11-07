@@ -43,7 +43,7 @@ export default function DailyArchive() {
           <div className="py-6 @[880px]:py-8">
             <h1 id="report-start" data-page-title="">
               <span className="sr-only">Archivo de boletines</span>
-              <Nameplate which="archive" className="block h-[50px] w-auto @[520px]:h-[70px] @[880px]:h-[98px]" />
+              <Nameplate which="archive" className="block h-[50px] w-auto max-w-full @[520px]:h-[70px] @[880px]:h-[98px]" />
             </h1>
           </div>
           <div aria-hidden="true" className="border-t border-line-strong" />
