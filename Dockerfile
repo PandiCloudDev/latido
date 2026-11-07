@@ -1,5 +1,5 @@
-# One image for every role: setup (migrations and seed), api, worker and web.
-# Build arg NPM_REGISTRY switches the npm registry (e.g. https://registry.npmmirror.com in mainland China).
+# Latido: una sola imagen para todos los roles: setup (migraciones y datos semilla), api, worker y web.
+# El argumento NPM_REGISTRY cambia el registro de npm (por ejemplo, un espejo cuando la red está restringida).
 FROM node:24-trixie-slim AS base
 WORKDIR /app
 # pg_dump for the optional database backups (Debian's client matches the PostgreSQL 17 server in compose).

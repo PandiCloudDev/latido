@@ -1,5 +1,6 @@
 {
   "name": "aihot",
+  "description": "Latido: radar de noticias de tecnología en español para México y Latinoamérica, construido sobre el motor AIHOT",
   "private": true,
   "type": "module",
   "workspaces": [

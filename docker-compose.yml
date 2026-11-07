@@ -1,5 +1,6 @@
-# docker compose up -d --build     → http://localhost:3000   (the admin is at /admin)
-# docker compose --profile https up -d --build   → HTTPS for SITE_DOMAIN through Caddy
+# Latido · docker compose up -d --build     → http://localhost:3000   (el panel está en /admin)
+# docker compose --profile https up -d --build   → HTTPS para SITE_DOMAIN con Caddy
+# El nombre del proyecto (aihot) se conserva: cambiarlo renombraría los volúmenes y dejaría atrás los datos existentes.
 name: aihot
 
 x-app: &app
