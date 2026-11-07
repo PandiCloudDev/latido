@@ -19,7 +19,7 @@ export function KindSwitch({ kind, phone = false, layoutId = phone ? "report-kin
       layoutId={layoutId}
       label="Cambiar entre boletín diario, semanal y mensual"
       active={kind}
-      items={KINDS.map((k) => ({ key: k, label: REPORT_NAMES[k], to: KIND_PATH[k], resetScroll: phone, prefetchOnPress: true }))}
+      items={KINDS.map((k) => ({ key: k, label: REPORT_NAMES[k].replace(/^Boletín /, "").replace(/^./, (c) => c.toUpperCase()), to: KIND_PATH[k], resetScroll: phone, prefetchOnPress: true }))}
     />
   );
 }

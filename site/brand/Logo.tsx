@@ -1,12 +1,29 @@
-// 站点的字标和圆环标记：页面用 Wordmark 画站名（size 是高度，单位像素），RingMark 是小标记，转起来就是加载动画。
-// 这里用站名排字；有自己的 Logo 时，把 Wordmark 换成你的 SVG（保持同样的参数）。
+// La marca de Latido: el ícono del pulso y el nombre "latido.news" (size es la altura en píxeles).
+// RingMark es la marca pequeña; al girar es la animación de carga.
 import { SITE } from "../site.ts";
+
+/** El ícono: un cuadro redondeado con el trazo de un latido. */
+export function PulseMark({ size = 24, className = "" }: { size?: number; className?: string }) {
+  return (
+    <svg viewBox="0 0 512 512" width={size} height={size} className={className} aria-hidden="true">
+      <defs>
+        <linearGradient id="latido-mark" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stopColor="#ff4d63" />
+          <stop offset="1" stopColor="#c8213d" />
+        </linearGradient>
+      </defs>
+      <rect width="512" height="512" rx="116" fill="url(#latido-mark)" />
+      <path d="M76 280H170L202 226L236 330L280 136L326 374L360 280H436" fill="none" stroke="#ffffff" strokeWidth="40" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
 
 export function Wordmark({ size = 24, className = "", title = SITE.name }: { size?: number; className?: string; title?: string }) {
   return (
-    <span className={`inline-flex items-center font-black leading-none tracking-[-0.03em] ${className}`} style={{ fontSize: Math.round(size * 0.92) }} aria-label={title} role="img">
-      <span aria-hidden="true" className="mr-[0.3em] inline-block size-[0.42em] rounded-full bg-accent" />
-      <span aria-hidden="true">{SITE.name}</span>
+    <span className={`inline-flex items-center leading-none ${className}`} style={{ fontSize: Math.round(size * 0.92) }} aria-label={title} role="img">
+      <PulseMark size={Math.round(size * 1.08)} className="mr-[0.32em] shrink-0" />
+      <span aria-hidden="true" className="font-black tracking-[-0.035em]">latido</span>
+      <span aria-hidden="true" className="font-semibold tracking-[-0.02em] text-accent">.news</span>
     </span>
   );
 }

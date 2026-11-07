@@ -226,7 +226,7 @@ export const COMMUNITY_FEEDS: { dev: string[]; hn: string[] } = {
 
 /** Texto de las imágenes para compartir de cada página (/og/pages/*.png). */
 export const CARDS: Record<string, { kicker: string; title: string; subtitle: string; accent?: "hot" | "amber" }> = {
-  site: { kicker: "Lo destacado del día", title: SITE.tagline, subtitle: SITE.description },
+  site: { kicker: "Lo destacado del día", title: SITE.tagline, subtitle: "Lo que importa en tecnología, seleccionado y resumido en español cada día." },
   all: { kicker: "Todas las notas", title: "Lo último de todas las fuentes, en un solo lugar", subtitle: "Las notas de todas las fuentes por orden de llegada, con filtros por sección y etiqueta." },
   hot: { kicker: "Lo más comentado", title: "De qué se está hablando en las últimas 48 horas", subtitle: "Índice de popularidad, tendencia y las fuentes públicas que la forman.", accent: "hot" },
   daily: { kicker: "Boletín diario", title: `Cada día a las ${spokenTime(EDITION_TIMES.daily)}, un boletín que sí terminas de leer`, subtitle: "Lo que valió la pena del día anterior." },

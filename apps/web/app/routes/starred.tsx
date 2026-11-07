@@ -29,7 +29,7 @@ function reportText(r: ImportReport): string {
   if (r.themeApplied) parts.push("Se aplicó el modo claro u oscuro importado");
   if (r.fontApplied) parts.push("Se aplicó la tipografía importada");
   if (r.readFailed) parts.push("No se pudo guardar el historial de lectura (el almacenamiento del navegador está lleno o no disponible)");
-  return parts.join("，");
+  return parts.join(", ");
 }
 
 export default function StarredPage() {

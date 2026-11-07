@@ -53,7 +53,7 @@ function partsOf(data: TopicPage): Part[] {
 function description(data: TopicPage, parts: Part[]): string {
   const { topic } = data;
   let text = topic.definition;
-  const news = parts.flatMap((p) => p.news(p.data)).slice(0, 2).map((title) => title.replace(/[。.]$/u, "")).join("；");
+  const news = parts.flatMap((p) => p.news(p.data)).slice(0, 2).map((title) => title.replace(/[。.]$/u, "")).join("; ");
   if (news && topic.latest) text = `Actualizado el ${monthDay(beijingDate(topic.latest.at))}: ${news}. ${topic.definition}`;
   return text.length > 150 ? `${text.slice(0, 149)}…` : text;
 }

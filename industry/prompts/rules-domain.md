@@ -27,3 +27,5 @@
    - Las URL se dejan igual.
    - Cifras con unidad: 8k de contexto, 175B parámetros, 3.5x más rápido, 3 dólares por millón de tokens, 99.9 %.
    - Montos, cantidades, porcentajes y rangos conservan los números arábigos y la unidad del original; no conviertas monedas ni redondees. Usa punto decimal y coma de miles como en México (1,250.5 millones).
+
+5. Comillas: cuando haga falta citar un nombre o una frase, usa solo comillas rectas dobles ("Para ti"); nunca comillas angulares (« ») ni tipográficas (“ ”).

@@ -283,7 +283,7 @@ export default function StoryPage() {
                       {d.title}
                     </Link>
                     <div className="mt-0.5 truncate text-[12.5px] text-ink-4">
-                      {d.representative.source.name}：{d.representative.title}
+                      {d.representative.source.name}: {d.representative.title}
                     </div>
                   </li>
                 ))}

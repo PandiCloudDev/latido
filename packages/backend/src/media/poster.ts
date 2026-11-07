@@ -3,9 +3,9 @@
 import { createHash } from "node:crypto";
 import { renderSVG } from "uqr";
 import { SITE } from "@aihot/site";
-import { brandMark, clamp, FALLBACK_FONTS, h, nameMark, renderPng, SITE_HOST, type Node } from "./og.ts";
+import { brandMark, clamp, FALLBACK_FONTS, h, nameMark, OG_FAMILY, renderPng, SITE_HOST, type Node } from "./og.ts";
 
-export const POSTER_TEMPLATE_VERSION = "poster-2026-09-29.1";
+export const POSTER_TEMPLATE_VERSION = "poster-2026-11-06.latido";
 const WIDTH = 1080;
 const HEIGHT = 1440;
 
@@ -19,15 +19,16 @@ export interface Poster {
   score: number | null;
 }
 
-const INK = "#0e191b";
-const ACCENT = "#176b75";
+const INK = "#1f1b1c";
+const ACCENT = "#c8213d";
 
 async function tree(p: Poster): Promise<Node> {
-  const title = clamp(p.title, 72);
+  const k = OG_FAMILY !== "Noto Sans SC" ? 1.75 : 1;
+  const title = clamp(p.title, Math.round(72 * k));
   const len = [...title].length;
-  const titleSize = len > 48 ? 58 : len > 30 ? 66 : 76;
+  const titleSize = len > 48 * k ? 58 : len > 30 * k ? 66 : 76;
   // The summary takes the room the title leaves.
-  const summary = p.summary ? clamp(p.summary, len > 48 ? 120 : len > 30 ? 150 : 180) : null;
+  const summary = p.summary ? clamp(p.summary, Math.round((len > 48 * k ? 120 : len > 30 * k ? 150 : 180) * k)) : null;
   const qr = `data:image/svg+xml;base64,${Buffer.from(renderSVG(p.url, { border: 0, ecc: "M", blackColor: INK, whiteColor: "#ffffff" })).toString("base64")}`;
   return h(
     "div",
@@ -37,35 +38,35 @@ async function tree(p: Poster): Promise<Node> {
       display: "flex",
       flexDirection: "column",
       padding: "84px 88px 72px",
-      fontFamily: "Noto Sans SC",
+      fontFamily: OG_FAMILY,
       color: INK,
-      backgroundColor: "#f5f6f5",
-      backgroundImage: "radial-gradient(circle at 100% 0%, rgba(23,107,117,0.16), rgba(245,246,245,0) 52%), radial-gradient(circle at 0% 100%, rgba(44,226,232,0.10), rgba(245,246,245,0) 45%)",
+      backgroundColor: "#fbf9f7",
+      backgroundImage: "radial-gradient(circle at 100% 0%, rgba(200,33,61,0.14), rgba(251,249,247,0) 52%), radial-gradient(circle at 0% 100%, rgba(255,90,110,0.09), rgba(251,249,247,0) 45%)",
     },
     [
       h("div", { display: "flex", alignItems: "center", justifyContent: "space-between" }, [
         (await brandMark("wordmark.svg", 50)) ?? nameMark(44, INK, ACCENT),
-        h("div", { display: "flex", fontSize: 26, color: "#66757a" }, p.date),
+        h("div", { display: "flex", fontSize: 26, color: "#6d6462" }, p.date),
       ]),
       h("div", { display: "flex", alignItems: "center", marginTop: 96 }, [
         h("div", { width: 12, height: 12, borderRadius: 999, backgroundColor: ACCENT, marginRight: 16 }),
-        h("div", { display: "flex", fontSize: 30, fontWeight: 700, color: ACCENT, letterSpacing: 1 }, clamp(p.kicker, 20)),
+        h("div", { display: "flex", fontSize: 30, fontWeight: 700, color: ACCENT, letterSpacing: 1 }, clamp(p.kicker, Math.round(20 * k))),
         p.score !== null
-          ? h("div", { display: "flex", marginLeft: 20, padding: "4px 16px", borderRadius: 999, backgroundColor: "rgba(23,107,117,0.09)", fontSize: 26, color: "#0f5a63" }, `Destacada · ${Math.round(p.score)} puntos`)
+          ? h("div", { display: "flex", marginLeft: 20, padding: "4px 16px", borderRadius: 999, backgroundColor: "rgba(200,33,61,0.08)", fontSize: 26, color: "#a91b33" }, `Destacada · ${Math.round(p.score)} puntos`)
           : null,
       ].filter(Boolean)),
       h("div", { display: "flex", marginTop: 30, fontSize: titleSize, fontWeight: 700, lineHeight: 1.3, color: INK }, title),
-      summary ? h("div", { display: "flex", marginTop: 36, fontSize: 34, lineHeight: 1.7, color: "#3a484c" }, summary) : null,
-      h("div", { display: "flex", marginTop: 36, fontSize: 28, color: "#66757a" }, clamp(`Fuente: ${p.source}`, 34)),
+      summary ? h("div", { display: "flex", marginTop: 36, fontSize: 34, lineHeight: 1.7, color: "#37302f" }, summary) : null,
+      h("div", { display: "flex", marginTop: 36, fontSize: 28, color: "#6d6462" }, clamp(`Fuente: ${p.source}`, Math.round(34 * k))),
       h("div", { display: "flex", flex: 1 }),
       h(
         "div",
-        { display: "flex", alignItems: "center", padding: "36px 40px", borderRadius: 32, backgroundColor: "#ffffff", boxShadow: "0 1px 2px rgba(14,25,27,0.06), 0 12px 32px rgba(14,25,27,0.07)" },
+        { display: "flex", alignItems: "center", padding: "36px 40px", borderRadius: 32, backgroundColor: "#ffffff", boxShadow: "0 1px 2px rgba(31,27,28,0.06), 0 12px 32px rgba(31,27,28,0.07)" },
         [
           h("img", { width: 200, height: 200 }, undefined, { src: qr, width: 200, height: 200 }),
           h("div", { display: "flex", flexDirection: "column", marginLeft: 44, flex: 1 }, [
             h("div", { display: "flex", fontSize: 36, fontWeight: 700, color: INK }, "Escanea el código QR"),
-            h("div", { display: "flex", marginTop: 14, fontSize: 28, lineHeight: 1.5, color: "#66757a" }, "Lee la nota completa, la traducción y el enlace al original"),
+            h("div", { display: "flex", marginTop: 14, fontSize: 28, lineHeight: 1.5, color: "#6d6462" }, "Lee la nota completa, la traducción y el enlace al original"),
             h("div", { display: "flex", marginTop: 22, fontSize: 26, color: ACCENT }, SITE_HOST),
           ]),
         ],

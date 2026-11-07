@@ -23,7 +23,7 @@ const SECTIONS: Array<{ title: string; items: NavItem[] }> = [
     items: [
       { to: "/", label: "Destacadas", icon: IconBolt, end: true },
       { to: "/all", label: "Todas las notas", icon: IconList },
-      { to: "/hot", label: "Lo más comentado", icon: IconFlame },
+      { to: "/hot", label: "Tendencias", icon: IconFlame },
       { to: "/daily", label: withSubject("Boletín diario"), icon: IconDoc },
       { to: "/topics", label: "Temas", icon: IconGrid },
       { to: "/starred", label: "Guardar", icon: IconBookmark },
@@ -32,7 +32,7 @@ const SECTIONS: Array<{ title: string; items: NavItem[] }> = [
   {
     title: "Más",
     items: [
-      { to: "/agent", label: "Conecta tu agente", icon: IconPlug },
+      { to: "/agent", label: "Para agentes IA", icon: IconPlug },
       { to: "/about", label: "Acerca de", icon: IconHeart },
       { to: "/changelog", label: "Novedades", icon: IconHistory, changelog: true },
       { to: "/feedback", label: "Comentarios", icon: IconMessage },
@@ -117,7 +117,7 @@ export interface Tab {
 
 const ENGINE_TABS: Tab[] = [
   { key: "featured", to: "/", label: "Destacadas", icon: IconBolt },
-  { key: "hot", to: "/hot", label: "Lo más comentado", icon: IconFlame },
+  { key: "hot", to: "/hot", label: "Tendencias", icon: IconFlame },
   { key: "daily", to: "/daily", label: "Boletín diario", icon: IconDoc },
   { key: "me", to: "/more", label: "Más", icon: IconUser, changelog: true },
 ];

@@ -87,7 +87,7 @@ export function Sidebar({ changelogVersion }: { changelogVersion: string | null 
       <Rail dot={dot} />
       <aside className="scrollbar-thin sticky top-0 hidden h-dvh w-[180px] shrink-0 flex-col border-r border-line bg-sidebar px-3 pb-[max(14px,env(safe-area-inset-bottom))] pt-6 wide:flex short:overflow-y-auto">
         <Link to="/" className="mb-4 flex h-[50px] shrink-0 items-center px-1 text-ink" aria-label={`Portada de ${SITE.name}`}>
-          <Wordmark size={26} />
+          <Wordmark size={21} />
         </Link>
         <nav className="scrollbar-thin -mx-1 flex-1 overflow-y-auto px-1 short:flex-none short:overflow-visible" aria-label="Navegación principal">
           {sidebar().map((section) => {
