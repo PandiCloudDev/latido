@@ -182,7 +182,7 @@ export function dailyAnswer(r: DailyReport, via: Via, notes: Map<string, DailyNo
     s.items.forEach((it, i) => {
       const link = it.links.aihot ?? it.links.original;
       const note = notes.get(link);
-      data.push(`${i + 1}. [${linkText(it.title)}](${link}) · ${publicSourceName(it.source.name)}${note?.otherSources ? ` · también la cubrieron otras ${note.otherSources} fuentes` : ""}`, ...(it.summary ? [`   ${it.summary}`] : []), ...noteLines(note));
+      data.push(`${i + 1}. [${linkText(it.title)}](${link}) · ${publicSourceName(it.source.name)}${note?.otherSources ? (note.otherSources === 1 ? " · también la cubrió otra fuente" : ` · también la cubrieron otras ${note.otherSources} fuentes`) : ""}`, ...(it.summary ? [`   ${it.summary}`] : []), ...noteLines(note));
     });
     data.push("");
   }

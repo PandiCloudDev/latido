@@ -1,5 +1,5 @@
 // Failures: an unbroken URL in a report's lead widened the phone layout and pushed the fifth tab off
-// screen; an open "另外 N 家也报道了" took its longest title's width and scrolled a narrow desktop window
+// screen; an open "Otras N fuentes también lo reportaron" took its longest title's width and scrolled a narrow desktop window
 // sideways (2026-10-16). Pages must fit the window at phone, narrow-phone, unfolded-foldable (669 upright,
 // 711 for an Android foldable, which reads the desktop pages beside the rail) and full-sidebar (941) widths.
 // Narrow desktops read in one column (2026-10-30): what a side column holds there (an article's reason,
@@ -60,7 +60,7 @@ const PAGES: Array<{ path: string; ready: (page: Page, width: number) => Promise
     path: `/${kind}`,
     ready: async (page: Page) => {
       await expect(page.getByRole("heading", { name: "今日头条", exact: true })).toBeVisible();
-      await expect(page.getByRole("link", { name: "周报", exact: true }).filter({ visible: true })).toBeVisible();
+      await expect(page.getByRole("link", { name: "Semanal", exact: true }).filter({ visible: true })).toBeVisible();
     },
   })),
   {
@@ -68,11 +68,11 @@ const PAGES: Array<{ path: string; ready: (page: Page, width: number) => Promise
     ready: async (page: Page) => {
       await expect(page.getByText("固定推荐理由", { exact: true }).filter({ visible: true })).toBeVisible();
       await expect(page.getByRole("link", { name: "固定主题" }).filter({ visible: true })).toBeVisible();
-      await expect(page.getByRole("link", { name: /原文/ }).filter({ visible: true }).first()).toBeVisible();
-      await page.getByRole("button", { name: "目录", exact: true }).filter({ visible: true }).click();
-      await expect(page.getByRole("dialog", { name: "目录" }).getByRole("link", { name: "第4部分" })).toBeVisible();
+      await expect(page.getByRole("link", { name: /original/i }).filter({ visible: true }).first()).toBeVisible();
+      await page.getByRole("button", { name: "Contenido", exact: true }).filter({ visible: true }).click();
+      await expect(page.getByRole("dialog", { name: "Contenido" }).getByRole("link", { name: "第4部分" })).toBeVisible();
       await page.keyboard.press("Escape");
-      await expect(page.getByRole("dialog", { name: "目录" })).toBeHidden();
+      await expect(page.getByRole("dialog", { name: "Contenido" })).toBeHidden();
     },
   },
   {
@@ -80,7 +80,7 @@ const PAGES: Array<{ path: string; ready: (page: Page, width: number) => Promise
     ready: async (page: Page, width: number) => {
       // Desktop opens the group in place; phones open it in a sheet.
       if (width < 700) return expect(page.getByRole("link", { name: "代表文章", exact: true })).toBeVisible();
-      await page.getByRole("button", { name: "另外 1 家也报道了" }).filter({ visible: true }).click();
+      await page.getByRole("button", { name: "Otra fuente también lo reportó" }).filter({ visible: true }).click();
       await expect(page.getByRole("link", { name: longTitle })).toBeVisible();
     },
   },

@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { after, test } from "node:test";
 import { beijingDate, beijingTime } from "@aihot/contracts/time";
+import { LOCALE } from "@aihot/site/locale";
 
 const originalWindow = Object.getOwnPropertyDescriptor(globalThis, "window");
 after(() => {
@@ -27,7 +28,10 @@ async function reader(starred: unknown[] = []) {
 const displayDate = (value: string) => `${beijingDate(value)} ${beijingTime(value)}`;
 
 test("import keeps bookmarks with invalid dates and persists displayable replacements", async () => {
-  const invalid = ["broken", "", "999999-01-01", "+275760-09-13T00:00:00.000Z", null, 42, {}];
+  // The extreme instant that leaves JavaScript's date range once moved into the site's zone: the latest one east
+  // of UTC (as in Beijing), the earliest one west of it (as in Mexico City).
+  const edge = LOCALE.utcOffset.startsWith("-") ? "-271821-04-20T00:00:00.000Z" : "+275760-09-13T00:00:00.000Z";
+  const invalid = ["broken", "", "999999-01-01", edge, null, 42, {}];
   const { state, values } = await reader();
   const before = Date.now();
   const report = state.importBundle(JSON.stringify({ version: 1, starred: invalid.map((date, i) => ({

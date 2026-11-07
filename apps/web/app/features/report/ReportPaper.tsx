@@ -133,12 +133,15 @@ function Related({ items, className = "" }: { items: ReportCitation[]; className
 }
 
 /** How many more sources reported the entry's event, and whether an earlier daily covered it. */
+/** "Otra fuente también lo reportó" / "Otras 3 fuentes también lo reportaron". */
+const otherSourcesText = (n: number) => (n === 1 ? "Otra fuente también lo reportó" : `Otras ${n} fuentes también lo reportaron`);
+
 function Coverage({ c }: { c: ReportCitation }) {
   return (
     <>
       {!!c.otherSources && (c.storyId
-        ? <IntentLink viewTransition to={`/story/${c.storyId}`} className="shrink-0 text-ink-4 transition-colors hover:text-accent">Otras {c.otherSources} fuentes también lo reportaron</IntentLink>
-        : <span className="shrink-0 text-ink-4">Otras {c.otherSources} fuentes también lo reportaron</span>)}
+        ? <IntentLink viewTransition to={`/story/${c.storyId}`} className="shrink-0 text-ink-4 transition-colors hover:text-accent">{otherSourcesText(c.otherSources)}</IntentLink>
+        : <span className="shrink-0 text-ink-4">{otherSourcesText(c.otherSources)}</span>)}
       {c.followUp && <Badge title={`El boletín del ${monthDay(c.followUp)} ya habló de esto; aquí está el nuevo avance`}>Seguimiento</Badge>}
     </>
   );

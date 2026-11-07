@@ -15,7 +15,7 @@ import { sessionCache } from "../../lib/session-cache";
 const reportsUrl = (factId: string, filters: TimelineFilters | undefined) =>
   listPath(`/api/site/groups/${encodeURIComponent(factId)}/reports`, filters ? filterParams(filters) : {});
 
-const labelOf = (group: GroupInfo) => (group.additionalSourceCount > 0 ? `Otras ${group.additionalSourceCount} fuentes también lo reportaron` : `${group.reportCount} notas`);
+const labelOf = (group: GroupInfo) => (group.additionalSourceCount === 1 ? "Otra fuente también lo reportó" : group.additionalSourceCount > 1 ? `Otras ${group.additionalSourceCount} fuentes también lo reportaron` : `${group.reportCount} notas`);
 
 // The groups left open in each history entry, with what they showed (null: still loading): back from an
 // item finds them open again. In memory for back within the app; in session storage for a page the
