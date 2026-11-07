@@ -49,3 +49,6 @@ export const UTC_OFFSET_MS: number = (() => {
 /** Un límite de longitud heredado (en caracteres chinos), llevado al idioma del sitio. */
 export const scaledLength = (chineseChars: number): number =>
   LOCALE.language === "zh" ? chineseChars : Math.round(chineseChars * LOCALE.lengthScale);
+
+/** Texto del motor (andamiaje de prompts, etiquetas) en el idioma del sitio: el original chino o su versión en español. */
+export const tr = (zh: string, es: string): string => (LOCALE.language === "zh" ? zh : es);

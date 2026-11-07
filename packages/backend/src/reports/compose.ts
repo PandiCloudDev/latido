@@ -17,6 +17,7 @@ import { completeReceipt } from "../providers/receipts.ts";
 import { shutdownSignal } from "../jobs/queue.ts";
 import { emit } from "../modules.ts";
 import { arrangeDaily, candidates, dailyEdition, periodEntries, sectionOf, SECTION_ORDER, type Candidate, type EditionEntry } from "./edition.ts";
+import { LOCALE, scaledLength, tr } from "@aihot/site/locale";
 
 export const REPORT_VERSION = promptVersion("report-period", "report-period-sections", "report-period-no-sections");
 
@@ -121,12 +122,15 @@ const PERIOD_EVENTS = { weekly: 20, monthly: 30 } as const;
 /** A section is introduced once it carries this many events; one or two are read faster than introduced. */
 const INTRO_EVENTS = 3;
 /** The longest overview and introduction an issue prints; the brief asks for less, writers overshoot. */
-const OVERVIEW_CHARS = { weekly: 240, monthly: 340 } as const;
-const INTRO_CHARS = 90;
+const OVERVIEW_CHARS = { weekly: scaledLength(240), monthly: scaledLength(340) } as const;
+const INTRO_CHARS = scaledLength(90);
 /** The brief's values for each kind: its name, its span and how long its overview should be. */
-const BRIEF = {
+const BRIEF = LOCALE.language === "zh" ? {
   weekly: { kindName: "周报", span: "一周", sentences: "三句话", chars: "160" },
   monthly: { kindName: "月报", span: "个月", sentences: "三到四句话", chars: "240" },
+} as const : {
+  weekly: { kindName: "resumen semanal", span: "la semana", sentences: "tres oraciones", chars: String(scaledLength(160)) },
+  monthly: { kindName: "resumen mensual", span: "el mes", sentences: "tres o cuatro oraciones", chars: String(scaledLength(240)) },
 } as const;
 
 export const PeriodSchema = z.object({
@@ -140,12 +144,12 @@ export const PeriodSchema = z.object({
  * what the issue carries.
  */
 export function periodPrompt(kind: "weekly" | "monthly", startDate: string, endDateInclusive: string, groups: Array<{ label: string; items: Candidate[] }>) {
-  const list = groups.map((g) => [`【${g.label}】`, ...g.items.map((e) => `- ${e.title}｜${e.summary.slice(0, 140)}`)].join("\n")).join("\n");
+  const list = groups.map((g) => [`【${g.label}】`, ...g.items.map((e) => `- ${e.title}${tr("｜", " | ")}${e.summary.slice(0, scaledLength(140))}`)].join("\n")).join("\n");
   const introduced = groups.filter((g) => g.items.length >= INTRO_EVENTS).map((g) => g.label);
   return {
     system: promptText("report-period", {
       ...BRIEF[kind],
-      sections: introduced.length ? promptText("report-period-sections", { columns: introduced.map((l) => `「${l}」`).join("") }) : promptText("report-period-no-sections"),
+      sections: introduced.length ? promptText("report-period-sections", { columns: LOCALE.language === "zh" ? introduced.map((l) => `「${l}」`).join("") : introduced.map((l) => `"${l}"`).join(", ") }) : promptText("report-period-no-sections"),
       sectionsExample: introduced.length ? `{"${introduced[0]}": "..."}` : "{}",
     }),
     user: `本期：${startDate} 至 ${endDateInclusive}\n${list}`,

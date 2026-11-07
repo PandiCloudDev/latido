@@ -11,6 +11,7 @@
 import { z } from "zod";
 import { describePublicationTime } from "../sources/dates.ts";
 import { promptText, promptVersion } from "../editorial/prompts.ts";
+import { LOCALE, tr } from "@aihot/site/locale";
 
 export const RELATE_PROMPT_VERSION = promptVersion("group-pair", "group-signal");
 export const BATCH_PROMPT_VERSION = promptVersion("group-batch");
@@ -95,6 +96,21 @@ export const SignalSchema = z.object({
 
 export function describeReport(r: ReportView, label: string, extra = "", summaryLimit = 360): string {
   const f = r.frame;
+  if (LOCALE.language !== "zh") {
+    return [
+      `【${label}】${extra}`,
+      `Título: ${r.title}`,
+      `Fuente: ${r.source}${r.firstParty ? " (parte involucrada / oficial)" : ""} | Fecha de publicación: ${describePublicationTime(r.at, r.publicationTime)}`,
+      `Resumen: ${(r.summary ?? "").slice(0, summaryLimit) || "(ninguno)"}`,
+      r.scope && r.scope !== "unknown" ? `Alcance: ${r.scope === "composite" ? "resumen de varios hechos independientes" : "un solo hecho o tema concreto"}` : null,
+      f && (f.subject || f.action || f.object)
+        ? `Elementos del hecho: protagonista=${f.subject || "?"}; acción=${f.action || "?"}; objeto=${f.object || "?"}; fecha=${f.occurredAt || "desconocida"}`
+        : null,
+      r.sourceText ? `【Evidencia del original】\n${r.sourceText.slice(0, GROUP_BODY_CHARS)}\n【Fin de la evidencia del original】` : null,
+    ]
+      .filter(Boolean)
+      .join("\n");
+  }
   return [
     `【${label}】${extra}`,
     `标题：${r.title}`,
@@ -112,24 +128,28 @@ export function describeReport(r: ReportView, label: string, extra = "", summary
 
 export const candidateKey = (index: number) => `C${index + 1}`;
 
-export function batchUser(query: ReportView, cands: CandidateView[], queryLabel = "新报道", reading: ReadingContext[] = []): string {
+const NEW_REPORT = tr("新报道", "Nota nueva");
+
+export function batchUser(query: ReportView, cands: CandidateView[], queryLabel = NEW_REPORT, reading: ReadingContext[] = []): string {
   const list = cands
     .map((c, i) => [
-      describeReport(c.report, `候选 ${candidateKey(i)}`, `（该事实已有 ${c.members} 篇报道；事实标题：${c.factTitle}）`),
-      queryLabel === "新报道" ? c.selected && c.selectedReport
-        ? describeReport(c.selectedReport, "已公开精选", "（增量只与这篇已展示的内容比较）")
-        : "【尚无公开精选】该候选只用于身份判断。" : null,
+      describeReport(c.report, tr(`候选 ${candidateKey(i)}`, `Candidato ${candidateKey(i)}`), tr(`（该事实已有 ${c.members} 篇报道；事实标题：${c.factTitle}）`, ` (este hecho ya tiene ${c.members} nota(s); título del hecho: ${c.factTitle})`)),
+      queryLabel === NEW_REPORT ? c.selected && c.selectedReport
+        ? describeReport(c.selectedReport, tr("已公开精选", "Destacado ya publicado"), tr("（增量只与这篇已展示的内容比较）", " (la novedad se compara solo con este contenido ya mostrado)"))
+        : tr("【尚无公开精选】该候选只用于身份判断。", "【Aún sin destacado publicado】Este candidato solo sirve para juzgar identidad.") : null,
     ].filter(Boolean).join("\n"))
     .join("\n\n");
   const background = reading.map(({ report, sourceText }, i) => [
-    describeReport(report, `已公开精选阅读背景 R${i + 1}`, "（只比较信息覆盖，不是事实候选）", 2000),
-    sourceText ? `【该已选报道的原文证据】\n${sourceText.slice(0, GROUP_BODY_CHARS)}\n【原文证据结束】` : null,
+    describeReport(report, tr(`已公开精选阅读背景 R${i + 1}`, `Contexto de lectura ya destacado R${i + 1}`), tr("（只比较信息覆盖，不是事实候选）", " (solo para comparar cobertura; no es un hecho candidato)"), 2000),
+    sourceText ? tr(`【该已选报道的原文证据】\n${sourceText.slice(0, GROUP_BODY_CHARS)}\n【原文证据结束】`, `【Evidencia del original de esta nota destacada】\n${sourceText.slice(0, GROUP_BODY_CHARS)}\n【Fin de la evidencia del original】`) : null,
   ].filter(Boolean).join("\n")).join("\n\n");
-  return `${describeReport(query, queryLabel)}\n\n${list}${background ? `\n\n${background}` : ""}\n\n${queryLabel}与每个候选的关系是什么？${background ? "同时比较所有已公开精选内容，判断新增价值；无事实候选时 decisions=[]。" : ""}`;
+  const question = tr(`${queryLabel}与每个候选的关系是什么？`, `¿Qué relación tiene la ${queryLabel.toLowerCase()} con cada candidato?`);
+  const also = background ? tr("同时比较所有已公开精选内容，判断新增价值；无事实候选时 decisions=[]。", " Compara también con todo el contenido destacado ya publicado para juzgar el valor nuevo; si no hay hechos candidatos, decisions=[].") : "";
+  return `${describeReport(query, queryLabel)}\n\n${list}${background ? `\n\n${background}` : ""}\n\n${question}${also}`;
 }
 
 export function pairUser(a: ReportView, b: ReportView): string {
-  return `${describeReport(a, "报道 A")}\n\n${describeReport(b, "报道 B")}\n\n这两篇报道是什么关系？`;
+  return `${describeReport(a, tr("报道 A", "Nota A"))}\n\n${describeReport(b, tr("报道 B", "Nota B"))}\n\n${tr("这两篇报道是什么关系？", "¿Qué relación tienen estas dos notas?")}`;
 }
 
 /** An identity answer must address every supplied candidate exactly once. */

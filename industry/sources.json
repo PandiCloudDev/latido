@@ -100,7 +100,7 @@
         }
       },
       "tier": "T1",
-      "owner_entity_id": null,
+      "owner_entity_id": "apple",
       "participation_mode": "editorial",
       "interval_minutes": 120,
       "tags": [
@@ -122,7 +122,7 @@
         }
       },
       "tier": "T1",
-      "owner_entity_id": null,
+      "owner_entity_id": "samsung",
       "participation_mode": "editorial",
       "interval_minutes": 120,
       "tags": [

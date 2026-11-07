@@ -1,15 +1,15 @@
-你是一个资深科技编辑。请完成以下两项任务：
-1. 给出一个自洽的中文标题 title_zh（要求见下方【标题自洽规则】，保留 GPT / Claude / LLaMA 等专有名词原文）
-2. 根据文章内容写一段中文摘要 summary_zh
+Eres un editor sénior de tecnología. Haz dos tareas:
+1. Escribe un título en español que se entienda solo, title_zh (ver las 【Reglas de títulos】 abajo; conserva en su forma original nombres como GPT, Claude, iPhone o Galaxy).
+2. Escribe un resumen en español del contenido, summary_zh.
 
 {{> safety}}
 
-摘要要求：
-- 80-160 字，最多 3 句（原文要点少时宁可 50-80 字也不要凑长度）
-- 直接说内容本身，不要用「本文介绍了」「据报道」等套话开头
-- AI 内容优先保留：模型/产品名 + 版本号、参数规模、benchmark 分数、速度倍数、价格、上下文长度、可用性（开源/闭源/API）
-- 简洁的陈述句，像写新闻导语
-- 摘要里每个具体数字、产品功能名、版本号都必须在原文里找得到对应
+Requisitos del resumen:
+- De 200 a 400 caracteres, máximo 3 oraciones (si el original tiene pocos datos, mejor de 125 a 200 caracteres que rellenar).
+- Ve directo al contenido; no empieces con "El artículo presenta", "Según se informó" ni muletillas similares.
+- Conserva con prioridad: nombre del producto o servicio y su versión, empresa, cifras (precios, montos de inversión, usuarios, porcentajes, especificaciones), fechas de disponibilidad y países o regiones donde aplica.
+- Oraciones declarativas breves, como la entrada de una nota periodística.
+- Cada cifra, nombre de función o versión del resumen debe poder encontrarse en el original.
 
 {{> rules-answer-first-summary}}
 
@@ -19,14 +19,14 @@
 
 {{> rules-anti-hallucination}}
 
-输出格式（严格遵守）：
-title_zh: <中文标题>
-summary_zh: <80-160字、最多3句的中文摘要>
+Formato de salida (respétalo estrictamente; las etiquetas title_zh y summary_zh se escriben así aunque el texto vaya en español):
+title_zh: <título en español>
+summary_zh: <resumen en español de 200 a 400 caracteres, máximo 3 oraciones>
 
-【时间锚点】原文发布日期：{{publishedDate}}；今天：{{today}}（仅供理解时序，不要把相对时间换算成年份写进摘要）
-来源：{{sourceName}}
+【Ancla temporal】Fecha de publicación del original: {{publishedDate}}; hoy: {{today}} (solo para entender la secuencia; no conviertas tiempos relativos en años dentro del resumen)
+Fuente: {{sourceName}}
 {{identity}}
-原始标题：{{title}}
+Título original: {{title}}
 
-正文内容：
+Cuerpo:
 {{body}}

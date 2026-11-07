@@ -1,2 +1,2 @@
-{{quotedLabel}}（背景上下文，仅在理解主推文时参考，不要逐句复述）：
+{{quotedLabel}} (contexto de fondo; consúltalo solo para entender la publicación principal y no lo repitas oración por oración):
 {{quotedText}}
