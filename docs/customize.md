@@ -1,6 +1,6 @@
 # Adaptarlo a otro sector
 
-Este repositorio está configurado como Latido, un radar de noticias de tecnología para México y Latinoamérica: las fuentes son medios y blogs oficiales del sector y el criterio de selección está calibrado para ese público. Para convertirlo en un radar de energía, salud, legal o finanzas, casi todo lo que hay que cambiar vive en dos carpetas, [`site/`](../site/) (nombre, textos, marca y páginas del sitio) e [`industry/`](../industry/) (categorías, fuentes, prompts y umbrales del sector), y el código rara vez se toca.
+Este repositorio está configurado como Latido, un radar de tecnología, negocios, energía y electromovilidad para México y Latinoamérica: las fuentes son medios y canales oficiales y el criterio de selección está calibrado para ese público. Para convertirlo en un radar de energía, salud, legal o finanzas, casi todo lo que hay que cambiar vive en dos carpetas, [`site/`](../site/) (nombre, textos, marca y páginas del sitio) e [`industry/`](../industry/) (categorías, fuentes, prompts y umbrales del sector), y el código rara vez se toca.
 
 Si usas un agente como Claude Code o Codex, puedes enviarle este texto y responder sus preguntas:
 

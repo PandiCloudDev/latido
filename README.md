@@ -14,7 +14,7 @@
 </p>
 
 <p align="center">
-  <b>El pulso de la tecnología en México y Latinoamérica.</b><br>
+  <b>Tecnología, negocios, energía y electromovilidad en México y Latinoamérica.</b><br>
   Un radar de noticias en español que lee decenas de medios, agrupa lo que cuentan lo mismo y entrega cada mañana lo que de verdad vale la pena leer.
 </p>
 
@@ -33,9 +33,9 @@
 
 ## Qué es Latido
 
-[Latido](https://latido.news) es un radar de noticias de tecnología y negocios digitales escrito en español, con una prioridad editorial clara: primero México, después Latinoamérica y, al final, lo global que sí mueve el tablero en la región. Cubre inteligencia artificial, productos y gadgets, startups y fintech, telecomunicaciones, ciberseguridad, regulación digital y videojuegos.
+[Latido](https://latido.news) es un radar de noticias de tecnología, negocios, energía y electromovilidad escrito en español, con una prioridad editorial clara: primero México, después Latinoamérica y, al final, lo global que sí mueve el tablero en la región. Cubre inteligencia artificial, productos y gadgets, startups y fintech, telecomunicaciones, ciberseguridad, regulación digital y videojuegos, además de inversión, industria, proyectos energéticos y transporte eléctrico.
 
-Todos los días recoge notas de 54 fuentes, las filtra con un modelo de lenguaje, califica dos veces y por separado las que prometen, y redacta para cada una un titular informativo y un resumen que responde primero a la pregunta del lector. Cuando varios medios cuentan la misma historia, la agrupa en un solo **evento** y la ordena según cuántas fuentes independientes están hablando de ella. Cada mañana publica el boletín *Latido diario*, los lunes el semanal y el día 1 de cada mes el mensual.
+Todos los días recoge notas de hasta 89 fuentes configuradas, las filtra con un modelo de lenguaje, califica dos veces y por separado las que prometen, y redacta para cada una un titular informativo y un resumen que responde primero a la pregunta del lector. Cuando varios medios cuentan la misma historia, la agrupa en un solo **evento** y la ordena según cuántas fuentes independientes están hablando de ella. Cada mañana publica el boletín *Latido diario*, los lunes el semanal y el día 1 de cada mes el mensual.
 
 Este repositorio es el sitio completo: la web pública, el panel de administración, el flujo de selección, el algoritmo de agrupación y de temperatura, y **el texto íntegro de cada prompt y de cada umbral de selección**, para que cualquiera pueda auditar con qué criterio se elige lo que se publica.
 
@@ -80,11 +80,15 @@ La **temperatura** se calcula por evento y no por nota: dentro de 48 horas cada 
 
 ## Cobertura
 
+El catálogo incluye 20 canales nuevos de negocios, 10 de energía y 5 de electromovilidad, además de los 54 originales.
+
 | Categoría | Qué entra |
 |---|---|
 | Inteligencia artificial | Modelos, asistentes, agentes y funciones de IA: lanzamientos, capacidades, precios y resultados |
 | Productos y gadgets | Smartphones, electrónica de consumo, apps y plataformas, incluida su llegada a México y sus precios |
-| Negocios y startups | Resultados, rondas de inversión, adquisiciones, alianzas, nombramientos, fintech y comercio electrónico |
+| Negocios y startups | Resultados, inversiones, adquisiciones, manufactura, logística, fintech y comercio electrónico |
+| Energía | Electricidad, redes, renovables, almacenamiento, petróleo y gas |
+| Electromovilidad | Vehículos eléctricos e híbridos, baterías, recarga, flotas y transporte público eléctrico |
 | Regulación y política digital | Leyes, autoridades, multas, licitaciones, impuestos digitales y protección de datos |
 | Ciberseguridad | Ataques, filtraciones, fraudes digitales y vulnerabilidades con hallazgos concretos |
 | Videojuegos | Industria, consolas, estudios y lanzamientos |

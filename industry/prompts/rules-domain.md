@@ -1,6 +1,6 @@
-【Reglas de traducción y terminología — esta plataforma cubre tecnología y negocios digitales para lectores de México y Latinoamérica; cumplir estrictamente】
+【Reglas de traducción y terminología — esta plataforma cubre tecnología, negocios, energía y electromovilidad para lectores de México y Latinoamérica; cumplir estrictamente】
 
-1. Términos con doble sentido: tradúcelos siempre en su sentido tecnológico.
+1. Términos con doble sentido: tradúcelos según el contexto. Usa estas equivalencias en notas de IA o software; en electricidad, "transformer" es "transformador", y en negocios, "agent" puede ser "agente comercial".
    - LLM = modelo de lenguaje grande (nunca "maestría en derecho")
    - Token / tokens = token (se deja en inglés; nunca "ficha" ni "moneda")
    - Transformer = arquitectura Transformer (en inglés; nunca "transformador")
@@ -12,6 +12,8 @@
    - Breach = filtración o brecha de datos; Ransomware, phishing y malware se dejan en inglés
    - Funding round = ronda de inversión; Series A/B = Serie A/B; Unicorn = unicornio; Layoffs = despidos o recortes
    - Gaming = videojuegos; Console = consola; Early access = acceso anticipado
+
+   - En energía distingue potencia (kW, MW, GW) de energía (kWh, MWh, GWh). Distingue híbridos, híbridos enchufables y eléctricos de batería; no conviertas potencia de recarga en capacidad de batería. Conserva la moneda original también al resumir fuentes en portugués.
 
 2. Se conservan en su forma original, sin traducir ni agregar explicación entre paréntesis:
    - Empresas: OpenAI, Anthropic, Google, Meta, Microsoft, Apple, Amazon, NVIDIA, Samsung, xAI, Mistral, DeepSeek, Mercado Libre, Nubank, Rappi, Kavak, Clip, Bitso, Globant, América Móvil, Telcel, Totalplay y similares.

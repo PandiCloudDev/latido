@@ -14,7 +14,9 @@
 export const CATEGORIES = [
   { key: "ia", tagColor: "indigo", label: "IA", feedLabel: "Inteligencia artificial", section: "Inteligencia artificial", guide: "Modelos de IA, asistentes, agentes y funciones de IA: lanzamientos, versiones, capacidades, precios y resultados en pruebas. Un producto que solo agrega una función de IA menor va en Productos." },
   { key: "productos", tagColor: "turquoise", label: "Productos", feedLabel: "Productos y gadgets", section: "Productos y gadgets", guide: "Lanzamientos y actualizaciones de productos, servicios, apps, plataformas, smartphones, gadgets y electrónica de consumo, incluida su llegada a México o Latinoamérica y sus precios. Las reseñas y comparativas van en Guías." },
-  { key: "industry", tagColor: "orange", label: "Negocios", feedLabel: "Negocios digitales", section: "Negocios y startups", guide: "Hechos ya ocurridos en empresas de tecnología y negocios digitales: resultados financieros, rondas de inversión, adquisiciones, alianzas, despidos, nombramientos de directivos, expansión a nuevos mercados, fintech y comercio electrónico. Que lo anuncie la propia empresa con tono promocional no lo vuelve opinión." },
+  { key: "industry", tagColor: "orange", label: "Negocios", feedLabel: "Negocios", section: "Negocios y startups", guide: "Resultados, inversión, adquisiciones, expansión, manufactura, logística y cadenas de suministro con consecuencias concretas; incluye empresas tecnológicas, fintech y comercio electrónico. Si el hecho central es un proyecto energético o un avance de movilidad eléctrica, usa la categoría sectorial." },
+  { key: "energia", tagColor: "yellow", label: "Energía", section: "Energía", guide: "Generación y suministro de electricidad, redes, almacenamiento estacionario, renovables, petróleo y gas: proyectos, operación, inversiones, tarifas o regulación específica del sector." },
+  { key: "electromovilidad", tagColor: "blue", label: "Electromovilidad", section: "Electromovilidad", guide: "Vehículos eléctricos e híbridos, baterías de tracción, recarga, flotas y transporte público eléctrico; incluye producción, ventas, infraestructura y regulación específica. El almacenamiento estacionario va en Energía y los autos de combustión sin vínculo con electrificación quedan fuera de esta categoría." },
   { key: "regulacion", tagColor: "violet", label: "Regulación", feedLabel: "Regulación digital", section: "Regulación y política digital", guide: "Leyes, normas, decisiones de autoridades, multas, licitaciones, impuestos digitales, protección de datos y política pública de tecnología y telecomunicaciones. Un juicio entre empresas sin autoridad reguladora va en Negocios." },
   { key: "ciberseguridad", tagColor: "red", label: "Ciberseguridad", section: "Ciberseguridad", guide: "Ataques, filtraciones de datos, fraudes digitales, vulnerabilidades y sus investigaciones, así como productos o estudios de seguridad con hallazgos concretos." },
   { key: "videojuegos", tagColor: "green", label: "Videojuegos", section: "Videojuegos", guide: "Industria, consolas, plataformas, estudios y lanzamientos de videojuegos, incluidos sus negocios y adquisiciones." },
@@ -49,7 +51,7 @@ export const CATEGORY_TAGS = [
 /** Etiquetas de tema opcionales. */
 export const TOPIC_TAGS = [
   "IA", "Agentes de IA", "Smartphones", "Gadgets", "Telecom y 5G", "Nube y centros de datos", "Chips", "Fintech", "Comercio electrónico",
-  "Redes sociales", "Streaming", "Movilidad", "Privacidad", "Talento y empleo", "México", "Latinoamérica",
+  "Redes sociales", "Streaming", "Movilidad", "Energía", "Electromovilidad", "Privacidad", "Talento y empleo", "México", "Latinoamérica",
 ] as const;
 
 /** Etiquetas de entidad opcionales (empresas y plataformas). */
