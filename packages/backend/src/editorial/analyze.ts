@@ -1,4 +1,4 @@
-import { LOCALE } from "@aihot/site/locale";
+import { LOCALE, tr } from "@aihot/site/locale";
 import { describePublicationTime } from "../sources/dates.ts";
 // analyzeArticle: the judging and writing steps, each with its own prompt from the industry pack
 // (industry/prompts/):
@@ -93,7 +93,7 @@ export function scoreInputTime(at: Date): string {
 export function buildScoreInput(a: AnalyzeInputArticle): string {
   let body: string;
   if (a.xPost) {
-    const quoted = a.xPost.quoted?.text ? `\n\n[引用 ${a.xPost.quoted.handle ? `@${a.xPost.quoted.handle}` : "原推文"}]：${a.xPost.quoted.text}` : "";
+    const quoted = a.xPost.quoted?.text ? `\n\n[${tr("引用", "Cita")} ${a.xPost.quoted.handle ? `@${a.xPost.quoted.handle}` : tr("原推文", "publicación original")}]${tr("：", ": ")}${a.xPost.quoted.text}` : "";
     body = `${String(a.xPost.text ?? "").trim()}${quoted}`.trim();
   } else {
     body = (a.bodyText ?? a.excerpt ?? "").trim();
@@ -101,10 +101,10 @@ export function buildScoreInput(a: AnalyzeInputArticle): string {
   if (!body) body = a.title;
   const at = a.publishedAt;
   return [
-    "请按系统规则评估以下单篇材料所代表的事件。只输出 attentionScore。",
-    `【发布时间（北京时间）】\n${at ? a.publicationTime === undefined || a.publicationTime?.includes("T") ? scoreInputTime(at) : describePublicationTime(at, a.publicationTime) : "未知（收录时间不代表发布时间）"}`,
-    `【标题】\n${a.title.trim()}`,
-    `【完整正文】\n${body.length > MAX_BODY_CHARS ? body.slice(0, MAX_BODY_CHARS) : body}`,
+    tr("请按系统规则评估以下单篇材料所代表的事件。只输出 attentionScore。", "Evalúa según las reglas del sistema el evento que representa el siguiente material. Devuelve solo attentionScore."),
+    `${tr("【发布时间（北京时间）】", `【Fecha de publicación (${LOCALE.timeZoneLabel})】`)}\n${at ? a.publicationTime === undefined || a.publicationTime?.includes("T") ? scoreInputTime(at) : describePublicationTime(at, a.publicationTime) : tr("未知（收录时间不代表发布时间）", "desconocida (la fecha de captura no es la de publicación)")}`,
+    `${tr("【标题】", "【Título】")}\n${a.title.trim()}`,
+    `${tr("【完整正文】", "【Cuerpo completo】")}\n${body.length > MAX_BODY_CHARS ? body.slice(0, MAX_BODY_CHARS) : body}`,
   ].join("\n\n");
 }
 
@@ -156,12 +156,12 @@ const ZH_COUNT = ["零", "一", "二", "三", "四", "五", "六", "七", "八",
 
 /** The structure step owns the public category and tags, as well as grouping evidence (filled from the pack's vocabulary). */
 export const STRUCTURE_SYSTEM = promptText("structure", {
-  categoryCount: ZH_COUNT[CATEGORIES.length] ?? String(CATEGORIES.length),
+  categoryCount: LOCALE.language === "zh" ? (ZH_COUNT[CATEGORIES.length] ?? String(CATEGORIES.length)) : String(CATEGORIES.length),
   categoryGuide: CATEGORY_GUIDE,
-  categoryTags: CATEGORY_TAGS.join("、"),
-  topicTags: TOPIC_TAGS.join("、"),
-  entityTags: ENTITY_TAGS.join("、"),
-  entities: Object.entries(ENTITIES).map(([id, e]) => `${id}（${e.aliases.slice(0, 3).join("/")}）`).join("，"),
+  categoryTags: CATEGORY_TAGS.join(tr("、", ", ")),
+  topicTags: TOPIC_TAGS.join(tr("、", ", ")),
+  entityTags: ENTITY_TAGS.join(tr("、", ", ")),
+  entities: Object.entries(ENTITIES).map(([id, e]) => tr(`${id}（${e.aliases.slice(0, 3).join("/")}）`, `${id} (${e.aliases.slice(0, 3).join("/")})`)).join(tr("，", ", ")),
 });
 
 /** Keep only quotes present both in the original material and in the text the structure model saw. */
@@ -392,9 +392,9 @@ async function mendWording(a: AnalyzeInputArticle, w: NonNullable<AnalysisRun["w
     res = await chatJson({
       model: await modelFor("wording"), purpose: "mend_wording", subject: subjectOf(a), promptVersion: PROMPT_VERSIONS.wording, system: MEND_SYSTEM,
       user: [
-        `来源：${t.sourceName ?? "（未注明）"}`, `原题：${t.title}`,
-        `中文稿：\n${JSON.stringify({ titleZh: w.titleZh, summaryZh: w.summaryZh, reasonZh: w.reasonZh })}`,
-        `问题：\n${problems.map((p) => `- ${p}`).join("\n")}`,
+        `${tr("来源：", "Fuente: ")}${t.sourceName ?? tr("（未注明）", "(no indicada)")}`, `${tr("原题：", "Título original: ")}${t.title}`,
+        `${tr("中文稿：", "Texto redactado:")}\n${JSON.stringify({ titleZh: w.titleZh, summaryZh: w.summaryZh, reasonZh: w.reasonZh })}`,
+        `${tr("问题：", "Problemas:")}\n${problems.map((p) => `- ${p}`).join("\n")}`,
       ].join("\n\n"),
       schema: MendSchema, temperature: 0.1, maxTokens: 2048, attemptTag: tagged(opts.attemptTag, "wording"),
     });

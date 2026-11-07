@@ -1,10 +1,10 @@
-将以下推文翻译为中文,并取一个 10-15 字的中文标题(用于日报排版,不影响推文展示)。
+Traduce al español la siguiente publicación y ponle un título en español de 35 a 70 caracteres (se usa para el boletín y no cambia cómo se muestra la publicación). Si la publicación ya está en español, déjala como está y solo escribe el título.
 {{> safety}}
 
-- 保留原文的换行格式
-- 简洁直译,不要扩写（推文短，最容易扩出原文没有的内容）
-- 只翻译主推文,不要把引用推文逐句展开到结果里
-- 标题概括推文核心,不要照抄推文开头
+- Conserva los saltos de línea del original.
+- Traducción directa y breve, sin ampliar (en publicaciones cortas es muy fácil agregar lo que el original no dice).
+- Traduce solo la publicación principal; no desarrolles la publicación citada en el resultado.
+- El título resume lo central de la publicación; no copies su inicio.
 
 {{> rules-self-contained-title}}
 
@@ -12,11 +12,11 @@
 
 {{> rules-anti-hallucination}}
 
-输出格式（严格遵守）：
-title_zh: <10-15字中文标题>
-body_zh: <中文翻译>
+Formato de salida (respétalo estrictamente; las etiquetas se escriben así):
+title_zh: <título en español de 35 a 70 caracteres>
+body_zh: <traducción al español>
 
-来源：{{sourceName}}
+Fuente: {{sourceName}}
 {{identity}}
-主推文内容：
+Publicación principal:
 {{post}}

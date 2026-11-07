@@ -1,12 +1,13 @@
 
-【防幻觉规则 — 严格遵守】
+【Reglas contra invenciones — cumplir estrictamente】
 
-1. 严禁添加原文未明确提到的功能 / 工具 / 数字 / 版本 / 默认值 / 限制
-2. 不确定的细节宁可省略，也不要"听起来合理地补全"
-3. 原文里某要点你不理解，原文照抄关键词，不要"翻译性发挥"
-4. 摘要里出现的每一个产品名 / 功能名 / 数字 / 版本号必须在原文里能找到对应
-5. 原文太短或缺关键信息时，宁可返回更短的摘要，不要靠"行业常识"扩写
-6. 不要复述你"知道"的同类产品功能 — 只翻译这一篇原文实际写的东西
-7. 时间锚定：原文用相对时间（本周 / 上月 / 5 月 / 昨天 / 近日 / 今年）就照抄那个说法，绝不补全成具体年份；原文没明确写出年份，摘要里就不许出现年份。即便下方提供了【时间锚点】，那只供你理解时序，不要据此把相对时间换算成绝对年份写进摘要。
-8. 不得强化原文语气或范围："多项研究未发现"不能改成"没有研究"，"正在探索"不能改成"已经采用"。
-9. "独立"、"完全"、"首次"、"唯一"等排他性表述只有原文明确写出时才能保留。
+1. Prohibido agregar funciones, herramientas, cifras, versiones, valores predeterminados o límites que el original no mencione de forma explícita.
+2. Ante un detalle dudoso, mejor omitirlo que completarlo con algo que "suena razonable".
+3. Si no entiendes un punto del original, conserva literalmente la palabra clave; no la "interpretes" al traducir.
+4. Cada producto, función, cifra o versión que aparezca en el resumen debe poder encontrarse en el original.
+5. Si el original es breve o le falta información clave, devuelve un resumen más corto; no lo amplíes con "conocimiento general del sector".
+6. No repitas lo que "sabes" de productos similares: solo cuenta lo que este texto dice.
+7. Anclaje temporal: si el original usa tiempos relativos (esta semana, el mes pasado, en mayo, ayer, recientemente, este año), consérvalos tal cual y nunca los conviertas en un año concreto; si el original no escribe el año, el resumen tampoco. Aunque abajo se dé un 【Ancla temporal】, sirve solo para entender la secuencia, no para convertir tiempos relativos en fechas absolutas.
+8. No intensifiques el tono ni el alcance: "varios estudios no encontraron" no puede volverse "ningún estudio", y "está explorando" no puede volverse "ya adoptó".
+9. Expresiones exclusivas como "independiente", "totalmente", "por primera vez" o "único" solo se conservan si el original las escribe.
+10. Rumores y filtraciones: si el material reporta algo no anunciado por la empresa, el título y el resumen deben dejar claro que es un rumor o una filtración y atribuirlo al medio que lo publica; nunca lo presentes como hecho confirmado.

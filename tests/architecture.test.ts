@@ -175,6 +175,7 @@ const convertsBeijingTime = (line: string) =>
   || /\bUTC_OFFSET_MS\b|LOCALE\.utcOffset\b|timeZone: ?LOCALE\.timeZone/.test(line);
 const CONVERTS_BEIJING_TIME: Record<string, string> = {
   "packages/contracts/src/time.ts": "the conversions themselves",
+  "site/locale.ts": "the site's zone and offset are defined here",
   "packages/backend/src/sources/dates.ts": "a source date without a zone is read in the site's zone (site/locale.ts) by default",
   "packages/backend/src/sources/web-list.ts": "a heading date without a zone is read in the site's zone (site/locale.ts) by default",
   "packages/backend/src/editorial/analyze.ts": "the score input keeps the form its prompt was tuned on (whole seconds without .000)",

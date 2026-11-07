@@ -12,57 +12,64 @@
  * feedLabel 是分类 RSS 标题里的名字（不写就用 label）。公开接口、RSS 和 MCP 里要把一类并进另一类发布，写在站点设置里（site/site.ts 的 PUBLIC_CATEGORIES）。
  */
 export const CATEGORIES = [
-  { key: "ai-models", tagColor: "indigo", label: "模型", feedLabel: "AI 模型", section: "模型发布/更新", guide: "模型本身的发布、版本、权重开放、能力或价格变化，以及既有榜单上的模型成绩。公布一次跑分不是发布新基准，也不是教程。" },
-  { key: "ai-products", tagColor: "turquoise", label: "产品", feedLabel: "AI 产品", section: "产品发布/更新", guide: "可使用的 AI 产品、功能、应用、工具、API、平台和工程组件的发布更新。模型厂商发布的推理框架、算子库、硬件适配组件仍是产品，不能因为厂商名归成模型。" },
-  { key: "industry", tagColor: "orange", label: "行业", feedLabel: "行业动态", section: "行业动态", guide: "已发生的公司经营、融资并购、人事、合作、诉讼、政策、真实安全事故及调查进展。新闻由当事人发帖、带有态度，也不因此变成观点。" },
-  { key: "paper", tagColor: "violet", label: "论文", feedLabel: "论文", section: "论文研究", guide: "以新研究方法、实验设计与发现为核心的论文、技术报告、新基准或研究数据集。系统性红队实验属于研究；既有榜单成绩归模型，真实事故的新闻调查归行业。" },
-  { key: "tip", tagColor: "green", label: "教程", section: "技巧与观点", guide: "读者可以照着使用的方法、提示词、工具用法、工程实践复盘与技术讲解。重点是可复用的做法；单纯发布工具归产品，只有态度和预测而无做法归观点。", commentary: true },
-  { key: "opinion", tagColor: "purple", label: "观点", section: "技巧与观点", guide: "重点是作者的解释、判断、主张、预测、评论或访谈观点。讨论市场不自动归行业，作者是名人不自动归观点。", commentary: true },
+  { key: "ia", tagColor: "indigo", label: "IA", feedLabel: "Inteligencia artificial", section: "Inteligencia artificial", guide: "Modelos de IA, asistentes, agentes y funciones de IA: lanzamientos, versiones, capacidades, precios y resultados en pruebas. Un producto que solo agrega una función de IA menor va en Productos." },
+  { key: "productos", tagColor: "turquoise", label: "Productos", feedLabel: "Productos y gadgets", section: "Productos y gadgets", guide: "Lanzamientos y actualizaciones de productos, servicios, apps, plataformas, smartphones, gadgets y electrónica de consumo, incluida su llegada a México o Latinoamérica y sus precios. Las reseñas y comparativas van en Guías." },
+  { key: "industry", tagColor: "orange", label: "Negocios", feedLabel: "Negocios digitales", section: "Negocios y startups", guide: "Hechos ya ocurridos en empresas de tecnología y negocios digitales: resultados financieros, rondas de inversión, adquisiciones, alianzas, despidos, nombramientos de directivos, expansión a nuevos mercados, fintech y comercio electrónico. Que lo anuncie la propia empresa con tono promocional no lo vuelve opinión." },
+  { key: "regulacion", tagColor: "violet", label: "Regulación", feedLabel: "Regulación digital", section: "Regulación y política digital", guide: "Leyes, normas, decisiones de autoridades, multas, licitaciones, impuestos digitales, protección de datos y política pública de tecnología y telecomunicaciones. Un juicio entre empresas sin autoridad reguladora va en Negocios." },
+  { key: "ciberseguridad", tagColor: "red", label: "Ciberseguridad", section: "Ciberseguridad", guide: "Ataques, filtraciones de datos, fraudes digitales, vulnerabilidades y sus investigaciones, así como productos o estudios de seguridad con hallazgos concretos." },
+  { key: "videojuegos", tagColor: "green", label: "Videojuegos", section: "Videojuegos", guide: "Industria, consolas, plataformas, estudios y lanzamientos de videojuegos, incluidos sus negocios y adquisiciones." },
+  { key: "tip", tagColor: "wathet", label: "Guías", section: "Guías y análisis", guide: "Lo que el lector puede aplicar: guías, trucos, explicaciones, reseñas, comparativas y pruebas de producto. Si solo se lanza una herramienta, va en Productos; si solo hay opinión sin método, va en Análisis.", commentary: true },
+  { key: "opinion", tagColor: "purple", label: "Análisis", section: "Guías y análisis", guide: "El foco es la interpretación, el juicio, la predicción, el comentario o la entrevista del autor. Hablar del mercado no lo vuelve Negocios, y que el autor sea famoso no lo vuelve Análisis.", commentary: true },
 ] as const satisfies ReadonlyArray<{ key: string; tagColor: string; label: string; feedLabel?: string; section: string; guide: string; commentary?: true }>;
 
 /**
- * 这个行业最受关注的一类发布（AI 行业是新模型）：日报报头的“N 个新模型”、改分类后修订已出的报告都按它数。
- * category 是类别，tag 是标签，两者都对上才算；unit 接在数字后面。
- * 没有这样一类的行业设成 null，报头就不显示这个数。
+ * El tipo de lanzamiento más seguido del sector: el encabezado del boletín diario muestra "N lanzamientos".
+ * Cuenta las notas con esa categoría y esa etiqueta; unit va después del número.
  */
-export const RELEASE: { category: string; tag: string; unit: string } | null = { category: "ai-models", tag: "模型发布", unit: "个新模型" };
+export const RELEASE: { category: string; tag: string; unit: string } | null = { category: "productos", tag: "Lanzamiento", unit: " lanzamientos" };
 
-/** 周报月报的总述可以直接写、不必在报道里找到出处的行业通用词（小写）。站名会自动算进去。 */
-export const PLAIN_TERMS: readonly string[] = ["ai", "api", "llm", "gpu", "agi", "ceo", "ipo"];
+/** Palabras generales del sector que el panorama semanal o mensual puede usar sin citar una nota (en minúsculas). */
+export const PLAIN_TERMS: readonly string[] = ["ia", "ai", "api", "app", "apps", "5g", "ceo", "ipo", "startup", "startups", "fintech"];
 
 /**
- * 内容理解一步给每篇资料判的“内容类型”（写在 prompts/content-understanding.md 里，改了类型要同步改那份提示词）。
- * 评分提示词（prompts/selection-score.md）按类型给五个维度不同的权重。
+ * Tipo de contenido que asigna la comprensión de contenido (prompts/content-understanding.md; si cambian, actualiza ese prompt).
+ * La rúbrica (prompts/selection-score.md) da a cada tipo pesos distintos en los cinco ejes.
  */
 export const ITEM_TYPES = ["model_release", "product_launch", "tool_or_prompt", "research_paper", "industry_event", "opinion_analysis", "tutorial_explainer"] as const;
 
-// ── 标签词表 ────────────────────────────────────────────────────────────────────────────
+// ── Etiquetas ─────────────────────────────────────────────────────────────────────────────
 
-/** 每篇资料的第一个标签必须是这些“分类标签”之一。 */
+/** La primera etiqueta de cada nota debe ser una de estas etiquetas de categoría. */
 export const CATEGORY_TAGS = [
-  "产品更新", "模型发布", "论文/研究", "开源/仓库", "教程/实践", "现象/趋势", "大佬观点", "评测/基准", "安全/对齐", "行业动态", "政策/监管",
-  "非AI/通用工具", "其他",
+  "Modelo o nueva generación", "Lanzamiento", "Actualización", "Empresas", "Inversión y startups", "Nombramientos", "Regulación",
+  "Ciberseguridad", "Videojuegos", "Estudio o investigación", "Código abierto", "Guía práctica", "Reseña y comparativa",
+  "Análisis y opinión", "Rumor o filtración", "Otro",
 ] as const;
 
-/** 可选的主题标签。 */
+/** Etiquetas de tema opcionales. */
 export const TOPIC_TAGS = [
-  "Agent", "编码", "推理", "多模态", "语音", "视频", "图像生成", "RAG", "端侧", "数据/训练", "搜索", "部署/工程", "开源生态", "具身智能", "MCP/工具调用",
+  "IA", "Agentes de IA", "Smartphones", "Gadgets", "Telecom y 5G", "Nube y centros de datos", "Chips", "Fintech", "Comercio electrónico",
+  "Redes sociales", "Streaming", "Movilidad", "Privacidad", "Talento y empleo", "México", "Latinoamérica",
 ] as const;
 
-/** 可选的实体标签（公司、机构、平台）。 */
-export const ENTITY_TAGS = ["OpenAI", "Anthropic", "DeepSeek", "DeepMind", "Google", "Meta", "Microsoft", "xAI", "Hugging Face", "GitHub", "arXiv"] as const;
+/** Etiquetas de entidad opcionales (empresas y plataformas). */
+export const ENTITY_TAGS = ["OpenAI", "Google", "Apple", "Microsoft", "Meta", "Amazon", "NVIDIA", "Samsung", "Anthropic", "Mercado Libre", "Nubank", "América Móvil"] as const;
 
-/** 模型常写的近义词，统一成词表里的写法。 */
+/** Sinónimos frecuentes del modelo, llevados a la forma del vocabulario. */
 export const TAG_SYNONYMS: Readonly<Record<string, string>> = {
-  "教程/玩法": "教程/实践", "技巧/最佳实践": "教程/实践", "合作/生态": "行业动态", "融资/收购": "行业动态", "公司动态": "行业动态",
-  合作: "行业动态", 生态: "行业动态", 融资: "行业动态", 收购: "行业动态", 投资: "行业动态", 并购: "行业动态",
-  政策: "政策/监管", 监管: "政策/监管", 法规: "政策/监管", 安全: "安全/对齐", 对齐: "安全/对齐",
-  论文: "论文/研究", 研究: "论文/研究", paper: "论文/研究", papers: "论文/研究",
-  "open-source": "开源/仓库", 开源: "开源/仓库", 仓库: "开源/仓库", repo: "开源/仓库",
-  教程: "教程/实践", 玩法: "教程/实践", 指南: "教程/实践", 技巧: "教程/实践", 最佳实践: "教程/实践", 实践: "教程/实践",
-  产品: "产品更新", 更新: "产品更新", 发布: "模型发布", 模型: "模型发布", 趋势: "现象/趋势", 现象: "现象/趋势", 观点: "大佬观点",
-  视频生成: "视频", 非ai: "非AI/通用工具", "non-ai": "非AI/通用工具", 通用工具: "非AI/通用工具", 工程工具: "非AI/通用工具",
-  安全扫描: "非AI/通用工具", devops: "非AI/通用工具", 行业: "行业动态", 动态: "行业动态",
+  lanzamientos: "Lanzamiento", "nuevo producto": "Lanzamiento", estreno: "Lanzamiento", "nuevo modelo": "Modelo o nueva generación", modelo: "Modelo o nueva generación",
+  "nueva generación": "Modelo o nueva generación", actualizacion: "Actualización", "actualización de producto": "Actualización", "precio": "Actualización",
+  empresa: "Empresas", negocios: "Empresas", "resultados financieros": "Empresas", adquisición: "Empresas", adquisicion: "Empresas", alianza: "Empresas", despidos: "Empresas",
+  inversión: "Inversión y startups", inversion: "Inversión y startups", "ronda de inversión": "Inversión y startups", startup: "Inversión y startups", startups: "Inversión y startups",
+  nombramiento: "Nombramientos", "nuevo director": "Nombramientos", regulacion: "Regulación", ley: "Regulación", política: "Regulación", "politica pública": "Regulación",
+  seguridad: "Ciberseguridad", ciberataque: "Ciberseguridad", filtración: "Ciberseguridad", hackeo: "Ciberseguridad", videojuego: "Videojuegos", gaming: "Videojuegos",
+  investigación: "Estudio o investigación", estudio: "Estudio o investigación", paper: "Estudio o investigación", reporte: "Estudio o investigación",
+  "open source": "Código abierto", "open-source": "Código abierto", "codigo abierto": "Código abierto", repositorio: "Código abierto",
+  guía: "Guía práctica", guia: "Guía práctica", tutorial: "Guía práctica", trucos: "Guía práctica", reseña: "Reseña y comparativa", comparativa: "Reseña y comparativa", review: "Reseña y comparativa",
+  opinión: "Análisis y opinión", opinion: "Análisis y opinión", análisis: "Análisis y opinión", rumor: "Rumor o filtración", filtracion: "Rumor o filtración",
+  "inteligencia artificial": "IA", ai: "IA", agentes: "Agentes de IA", celulares: "Smartphones", teléfonos: "Smartphones", telecomunicaciones: "Telecom y 5G", "5g": "Telecom y 5G",
+  nube: "Nube y centros de datos", semiconductores: "Chips", "e-commerce": "Comercio electrónico", ecommerce: "Comercio electrónico", "comercio electronico": "Comercio electrónico",
+  mexico: "México", latam: "Latinoamérica", latinoamerica: "Latinoamérica", "américa latina": "Latinoamérica",
 };
 
 // ── 公司与主体 ──────────────────────────────────────────────────────────────────────────
@@ -74,24 +81,36 @@ export const TAG_SYNONYMS: Readonly<Record<string, string>> = {
  * 所有这些名字都用来认出说的是哪家公司，比如把事实的主体对到发布方。
  */
 export const ENTITIES: Record<string, { name: string; displayTag: string | null; aliases: string[]; orgNames?: string[]; otherNames?: string[] }> = {
-  "world-labs": { name: "World Labs", displayTag: null, aliases: ["World Labs"] },
-  "thinking-machines": { name: "Thinking Machines Lab", displayTag: null, aliases: ["Thinking Machines"] },
-  amd: { name: "AMD", displayTag: null, aliases: ["AMD", "Advanced Micro Devices"] },
   openai: { name: "OpenAI", displayTag: "OpenAI", aliases: ["OpenAI", "ChatGPT", "Sora", "Codex", "GPT"], orgNames: ["OpenAI"], otherNames: ["OpenAI Developers"] },
   anthropic: { name: "Anthropic", displayTag: "Anthropic", aliases: ["Anthropic", "Claude"], orgNames: ["Anthropic"], otherNames: ["Claude Code"] },
-  google: { name: "Google", displayTag: "Google", aliases: ["Google", "DeepMind", "Gemini", "谷歌"], orgNames: ["Google DeepMind", "Google Research", "Google", "DeepMind", "谷歌"], otherNames: ["Google AI", "Google Labs", "Google Cloud"] },
-  deepseek: { name: "DeepSeek", displayTag: "DeepSeek", aliases: ["DeepSeek", "深度求索"], orgNames: ["DeepSeek", "深度求索"] },
-  qwen: { name: "千问 Qwen", displayTag: null, aliases: ["Qwen", "通义", "阿里"], orgNames: ["通义千问", "通义实验室", "阿里巴巴", "阿里云", "阿里", "Qwen Team", "Qwen", "Alibaba"], otherNames: ["千问", "千问APP", "Alibaba Cloud"] },
-  kimi: { name: "月之暗面 / Kimi", displayTag: null, aliases: ["Kimi", "月之暗面", "Moonshot", "Kimi / 月之暗面"], orgNames: ["Moonshot AI", "月之暗面", "Kimi"] },
-  minimax: { name: "MiniMax", displayTag: null, aliases: ["MiniMax", "海螺"], orgNames: ["MiniMax", "稀宇科技"] },
-  zhipu: { name: "智谱 GLM", displayTag: null, aliases: ["智谱", "GLM", "Z.ai"], orgNames: ["智谱AI", "智谱", "Zhipu AI", "Z.ai"], otherNames: ["Zhipu"] },
-  xai: { name: "xAI", displayTag: "xAI", aliases: ["xAI", "Grok"], orgNames: ["SpaceX Super Intelligence", "SpaceXAI", "SpaceXSI", "xAI"], otherNames: ["Grok Bot"] },
-  meta: { name: "Meta", displayTag: "Meta", aliases: ["Meta", "Llama"], orgNames: ["Meta Superintelligence Labs", "Meta AI", "Meta"], otherNames: ["AI at Meta", "Muse"] },
-  microsoft: { name: "Microsoft", displayTag: "Microsoft", aliases: ["Microsoft", "微软", "Copilot"], orgNames: ["Microsoft Research", "Microsoft AI", "Microsoft", "微软"] },
-  nvidia: { name: "NVIDIA", displayTag: null, aliases: ["NVIDIA", "英伟达"], orgNames: ["NVIDIA", "英伟达"] },
-  "hugging-face": { name: "Hugging Face", displayTag: "Hugging Face", aliases: ["Hugging Face"], orgNames: ["Hugging Face", "HuggingFace"] },
-  cursor: { name: "Cursor", displayTag: null, aliases: ["Cursor", "Anysphere"], orgNames: ["Cursor"] },
-  openrouter: { name: "OpenRouter", displayTag: null, aliases: ["OpenRouter"], orgNames: ["OpenRouter"] },
+  google: { name: "Google", displayTag: "Google", aliases: ["Google", "DeepMind", "Gemini", "Android", "YouTube", "Alphabet"], orgNames: ["Google DeepMind", "Google Research", "Google", "DeepMind", "Alphabet"], otherNames: ["Google AI", "Google Cloud", "Google México"] },
+  apple: { name: "Apple", displayTag: "Apple", aliases: ["Apple", "iPhone", "iPad", "Mac", "iOS", "Apple Intelligence"], orgNames: ["Apple"] },
+  microsoft: { name: "Microsoft", displayTag: "Microsoft", aliases: ["Microsoft", "Copilot", "Windows", "Xbox", "Azure"], orgNames: ["Microsoft Research", "Microsoft AI", "Microsoft", "Microsoft México"] },
+  meta: { name: "Meta", displayTag: "Meta", aliases: ["Meta", "Llama", "WhatsApp", "Instagram", "Facebook"], orgNames: ["Meta Superintelligence Labs", "Meta AI", "Meta"], otherNames: ["AI at Meta"] },
+  amazon: { name: "Amazon", displayTag: "Amazon", aliases: ["Amazon", "AWS", "Alexa", "Prime Video"], orgNames: ["Amazon", "Amazon Web Services", "AWS"], otherNames: ["Amazon México"] },
+  nvidia: { name: "NVIDIA", displayTag: "NVIDIA", aliases: ["NVIDIA", "GeForce"], orgNames: ["NVIDIA"] },
+  samsung: { name: "Samsung", displayTag: "Samsung", aliases: ["Samsung", "Galaxy"], orgNames: ["Samsung Electronics", "Samsung", "Samsung México"] },
+  xai: { name: "xAI", displayTag: null, aliases: ["xAI", "Grok"], orgNames: ["xAI"] },
+  deepseek: { name: "DeepSeek", displayTag: null, aliases: ["DeepSeek"], orgNames: ["DeepSeek"] },
+  "hugging-face": { name: "Hugging Face", displayTag: null, aliases: ["Hugging Face"], orgNames: ["Hugging Face", "HuggingFace"] },
+  sony: { name: "Sony", displayTag: null, aliases: ["Sony", "PlayStation"], orgNames: ["Sony", "Sony Interactive Entertainment", "PlayStation"] },
+  nintendo: { name: "Nintendo", displayTag: null, aliases: ["Nintendo", "Switch"], orgNames: ["Nintendo"] },
+  "mercado-libre": { name: "Mercado Libre", displayTag: "Mercado Libre", aliases: ["Mercado Libre", "MercadoLibre", "Mercado Pago"], orgNames: ["Mercado Libre", "Mercado Pago"] },
+  nubank: { name: "Nubank", displayTag: "Nubank", aliases: ["Nubank", "Nu México", "Nu"], orgNames: ["Nubank", "Nu Holdings", "Nu México"] },
+  "america-movil": { name: "América Móvil", displayTag: "América Móvil", aliases: ["América Móvil", "Telcel", "Telmex", "Claro"], orgNames: ["América Móvil", "Telcel", "Telmex", "Claro"] },
+  rappi: { name: "Rappi", displayTag: null, aliases: ["Rappi"], orgNames: ["Rappi"] },
+  kavak: { name: "Kavak", displayTag: null, aliases: ["Kavak"], orgNames: ["Kavak"] },
+  clip: { name: "Clip", displayTag: null, aliases: ["Clip"], orgNames: ["Clip", "PayClip"] },
+  bitso: { name: "Bitso", displayTag: null, aliases: ["Bitso"], orgNames: ["Bitso"] },
+  globant: { name: "Globant", displayTag: null, aliases: ["Globant"], orgNames: ["Globant"] },
+  totalplay: { name: "Totalplay", displayTag: null, aliases: ["Totalplay"], orgNames: ["Totalplay", "Grupo Salinas"] },
+  "at-t": { name: "AT&T", displayTag: null, aliases: ["AT&T"], orgNames: ["AT&T", "AT&T México"] },
+  spotify: { name: "Spotify", displayTag: null, aliases: ["Spotify"], orgNames: ["Spotify"] },
+  netflix: { name: "Netflix", displayTag: null, aliases: ["Netflix"], orgNames: ["Netflix"] },
+  tesla: { name: "Tesla", displayTag: null, aliases: ["Tesla", "Starlink", "SpaceX"], orgNames: ["Tesla", "SpaceX", "Starlink"] },
+  huawei: { name: "Huawei", displayTag: null, aliases: ["Huawei", "HarmonyOS"], orgNames: ["Huawei"] },
+  xiaomi: { name: "Xiaomi", displayTag: null, aliases: ["Xiaomi", "Redmi", "POCO"], orgNames: ["Xiaomi"] },
+  motorola: { name: "Motorola", displayTag: null, aliases: ["Motorola", "Moto"], orgNames: ["Motorola", "Lenovo"] },
 };
 
 /**
@@ -100,56 +119,53 @@ export const ENTITIES: Record<string, { name: string; displayTag: string | null;
  */
 export const IDENTITY_LEXICON: ReadonlyArray<{ id: string; name: string; patterns: RegExp[] }> = [
   { id: "openai", name: "OpenAI", patterns: [/openai|chatgpt|\bgpt-?[o\d]|\bsora\b|\bcodex\b/i] },
-  { id: "anthropic", name: "Anthropic", patterns: [/anthropic|\bclaude\b/i, /\b(?:opus|sonnet|haiku)\s*\d+(?:[.\-]\d+)*\b/i, /\bfable\s*\d+(?:[.\-]\d+)*\b|\bmythos\b/i] },
-  { id: "google", name: "Google / Gemini", patterns: [/google|deepmind|\bgemini\b|notebooklm|\bveo\s?\d|\bAlphaFold\b|\bAMIE\b/i] },
-  { id: "deepseek", name: "DeepSeek", patterns: [/deepseek|深度求索/i] },
+  { id: "anthropic", name: "Anthropic", patterns: [/anthropic|\bclaude\b/i, /\b(?:opus|sonnet|haiku)\s*\d+(?:[.\-]\d+)*\b/i] },
+  { id: "google", name: "Google / Gemini", patterns: [/google|deepmind|\bgemini\b|notebooklm|\bandroid\b|\byoutube\b|\bpixel\s?\d/i] },
+  { id: "apple", name: "Apple", patterns: [/\bapple\b|\biphone\b|\bipad\b|\bmacbook\b|\bios\s?\d+|\bvision pro\b/i] },
+  { id: "microsoft", name: "Microsoft / Copilot", patterns: [/microsoft|copilot|\bwindows\b|\bazure\b|\bxbox\b/i] },
+  { id: "meta", name: "Meta", patterns: [/\bMeta\b/, /\bmeta\s?ai\b|\bllama\b|whatsapp|instagram|facebook/i] },
+  { id: "amazon", name: "Amazon / AWS", patterns: [/amazon|\baws\b|\balexa\b/i] },
+  { id: "nvidia", name: "NVIDIA", patterns: [/nvidia|\bgeforce\b|\bblackwell\b|\brubin(?:\s+ultra)?\b|\bcuda\b/i] },
+  { id: "samsung", name: "Samsung", patterns: [/samsung|\bgalaxy\s?[a-z]?\d/i] },
   { id: "xai", name: "xAI / Grok", patterns: [/\bxai\b|\bgrok\b/i] },
-  { id: "meta", name: "Meta / Llama", patterns: [/\bMeta\b/, /\bmeta\s?ai\b|\bllama\b/i] },
-  { id: "microsoft", name: "Microsoft / Copilot", patterns: [/microsoft|copilot|微软/i] },
-  { id: "nvidia", name: "NVIDIA", patterns: [/nvidia|英伟达|\bnemotron\b|\bnemo\b|\bblackwell\b|\brubin(?:\s+ultra)?\b|\bcuda\b/i] },
-  { id: "qwen", name: "千问 Qwen", patterns: [/\bqwen|通义|千问/i] },
-  { id: "hugging-face", name: "Hugging Face", patterns: [/hugging\s?face/i] },
-  { id: "cursor", name: "Cursor", patterns: [/\bCursor\b/] },
-  { id: "kimi", name: "月之暗面 / Kimi", patterns: [/\bkimi\b|月之暗面|\bmoonshot\s?ai\b/i] },
-  { id: "openrouter", name: "OpenRouter", patterns: [/openrouter/i] },
-  { id: "minimax", name: "MiniMax", patterns: [/minimax/i] },
-  { id: "zhipu", name: "智谱 GLM", patterns: [/智谱|\bglm-?[4-9]/i] },
-  { id: "hunyuan", name: "腾讯混元", patterns: [/混元|hunyuan/i] },
-  { id: "doubao", name: "字节豆包", patterns: [/豆包|doubao|字节跳动|bytedance/i] },
+  { id: "deepseek", name: "DeepSeek", patterns: [/deepseek/i] },
   { id: "mistral", name: "Mistral", patterns: [/mistral/i] },
+  { id: "hugging-face", name: "Hugging Face", patterns: [/hugging\s?face/i] },
+  { id: "sony", name: "Sony / PlayStation", patterns: [/\bsony\b|playstation|\bps[45]\b/i] },
+  { id: "nintendo", name: "Nintendo", patterns: [/nintendo|\bswitch\s?2\b/i] },
+  { id: "mercado-libre", name: "Mercado Libre", patterns: [/mercado\s?libre|mercado\s?pago/i] },
+  { id: "nubank", name: "Nubank", patterns: [/nubank|\bnu m[eé]xico\b/i] },
+  { id: "america-movil", name: "América Móvil", patterns: [/am[eé]rica m[oó]vil|\btelcel\b|\btelmex\b/i] },
+  { id: "rappi", name: "Rappi", patterns: [/\brappi\b/i] },
+  { id: "kavak", name: "Kavak", patterns: [/\bkavak\b/i] },
+  { id: "bitso", name: "Bitso", patterns: [/\bbitso\b/i] },
+  { id: "globant", name: "Globant", patterns: [/\bglobant\b/i] },
+  { id: "totalplay", name: "Totalplay", patterns: [/totalplay/i] },
+  { id: "huawei", name: "Huawei", patterns: [/huawei|harmonyos/i] },
+  { id: "xiaomi", name: "Xiaomi", patterns: [/xiaomi|\bredmi\b/i] },
+  { id: "tesla", name: "Tesla / SpaceX", patterns: [/\btesla\b|\bstarlink\b|\bspacex\b/i] },
+  { id: "netflix", name: "Netflix", patterns: [/netflix/i] },
+  { id: "spotify", name: "Spotify", patterns: [/spotify/i] },
   { id: "perplexity", name: "Perplexity", patterns: [/\bPerplexity\b/] },
-  { id: "runway", name: "Runway", patterns: [/\brunway\b/i] },
-  { id: "suno", name: "Suno", patterns: [/\bsuno\b/i] },
-  { id: "midjourney", name: "Midjourney", patterns: [/midjourney/i] },
-  { id: "stability-ai", name: "Stability AI", patterns: [/stability\s?ai/i] },
-  { id: "elevenlabs", name: "ElevenLabs", patterns: [/eleven\s?labs/i] },
-  { id: "vllm", name: "vLLM", patterns: [/\bvllm\b/i] },
   { id: "ollama", name: "Ollama", patterns: [/\bollama\b/i] },
-  { id: "windsurf", name: "Windsurf", patterns: [/windsurf/i] },
-  { id: "devin", name: "Devin", patterns: [/\bdevin\b/i] },
-  { id: "manus", name: "Manus", patterns: [/\bmanus\b/i] },
-  { id: "apple", name: "Apple AI", patterns: [/\bapple\s?(intelligence|silicon|ai)\b|苹果(智能|\s?AI)/i] },
-  { id: "amazon", name: "Amazon / AWS", patterns: [/amazon|\baws\b|亚马逊/i] },
-  { id: "baidu", name: "百度文心", patterns: [/百度|baidu|文心|\bernie\s?bot\b/i] },
 ];
 
-/** 这些域名上的文章，发布方就是对应的公司（托管平台如 GitHub、arXiv 不算）。 */
+/** En estos dominios, quien publica es la empresa correspondiente (plataformas como GitHub o arXiv no cuentan). */
 export const PUBLISHER_DOMAINS: ReadonlyArray<{ entityId: string; domains: readonly string[] }> = [
   { entityId: "openai", domains: ["openai.com"] },
   { entityId: "anthropic", domains: ["anthropic.com", "claude.com"] },
   { entityId: "google", domains: ["deepmind.google", "ai.google", "blog.google"] },
-  { entityId: "deepseek", domains: ["deepseek.com"] },
-  { entityId: "xai", domains: ["x.ai"] },
-  { entityId: "meta", domains: ["ai.meta.com"] },
+  { entityId: "apple", domains: ["apple.com"] },
   { entityId: "microsoft", domains: ["microsoft.com"] },
   { entityId: "nvidia", domains: ["nvidia.com"] },
-  { entityId: "qwen", domains: ["qwen.ai"] },
-  { entityId: "cursor", domains: ["cursor.com"] },
-  { entityId: "openrouter", domains: ["openrouter.ai"] },
+  { entityId: "samsung", domains: ["news.samsung.com", "samsung.com"] },
+  { entityId: "hugging-face", domains: ["huggingface.co"] },
+  { entityId: "deepseek", domains: ["deepseek.com"] },
+  { entityId: "xai", domains: ["x.ai"] },
+  { entityId: "meta", domains: ["ai.meta.com", "about.fb.com"] },
 ];
 
-/** 原文里的这些写法也算提到了对应公司。 */
+/** Estas formas en el original también cuentan como mención de la empresa. */
 export const IDENTITY_CONTEXT_ALIASES: ReadonlyArray<{ entityId: string; pattern: RegExp }> = [
   { entityId: "meta", pattern: /@AIatMeta\b/i },
-  { entityId: "zhipu", pattern: /\bZhipu(?:\s+AI\b|['’]s\b)/i },
 ];

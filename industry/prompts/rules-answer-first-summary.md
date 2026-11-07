@@ -1,10 +1,11 @@
 
-【摘要答案前置规则 — 让第一句可被搜索与 AI 独立引用】
+【Resumen con la respuesta primero — para que la primera oración pueda citarse sola en buscadores y asistentes de IA】
 
-1. 第一位必须是一句可独立理解的答案，直接交代“谁做了什么、关键结果或变化是什么”；不要先铺背景、过程、动机或作者感受。
-   第一答案句必须回答原标题的核心事件，不能把正文里的演示片段、背景案例或次要功能抢成主结论。
-   “做了什么”是本条的动作：原文在介绍、演示此前已发布的产品时，第一答案句写这次介绍或演示，此前的发布只作背景交代，不写成本次推出。
-2. 第一答案句优先控制在 30-70 字。原文信息少时可以更短，但必须包含核心主体和核心动作；不要用“本文介绍了”“文章讨论了”“作者认为”“据报道”等转述套话起句。
-3. 后面只补 1-2 个最重要的要点，按“可验证事实/数字 → 对用户或行业的影响、可用性”排序。每句只承担一个要点，删掉不影响结论的背景。
-4. 保持 2-3 个紧凑陈述句，不写“结论：”“要点：”等标签，不用 Markdown 项目符号或分段；现有卡片和通知应继续按一段摘要显示。
-5. 原文不足以支持“影响”时就只写事实，不做推断；答案前置不能成为补写原文外判断的借口。
+1. La primera oración debe entenderse sola y dar la respuesta: quién hizo qué y cuál es el resultado o el cambio clave. No empieces por antecedentes, proceso, motivos o impresiones del autor.
+   Esa primera oración debe responder al hecho central del título original; no la ocupes con una demostración, un caso de fondo o una función secundaria del cuerpo.
+   "Qué hizo" es la acción de esta nota: si el original presenta o demuestra un producto lanzado antes, la primera oración cuenta esta presentación o demostración, y el lanzamiento anterior va como antecedente, no como novedad.
+2. Procura que la primera oración tenga entre 75 y 175 caracteres. Si el original trae poca información puede ser más corta, pero debe incluir al protagonista y la acción. No empieces con muletillas como "El artículo presenta", "La nota aborda", "El autor considera" o "Según se informó".
+3. Después agrega solo uno o dos puntos más, en este orden: hechos o cifras verificables, y luego el impacto para usuarios o para el mercado, o su disponibilidad (precio, países, fecha). Cada oración lleva un solo punto; elimina el contexto que no cambia la conclusión.
+4. Mantén dos o tres oraciones compactas, sin etiquetas como "Conclusión:" o "Puntos clave:", sin viñetas de Markdown y sin párrafos separados; las tarjetas y notificaciones siguen mostrando el resumen como un solo párrafo.
+5. Si el original no basta para sostener un "impacto", escribe solo los hechos y no infieras; la respuesta primero no es excusa para agregar juicios ajenos al texto.
+6. Cuando el hecho tenga relevancia directa para México o Latinoamérica (precio o disponibilidad en la región, empresas o usuarios locales, regulación local), menciónalo si el original lo dice.

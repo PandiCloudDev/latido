@@ -55,3 +55,31 @@ test("el calendario cuenta los días en la hora del centro de México", { skip: 
   assert.equal(monthDay("2026-11-06", "2026-11-06"), "6 de noviembre");
   assert.equal(monthDay("2019-02-19", "2026-11-06"), "19 de febrero de 2019");
 });
+
+test("las etiquetas que piden los prompts son exactamente las de la taxonomía", async () => {
+  const { readFileSync } = await import("node:fs");
+  const { CATEGORY_TAGS, TOPIC_TAGS, ENTITY_TAGS, CATEGORIES, ENTITIES } = await import("@aihot/industry/taxonomy");
+  const topics = JSON.parse(readFileSync(new URL("../industry/topics.json", import.meta.url), "utf8")) as { topics: Array<{ tags?: string[]; entityId?: string }> };
+  const prompt = readFileSync(new URL("../industry/prompts/content-understanding.md", import.meta.url), "utf8");
+  const listAfter = (label: string) => prompt.split(label)[1]!.split("\n")[0]!.replace(/\.$/, "").split(", ").map((t) => t.trim());
+  assert.deepEqual(listAfter("una de estas etiquetas de categoría: "), [...CATEGORY_TAGS]);
+  assert.deepEqual(listAfter("- Temas: "), [...TOPIC_TAGS]);
+  assert.deepEqual(listAfter("- Entidades: "), [...ENTITY_TAGS]);
+  const all = new Set<string>([...CATEGORY_TAGS, ...TOPIC_TAGS, ...ENTITY_TAGS]);
+  for (const t of topics.topics) {
+    for (const tag of t.tags ?? []) assert.ok(all.has(tag), `topics.json usa una etiqueta desconocida: ${tag}`);
+    if (t.entityId) assert.ok(t.entityId in ENTITIES, `topics.json usa una entidad desconocida: ${t.entityId}`);
+  }
+  assert.ok(CATEGORIES.some((c) => c.key === "industry"), "el motor espera una categoría industry");
+  const sources = JSON.parse(readFileSync(new URL("../industry/sources.json", import.meta.url), "utf8")) as { sources: Array<{ owner_entity_id: string | null }> };
+  for (const s of sources.sources) if (s.owner_entity_id) assert.ok(s.owner_entity_id in ENTITIES, `fuente con entidad desconocida: ${s.owner_entity_id}`);
+});
+
+test("los prompts ya no tienen texto en chino y conservan sus marcadores", async () => {
+  const { readFileSync, readdirSync } = await import("node:fs");
+  const dir = new URL("../industry/prompts/", import.meta.url);
+  for (const f of readdirSync(dir)) {
+    const text = readFileSync(new URL(f, dir), "utf8");
+    assert.ok(!/\p{Script=Han}/u.test(text), `${f} todavía tiene chino`);
+  }
+});

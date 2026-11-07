@@ -1,1 +1,1 @@
-sections 是栏目导读，只写{{columns}}，键是栏目名：每个一句话，不超过 50 字，点出这个栏目的共同走向或总述没写到的要事；不重复总述里的事件和数字，不复述条目标题。
+sections es la guía de secciones; escribe solo {{columns}}, con el nombre de la sección como clave: una oración por sección, de máximo 125 caracteres, que señale la tendencia común de la sección o algo importante que el panorama no dijo; no repitas eventos ni cifras del panorama ni copies títulos de notas.

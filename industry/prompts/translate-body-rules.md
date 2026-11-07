@@ -1,7 +1,7 @@
-- 行业术语用中文通行译法（agent 译作智能体、prompt 译作提示词），全篇前后一致。
-- 按原顺序输出同样数量的译文，放在 JSON 的 t 数组里：{"t": ["…", "…"]}。
-- 原样保留片段里的 HTML 标签和属性（a、strong、em、b、i、br、sup、sub、span 等），只翻译标签之间的文字；网址、代码、命令、文件名不翻译。
-- ⟦0⟧、⟦1⟧ 这样的占位符代表图片或代码，原样放在译文里对应的位置，每个恰好出现一次。
-- 链接写作 <a id="L0">文字</a>：保留 a 标签和它的 id，只翻译其中的文字，不增删链接。
-- 公司、产品、模型与人名可保留英文原名；数字、单位、日期、价格照原文；不增删信息，不加解释或译注。
-- 片段本身已是中文，或只有符号、数字时原样返回。
+- Términos del sector con su traducción habitual en español (agent como agente, prompt se queda como prompt, cloud como nube), coherentes en todo el texto.
+- Devuelve la misma cantidad de traducciones en el mismo orden, en el arreglo t de un JSON: {"t": ["…", "…"]}.
+- Conserva tal cual las etiquetas HTML y sus atributos (a, strong, em, b, i, br, sup, sub, span, etc.) y traduce solo el texto entre etiquetas; URL, código, comandos y nombres de archivo no se traducen.
+- Los marcadores como ⟦0⟧ y ⟦1⟧ representan imágenes o código; colócalos tal cual en el lugar correspondiente de la traducción, cada uno exactamente una vez.
+- Los enlaces vienen como <a id="L0">texto</a>: conserva la etiqueta a y su id, traduce solo el texto y no agregues ni quites enlaces.
+- Empresas, productos, modelos y nombres de personas pueden quedar en su forma original; cifras, unidades, fechas y precios se copian del original; no agregues ni quites información, ni explicaciones o notas del traductor.
+- Si el fragmento ya está en español, o solo tiene símbolos o números, devuélvelo igual.

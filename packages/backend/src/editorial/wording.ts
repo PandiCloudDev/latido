@@ -2,6 +2,7 @@
 // reason, named with what to write instead, for the one call that mends them (analyze.ts, mendWording).
 import { READER_WORDING } from "@aihot/industry/wording";
 import { ITEM_COPY } from "@aihot/site";
+import { tr } from "@aihot/site/locale";
 
 export interface ReaderCopy {
   titleZh: string;
@@ -9,7 +10,7 @@ export interface ReaderCopy {
   reasonZh: string | null;
 }
 
-const FIELDS: Array<[keyof ReaderCopy, string]> = [["titleZh", "标题"], ["summaryZh", "摘要"], ["reasonZh", ITEM_COPY.reasonLabel]];
+const FIELDS: Array<[keyof ReaderCopy, string]> = [["titleZh", tr("标题", "El título")], ["summaryZh", tr("摘要", "El resumen")], ["reasonZh", ITEM_COPY.reasonLabel]];
 
 /**
  * Every use of a word of the list in a copy, each as a line the model can act on: where, the words around it,
@@ -22,7 +23,8 @@ export function wordingProblems(copy: ReaderCopy): string[] {
     if (!text) continue;
     for (const [pattern, fix] of READER_WORDING) {
       for (const hit of text.matchAll(new RegExp(pattern.source, `${pattern.flags.replace("g", "")}g`))) {
-        problems.push(`${name}用了“${hit[0]}”（“${text.slice(Math.max(0, hit.index - 8), hit.index + hit[0].length + 8)}”）：${fix}`);
+        const around = text.slice(Math.max(0, hit.index - 8), hit.index + hit[0].length + 8);
+        problems.push(tr(`${name}用了“${hit[0]}”（“${around}”）：${fix}`, `${name} usa "${hit[0]}" ("${around}"): ${fix}`));
       }
     }
   }
