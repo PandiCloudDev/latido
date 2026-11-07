@@ -1,5 +1,5 @@
 {
-  "$comment": "示范信源：首次启动时导入（scripts/seed.ts），已存在的不会被覆盖。之后在后台“信源”里新建、修改和暂停。字段说明见 docs/customize.md。",
+  "$comment": "Fuentes de Latido: se importan en el primer arranque (scripts/seed.ts); las existentes no se sobrescriben. Niveles: T1 oficial de primera mano (umbral 60), T1_5 medios de referencia y portales propios (65), T2 medios generales y regionales (76). Solo feeds de tecnología: no se usan feeds generales que obliguen a descartar notas pagando llamadas al modelo.",
   "sources": [
     {
       "id": "rss-openai-news",
@@ -16,17 +16,19 @@
       "participation_mode": "editorial",
       "interval_minutes": 120,
       "tags": [
-        "官方"
+        "Oficial",
+        "Global",
+        "IA"
       ],
       "site_fulltext": false,
       "syndicate_fulltext": false
     },
     {
-      "id": "rss-google-deepmind",
-      "name": "Google DeepMind",
+      "id": "rss-google-blog",
+      "name": "Google Blog",
       "kind": "rss",
       "config": {
-        "feedUrl": "https://deepmind.google/blog/rss.xml",
+        "feedUrl": "https://blog.google/rss/",
         "_aihot": {
           "initialBackfillLimit": 8
         }
@@ -36,70 +38,9 @@
       "participation_mode": "editorial",
       "interval_minutes": 120,
       "tags": [
-        "官方"
-      ],
-      "site_fulltext": false,
-      "syndicate_fulltext": false
-    },
-    {
-      "id": "rss-google-research",
-      "name": "Google Research",
-      "kind": "rss",
-      "config": {
-        "feedUrl": "https://research.google/blog/rss/",
-        "_aihot": {
-          "initialBackfillLimit": 8
-        }
-      },
-      "tier": "T1",
-      "owner_entity_id": "google",
-      "participation_mode": "editorial",
-      "interval_minutes": 120,
-      "tags": [
-        "官方",
-        "研究"
-      ],
-      "site_fulltext": false,
-      "syndicate_fulltext": false
-    },
-    {
-      "id": "rss-hugging-face",
-      "name": "Hugging Face Blog",
-      "kind": "rss",
-      "config": {
-        "feedUrl": "https://huggingface.co/blog/feed.xml",
-        "_aihot": {
-          "initialBackfillLimit": 8
-        }
-      },
-      "tier": "T1",
-      "owner_entity_id": "hugging-face",
-      "participation_mode": "editorial",
-      "interval_minutes": 120,
-      "tags": [
-        "官方",
-        "开源"
-      ],
-      "site_fulltext": false,
-      "syndicate_fulltext": false
-    },
-    {
-      "id": "rss-microsoft-research",
-      "name": "Microsoft Research",
-      "kind": "rss",
-      "config": {
-        "feedUrl": "https://www.microsoft.com/en-us/research/feed/",
-        "_aihot": {
-          "initialBackfillLimit": 8
-        }
-      },
-      "tier": "T1",
-      "owner_entity_id": "microsoft",
-      "participation_mode": "editorial",
-      "interval_minutes": 120,
-      "tags": [
-        "官方",
-        "研究"
+        "Oficial",
+        "Global",
+        "Tecnología"
       ],
       "site_fulltext": false,
       "syndicate_fulltext": false
@@ -119,17 +60,41 @@
       "participation_mode": "editorial",
       "interval_minutes": 120,
       "tags": [
-        "官方"
+        "Oficial",
+        "Global",
+        "IA"
       ],
       "site_fulltext": false,
       "syndicate_fulltext": false
     },
     {
-      "id": "rss-aws-ml",
-      "name": "AWS Machine Learning Blog",
+      "id": "rss-microsoft-blog",
+      "name": "Microsoft Blog",
       "kind": "rss",
       "config": {
-        "feedUrl": "https://aws.amazon.com/blogs/machine-learning/feed/",
+        "feedUrl": "https://blogs.microsoft.com/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 8
+        }
+      },
+      "tier": "T1",
+      "owner_entity_id": "microsoft",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Oficial",
+        "Global",
+        "Tecnología"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-apple-newsroom",
+      "name": "Apple Newsroom",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.apple.com/newsroom/rss-feed.rss",
         "_aihot": {
           "initialBackfillLimit": 8
         }
@@ -139,18 +104,19 @@
       "participation_mode": "editorial",
       "interval_minutes": 120,
       "tags": [
-        "官方",
-        "教程"
+        "Oficial",
+        "Global",
+        "Gadgets"
       ],
       "site_fulltext": false,
       "syndicate_fulltext": false
     },
     {
-      "id": "rss-github-ai",
-      "name": "GitHub Blog · AI & ML",
+      "id": "rss-samsung-newsroom-mexico",
+      "name": "Samsung Newsroom México",
       "kind": "rss",
       "config": {
-        "feedUrl": "https://github.blog/ai-and-ml/feed/",
+        "feedUrl": "https://news.samsung.com/mx/feed",
         "_aihot": {
           "initialBackfillLimit": 8
         }
@@ -160,57 +126,437 @@
       "participation_mode": "editorial",
       "interval_minutes": 120,
       "tags": [
-        "官方"
+        "Oficial",
+        "México",
+        "Gadgets"
       ],
       "site_fulltext": false,
       "syndicate_fulltext": false
     },
     {
-      "id": "rss-mistral",
-      "name": "Mistral AI",
+      "id": "rss-hugging-face-blog",
+      "name": "Hugging Face Blog",
       "kind": "rss",
       "config": {
-        "feedUrl": "https://mistral.ai/news/rss",
+        "feedUrl": "https://huggingface.co/blog/feed.xml",
         "_aihot": {
           "initialBackfillLimit": 8
         }
       },
       "tier": "T1",
+      "owner_entity_id": "hugging-face",
+      "participation_mode": "editorial",
+      "interval_minutes": 180,
+      "tags": [
+        "Oficial",
+        "Global",
+        "IA"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-conciencia-y-tecnologia",
+      "name": "ConCiencia y Tecnología",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://concienciaytecnologia.com/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 8
+        }
+      },
+      "tier": "T1_5",
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 60,
+      "tags": [
+        "Propio",
+        "México",
+        "Tecnología"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-generacion-c",
+      "name": "Generación C",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://generacion-c.com/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 8
+        }
+      },
+      "tier": "T1_5",
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 60,
+      "tags": [
+        "Propio",
+        "México",
+        "Tecnología"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-ayacnet",
+      "name": "Ayacnet",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://ayacnet.com/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 8
+        }
+      },
+      "tier": "T1_5",
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 60,
+      "tags": [
+        "Propio",
+        "México",
+        "Tecnología"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-en-la-red-mx-tecnologia",
+      "name": "En la Red MX · Tecnología",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://enlaredmx.com/category/tecnologia/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 8
+        }
+      },
+      "tier": "T1_5",
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 60,
+      "tags": [
+        "Propio",
+        "México",
+        "Tecnología"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-xataka-mexico",
+      "name": "Xataka México",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.xataka.com.mx/index.xml",
+        "_aihot": {
+          "initialBackfillLimit": 8
+        }
+      },
+      "tier": "T1_5",
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 30,
+      "tags": [
+        "Medio",
+        "México",
+        "Tecnología"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-expansion-tecnologia",
+      "name": "Expansión Tecnología",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://expansion.mx/rss/tecnologia",
+        "_aihot": {
+          "initialBackfillLimit": 8
+        }
+      },
+      "tier": "T1_5",
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 60,
+      "tags": [
+        "Medio",
+        "México",
+        "Negocios"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-dpl-news",
+      "name": "DPL News",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://dplnews.com/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 8
+        }
+      },
+      "tier": "T1_5",
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 60,
+      "tags": [
+        "Medio",
+        "Latinoamérica",
+        "Regulación y telecom"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-bloomberg-linea-tecnologia",
+      "name": "Bloomberg Línea Tecnología",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.bloomberglinea.com/arc/outboundfeeds/rss/category/tecnologia/?outputType=xml",
+        "_aihot": {
+          "initialBackfillLimit": 8
+        }
+      },
+      "tier": "T1_5",
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 60,
+      "tags": [
+        "Medio",
+        "Latinoamérica",
+        "Negocios"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-latamlist",
+      "name": "LatamList",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://latamlist.com/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 8
+        }
+      },
+      "tier": "T1_5",
       "owner_entity_id": null,
       "participation_mode": "editorial",
       "interval_minutes": 120,
       "tags": [
-        "官方"
+        "Medio",
+        "Latinoamérica",
+        "Startups"
       ],
       "site_fulltext": false,
       "syndicate_fulltext": false
     },
     {
-      "id": "rss-bair",
-      "name": "Berkeley AI Research",
+      "id": "rss-contxto",
+      "name": "Contxto",
       "kind": "rss",
       "config": {
-        "feedUrl": "https://bair.berkeley.edu/blog/feed.xml",
+        "feedUrl": "https://contxto.com/es/feed/",
         "_aihot": {
           "initialBackfillLimit": 8
         }
       },
-      "tier": "T1",
+      "tier": "T1_5",
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Medio",
+        "Latinoamérica",
+        "Startups"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-welivesecurity-eset",
+      "name": "WeLiveSecurity (ESET)",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.welivesecurity.com/es/rss/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 8
+        }
+      },
+      "tier": "T1_5",
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Medio",
+        "Latinoamérica",
+        "Ciberseguridad"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-el-pais-tecnologia",
+      "name": "El País Tecnología",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://feeds.elpais.com/mrss-s/pages/ep/site/elpais.com/section/tecnologia/portada",
+        "_aihot": {
+          "initialBackfillLimit": 8
+        }
+      },
+      "tier": "T1_5",
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 60,
+      "tags": [
+        "Medio",
+        "Global",
+        "Tecnología"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-una-al-dia-hispasec",
+      "name": "Una al Día (Hispasec)",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://unaaldia.hispasec.com/feed",
+        "_aihot": {
+          "initialBackfillLimit": 8
+        }
+      },
+      "tier": "T1_5",
       "owner_entity_id": null,
       "participation_mode": "editorial",
       "interval_minutes": 180,
       "tags": [
-        "研究"
+        "Medio",
+        "Global",
+        "Ciberseguridad"
       ],
       "site_fulltext": false,
       "syndicate_fulltext": false
     },
     {
-      "id": "rss-the-verge-ai",
-      "name": "The Verge · AI",
+      "id": "rss-techcrunch",
+      "name": "TechCrunch",
       "kind": "rss",
       "config": {
-        "feedUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+        "feedUrl": "https://techcrunch.com/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 8
+        }
+      },
+      "tier": "T1_5",
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 30,
+      "tags": [
+        "Medio",
+        "Global",
+        "Startups"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-the-verge",
+      "name": "The Verge",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.theverge.com/rss/index.xml",
+        "_aihot": {
+          "initialBackfillLimit": 8
+        }
+      },
+      "tier": "T1_5",
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 30,
+      "tags": [
+        "Medio",
+        "Global",
+        "Tecnología"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-rest-of-world",
+      "name": "Rest of World",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://restofworld.org/feed/latest/",
+        "_aihot": {
+          "initialBackfillLimit": 8
+        }
+      },
+      "tier": "T1_5",
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Medio",
+        "Global",
+        "Mercados emergentes"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-crunchbase-news",
+      "name": "Crunchbase News",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://news.crunchbase.com/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 8
+        }
+      },
+      "tier": "T1_5",
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Medio",
+        "Global",
+        "Inversión"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-bleepingcomputer",
+      "name": "BleepingComputer",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.bleepingcomputer.com/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 8
+        }
+      },
+      "tier": "T1_5",
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 60,
+      "tags": [
+        "Medio",
+        "Global",
+        "Ciberseguridad"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-el-universal-techbit",
+      "name": "El Universal Techbit",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.eluniversal.com.mx/arc/outboundfeeds/rss/category/techbit/?outputType=xml",
         "_aihot": {
           "initialBackfillLimit": 8
         }
@@ -220,57 +566,19 @@
       "participation_mode": "editorial",
       "interval_minutes": 60,
       "tags": [
-        "媒体"
+        "Medio",
+        "México",
+        "Tecnología"
       ],
       "site_fulltext": false,
       "syndicate_fulltext": false
     },
     {
-      "id": "rss-techcrunch-ai",
-      "name": "TechCrunch · AI",
+      "id": "rss-esemanal",
+      "name": "eSemanal",
       "kind": "rss",
       "config": {
-        "feedUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-        "_aihot": {
-          "initialBackfillLimit": 8
-        }
-      },
-      "tier": "T2",
-      "owner_entity_id": null,
-      "participation_mode": "editorial",
-      "interval_minutes": 60,
-      "tags": [
-        "媒体"
-      ],
-      "site_fulltext": false,
-      "syndicate_fulltext": false
-    },
-    {
-      "id": "rss-ars-technica-ai",
-      "name": "Ars Technica · AI",
-      "kind": "rss",
-      "config": {
-        "feedUrl": "https://arstechnica.com/ai/feed/",
-        "_aihot": {
-          "initialBackfillLimit": 8
-        }
-      },
-      "tier": "T2",
-      "owner_entity_id": null,
-      "participation_mode": "editorial",
-      "interval_minutes": 60,
-      "tags": [
-        "媒体"
-      ],
-      "site_fulltext": false,
-      "syndicate_fulltext": false
-    },
-    {
-      "id": "rss-mit-tech-review-ai",
-      "name": "MIT Technology Review · AI",
-      "kind": "rss",
-      "config": {
-        "feedUrl": "https://www.technologyreview.com/topic/artificial-intelligence/feed",
+        "feedUrl": "https://esemanal.mx/feed/",
         "_aihot": {
           "initialBackfillLimit": 8
         }
@@ -280,37 +588,19 @@
       "participation_mode": "editorial",
       "interval_minutes": 120,
       "tags": [
-        "媒体"
+        "Medio",
+        "México",
+        "Industria TI"
       ],
       "site_fulltext": false,
       "syndicate_fulltext": false
     },
     {
-      "id": "rss-the-decoder",
-      "name": "The Decoder",
+      "id": "rss-it-masters-mag",
+      "name": "IT Masters Mag",
       "kind": "rss",
       "config": {
-        "feedUrl": "https://the-decoder.com/feed/",
-        "_aihot": {
-          "initialBackfillLimit": 8
-        }
-      },
-      "tier": "T2",
-      "owner_entity_id": null,
-      "participation_mode": "editorial",
-      "interval_minutes": 60,
-      "tags": [
-        "媒体"
-      ],
-      "site_fulltext": false,
-      "syndicate_fulltext": false
-    },
-    {
-      "id": "rss-simon-willison",
-      "name": "Simon Willison",
-      "kind": "rss",
-      "config": {
-        "feedUrl": "https://simonwillison.net/atom/everything/",
+        "feedUrl": "https://www.itmastersmag.com/feed/",
         "_aihot": {
           "initialBackfillLimit": 8
         }
@@ -320,17 +610,19 @@
       "participation_mode": "editorial",
       "interval_minutes": 120,
       "tags": [
-        "个人"
+        "Medio",
+        "México",
+        "TI empresarial"
       ],
       "site_fulltext": false,
       "syndicate_fulltext": false
     },
     {
-      "id": "rss-import-ai",
-      "name": "Import AI",
+      "id": "rss-el-ceo",
+      "name": "El CEO",
       "kind": "rss",
       "config": {
-        "feedUrl": "https://importai.substack.com/feed",
+        "feedUrl": "https://elceo.com/feed/",
         "_aihot": {
           "initialBackfillLimit": 8
         }
@@ -338,20 +630,21 @@
       "tier": "T2",
       "owner_entity_id": null,
       "participation_mode": "editorial",
-      "interval_minutes": 180,
+      "interval_minutes": 120,
       "tags": [
-        "个人",
-        "周刊"
+        "Medio",
+        "México",
+        "Negocios"
       ],
       "site_fulltext": false,
       "syndicate_fulltext": false
     },
     {
-      "id": "rss-latent-space",
-      "name": "Latent Space",
+      "id": "rss-fayerwayer",
+      "name": "FayerWayer",
       "kind": "rss",
       "config": {
-        "feedUrl": "https://www.latent.space/feed",
+        "feedUrl": "https://www.fayerwayer.com/arc/outboundfeeds/rss/?outputType=xml",
         "_aihot": {
           "initialBackfillLimit": 8
         }
@@ -359,9 +652,539 @@
       "tier": "T2",
       "owner_entity_id": null,
       "participation_mode": "editorial",
-      "interval_minutes": 180,
+      "interval_minutes": 60,
       "tags": [
-        "个人"
+        "Medio",
+        "Chile",
+        "Tecnología"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-infobae-tecno",
+      "name": "Infobae Tecno",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.infobae.com/arc/outboundfeeds/rss/category/tecno/?outputType=xml",
+        "_aihot": {
+          "initialBackfillLimit": 8
+        }
+      },
+      "tier": "T2",
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 30,
+      "tags": [
+        "Medio",
+        "Latinoamérica",
+        "Tecnología"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-mobile-time",
+      "name": "Mobile Time",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.mobiletime.com.br/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 8
+        }
+      },
+      "tier": "T2",
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Medio",
+        "Brasil",
+        "Tecnología"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-enter-co",
+      "name": "Enter.co",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.enter.co/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 8
+        }
+      },
+      "tier": "T2",
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 60,
+      "tags": [
+        "Medio",
+        "Colombia",
+        "Tecnología"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-impacto-tic",
+      "name": "Impacto TIC",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://impactotic.co/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 8
+        }
+      },
+      "tier": "T2",
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Medio",
+        "Colombia",
+        "Tecnología"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-el-tiempo-tecnosfera",
+      "name": "El Tiempo Tecnósfera",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.eltiempo.com/rss/tecnosfera.xml",
+        "_aihot": {
+          "initialBackfillLimit": 8
+        }
+      },
+      "tier": "T2",
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 60,
+      "tags": [
+        "Medio",
+        "Colombia",
+        "Tecnología"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-semana-tecnologia",
+      "name": "Semana Tecnología",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.semana.com/arc/outboundfeeds/rss/category/tecnologia/?outputType=xml",
+        "_aihot": {
+          "initialBackfillLimit": 8
+        }
+      },
+      "tier": "T2",
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 60,
+      "tags": [
+        "Medio",
+        "Colombia",
+        "Tecnología"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-portafolio-tecnologia",
+      "name": "Portafolio Tecnología",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.portafolio.co/rss/tecnologia.xml",
+        "_aihot": {
+          "initialBackfillLimit": 8
+        }
+      },
+      "tier": "T2",
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Medio",
+        "Colombia",
+        "Negocios"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-clarin-tecnologia",
+      "name": "Clarín Tecnología",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.clarin.com/rss/tecnologia/",
+        "_aihot": {
+          "initialBackfillLimit": 8
+        }
+      },
+      "tier": "T2",
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 60,
+      "tags": [
+        "Medio",
+        "Argentina",
+        "Tecnología"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-la-nacion-tecnologia",
+      "name": "La Nación Tecnología",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.lanacion.com.ar/arc/outboundfeeds/rss/category/tecnologia/?outputType=xml",
+        "_aihot": {
+          "initialBackfillLimit": 8
+        }
+      },
+      "tier": "T2",
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 60,
+      "tags": [
+        "Medio",
+        "Argentina",
+        "Tecnología"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-iprofesional-tecnologia",
+      "name": "iProfesional Tecnología",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.iprofesional.com/rss/tecnologia",
+        "_aihot": {
+          "initialBackfillLimit": 8
+        }
+      },
+      "tier": "T2",
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 60,
+      "tags": [
+        "Medio",
+        "Argentina",
+        "Negocios"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-tn-tecno",
+      "name": "TN Tecno",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://tn.com.ar/arc/outboundfeeds/rss/category/tecno/?outputType=xml",
+        "_aihot": {
+          "initialBackfillLimit": 8
+        }
+      },
+      "tier": "T2",
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 60,
+      "tags": [
+        "Medio",
+        "Argentina",
+        "Tecnología"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-la-tercera-tecnologia",
+      "name": "La Tercera Tecnología",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.latercera.com/arc/outboundfeeds/rss/category/tecnologia/?outputType=xml",
+        "_aihot": {
+          "initialBackfillLimit": 8
+        }
+      },
+      "tier": "T2",
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Medio",
+        "Chile",
+        "Tecnología"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-trendtic",
+      "name": "TrendTIC",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.trendtic.cl/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 8
+        }
+      },
+      "tier": "T2",
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Medio",
+        "Chile",
+        "Negocios"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-el-comercio-tecnologia",
+      "name": "El Comercio Tecnología",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://elcomercio.pe/arc/outboundfeeds/rss/category/tecnologia/?outputType=xml",
+        "_aihot": {
+          "initialBackfillLimit": 8
+        }
+      },
+      "tier": "T2",
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 60,
+      "tags": [
+        "Medio",
+        "Perú",
+        "Tecnología"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-gestion-tecnologia",
+      "name": "Gestión Tecnología",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://gestion.pe/arc/outboundfeeds/rss/category/tecnologia/?outputType=xml",
+        "_aihot": {
+          "initialBackfillLimit": 8
+        }
+      },
+      "tier": "T2",
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Medio",
+        "Perú",
+        "Negocios"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-rpp-tecnologia",
+      "name": "RPP Tecnología",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://rpp.pe/feed/tecnologia",
+        "_aihot": {
+          "initialBackfillLimit": 8
+        }
+      },
+      "tier": "T2",
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 60,
+      "tags": [
+        "Medio",
+        "Perú",
+        "Tecnología"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-xataka",
+      "name": "Xataka",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.xataka.com/index.xml",
+        "_aihot": {
+          "initialBackfillLimit": 8
+        }
+      },
+      "tier": "T2",
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 30,
+      "tags": [
+        "Medio",
+        "Global",
+        "Tecnología"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-xataka-movil",
+      "name": "Xataka Móvil",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.xatakamovil.com/index.xml",
+        "_aihot": {
+          "initialBackfillLimit": 8
+        }
+      },
+      "tier": "T2",
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 60,
+      "tags": [
+        "Medio",
+        "Global",
+        "Gadgets"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-hipertextual",
+      "name": "Hipertextual",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://hipertextual.com/feed",
+        "_aihot": {
+          "initialBackfillLimit": 8
+        }
+      },
+      "tier": "T2",
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 60,
+      "tags": [
+        "Medio",
+        "Global",
+        "Tecnología"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-genbeta",
+      "name": "Genbeta",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.genbeta.com/index.xml",
+        "_aihot": {
+          "initialBackfillLimit": 8
+        }
+      },
+      "tier": "T2",
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 60,
+      "tags": [
+        "Medio",
+        "Global",
+        "Software"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-wwwhat-s-new",
+      "name": "WWWhat's new",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://wwwhatsnew.com/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 8
+        }
+      },
+      "tier": "T2",
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 60,
+      "tags": [
+        "Medio",
+        "Global",
+        "Tecnología"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-3djuegos",
+      "name": "3DJuegos",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.3djuegos.com/index.xml",
+        "_aihot": {
+          "initialBackfillLimit": 8
+        }
+      },
+      "tier": "T2",
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 60,
+      "tags": [
+        "Medio",
+        "Global",
+        "Videojuegos"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-gsmarena",
+      "name": "GSMArena",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.gsmarena.com/rss-news-reviews.php3",
+        "_aihot": {
+          "initialBackfillLimit": 8
+        }
+      },
+      "tier": "T2",
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 60,
+      "tags": [
+        "Medio",
+        "Global",
+        "Gadgets"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-finextra",
+      "name": "Finextra",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.finextra.com/rss/headlines.aspx",
+        "_aihot": {
+          "initialBackfillLimit": 8
+        }
+      },
+      "tier": "T2",
+      "owner_entity_id": null,
+      "participation_mode": "editorial",
+      "interval_minutes": 60,
+      "tags": [
+        "Medio",
+        "Global",
+        "Fintech"
       ],
       "site_fulltext": false,
       "syndicate_fulltext": false
