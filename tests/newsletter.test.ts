@@ -1,7 +1,7 @@
 import "./setup.ts";
 import assert from "node:assert/strict";
-import { test } from "node:test";
-import { sql } from "@aihot/backend/db";
+import { after, test } from "node:test";
+import { closeDb, sql } from "@aihot/backend/db";
 import { CATEGORY_TAGS } from "@aihot/backend/editorial/vocabulary";
 import { installModules } from "@aihot/backend/modules";
 import { listTopicDefinitions } from "@aihot/backend/publication/topics";
@@ -9,6 +9,8 @@ import { buildApp } from "../apps/api/src/app.ts";
 import { EDITORIAL_SERVER, readEditorialDisplay, saveAd, saveTopic } from "../modules/editorial-controls/server.ts";
 import type { Mail } from "../modules/editorial-controls/mail.ts";
 import { confirmSubscription, deliverIssue, newsletterCounts, purgeNewsletter, requestSubscription, unsubscribe } from "../modules/editorial-controls/newsletter.ts";
+
+after(closeDb);
 
 test("weekly email requires confirmation, delivers at most once, and respects unsubscribe", async () => {
   const out: Mail[] = [];
@@ -52,7 +54,7 @@ test("public signup starts closed and the editorial controls require authenticat
     assert.equal((await app.inject({ method: "GET", url: "/api/site/newsletter/unsubscribe?token=fake" })).statusCode, 404);
     assert.equal((await app.inject({ method: "GET", url: "/api/admin/editorial" })).statusCode, 401);
     assert.deepEqual(await readEditorialDisplay(), { signupUrl: null, ad: null });
-    await assert.rejects(saveAd({ enabled: true, advertiser: "Ejemplo", text: "Mensaje", url: "javascript:alert(1)", action: "Leer" }, "test"));
+    assert.throws(() => saveAd({ enabled: true, advertiser: "Ejemplo", text: "Mensaje", url: "javascript:alert(1)", action: "Leer" }, "test"));
     await saveAd({ enabled: true, advertiser: "Ejemplo", text: "Mensaje", url: "https://example.test", action: "Leer" }, "test");
     assert.equal((await readEditorialDisplay()).ad?.advertiser, "Ejemplo");
     const topic = { enabled: true, slug: "test-editorial-topic", name: "Prueba", definition: "Cobertura de prueba", group: "field", tags: [CATEGORY_TAGS[0]] };

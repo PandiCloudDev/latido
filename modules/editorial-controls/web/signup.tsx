@@ -31,8 +31,11 @@ const inlineLink = "font-bold text-editorial-blue underline underline-offset-4";
 
 export async function action({ params, request }: ActionFunctionArgs) {
   const intent = intentOf(params.intent);
+  const origin = request.headers.get("origin");
+  // The TLS proxy can hand the SSR process a plain HTTP request. The canonical site URL is trusted configuration.
+  const siteOrigin = new URL(process.env.SITE_URL || request.url).origin;
   const allowed = request.headers.get("sec-fetch-site") !== "cross-site" &&
-    (!request.headers.has("origin") || request.headers.get("origin") === new URL(request.url).origin);
+    (!origin || origin === siteOrigin || origin === new URL(request.url).origin);
   if (!allowed) return data({ ok: false, message: "Abre el formulario directamente desde Latido." }, { status: 403 });
   const type = request.headers.get("content-type") ?? "";
   if (!type.startsWith("application/x-www-form-urlencoded") || Number(request.headers.get("content-length")) > 2048) {
