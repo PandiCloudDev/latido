@@ -59,6 +59,12 @@ El MCP acepta por defecto el host de `SITE_URL`, además de `localhost`, `127.0.
 
 Si hay cachés como Nginx o una CDN enfrente, deben respetar el vencimiento que indica la aplicación (`Cache-Control`): páginas públicas, datos de navegación, API, RSS, Markdown de notas, imágenes para compartir de boletines, sitemap, y las guías `/api/v1/agent` y `/openapi-v1.json` (que también se revalidan al vencer sus cinco minutos). No les asignes un vencimiento más largo, no sirvas contenido viejo sin conexión una vez vencido, no reinicies su vigencia al reenviar una respuesta vieja y no acumules caché de proxy y CDN sobre contenido dinámico. El framework no administra la CDN de tu sitio ni purga su caché.
 
+### Publicidad en la portada
+
+En `/admin/editorial#publicidad` puedes mostrar un anuncio fijo con texto y enlace HTTPS, o una unidad de Google AdSense en el mismo espacio. Desmarca **Mostrar publicidad en la portada** para ocultar el espacio y conservar los datos guardados.
+
+Para AdSense, verifica el dominio con [`/ads.txt`](https://latido.news/ads.txt), que ya declara la cuenta del sitio. Cuando el dominio esté listo en Google, crea una [unidad de display adaptable](https://support.google.com/adsense/answer/9274025) y pega solo su número `data-ad-slot` en el panel. El código de la cuenta ya está integrado. Antes de mostrarla, configura los avisos de privacidad y [consentimiento que correspondan](https://support.google.com/adsense/answer/13554116). Mantén los anuncios automáticos desactivados en Google si solo quieres ocupar el espacio de portada.
+
 ### Actualizaciones
 
 Antes de actualizar, respalda (ver [Respaldos](#respaldos)). Construye primero, detén los servicios anteriores y después ejecuta las migraciones y la versión nueva:

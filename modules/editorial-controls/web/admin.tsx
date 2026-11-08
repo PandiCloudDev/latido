@@ -3,8 +3,9 @@ import { Link, useLoaderData } from "react-router";
 import { SITE } from "@aihot/site";
 import { adminGet } from "@aihot/web/lib/admin.server";
 import { useAdminAction } from "@aihot/web/features/admin/action";
+import { slugFrom } from "@aihot/web/features/admin/format";
 import { AdminPage, Badge, Button, ButtonLink, Card, Field, Input, Select, Textarea } from "@aihot/web/features/admin/ui";
-import { type AdSettings, type EditorialSettings, type ManagedTopic } from "../types.ts";
+import { ADSENSE_CLIENT, type AdSettings, type EditorialSettings, type ManagedTopic } from "../types.ts";
 
 export function loader({ request }: { request: Request }) {
   return adminGet<EditorialSettings>(request, "/api/admin/editorial");
@@ -60,20 +61,34 @@ function AdForm({ value }: { value: AdSettings }) {
   const { run, busy } = useAdminAction();
   return (
     <Card title="Publicidad en la portada" right={<Badge tone={value.enabled ? "ok" : undefined}>{value.enabled ? "Visible" : "Oculta"}</Badge>}>
-      <form className="space-y-4" onSubmit={(e) => {
+      <form className="space-y-4" onSubmit={async (e) => {
         e.preventDefault();
-        void run("PUT", "/api/admin/editorial/ad", draft, { success: "Espacio publicitario guardado" });
+        const saved = await run<AdSettings>("PUT", "/api/admin/editorial/ad", draft, { success: "Espacio publicitario guardado" });
+        if (saved) set(saved);
       }}>
-        <p className="text-[13px] text-ink-3">Coloca un anuncio identificado como “Publicidad” debajo del boletín en la portada. Cuando lo desactivas, el espacio deja de aparecer.</p>
-        <Field label="Nombre del anunciante"><Input value={draft.advertiser} maxLength={80} onChange={(e) => set({ ...draft, advertiser: e.target.value })} /></Field>
-        <Field label="Mensaje del anuncio"><Textarea rows={2} maxLength={220} value={draft.text} onChange={(e) => set({ ...draft, text: e.target.value })} /></Field>
-        <div className="grid gap-4 sm:grid-cols-2">
-          <Field label="Destino del enlace"><Input type="url" placeholder="https://…" value={draft.url} maxLength={1000} onChange={(e) => set({ ...draft, url: e.target.value })} /></Field>
-          <Field label="Texto del enlace"><Input placeholder="Conoce más" value={draft.action} maxLength={45} onChange={(e) => set({ ...draft, action: e.target.value })} /></Field>
-        </div>
+        <p className="text-[13px] text-ink-3">El espacio aparece debajo del boletín en la portada. Puedes cambiar de formato sin perder lo guardado en el otro.</p>
+        <Field label="Tipo de publicidad">
+          <Select value={draft.mode} onChange={(e) => set({ ...draft, mode: e.target.value === "adsense" ? "adsense" : "fixed" })}>
+            <option value="fixed">Anuncio fijo</option>
+            <option value="adsense">Google AdSense</option>
+          </Select>
+        </Field>
+        {draft.mode === "fixed" ? <>
+          <Field label="Nombre del anunciante"><Input required={draft.enabled} value={draft.advertiser} maxLength={80} onChange={(e) => set({ ...draft, advertiser: e.target.value })} /></Field>
+          <Field label="Mensaje del anuncio"><Textarea required={draft.enabled} rows={2} maxLength={220} value={draft.text} onChange={(e) => set({ ...draft, text: e.target.value })} /></Field>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <Field label="Destino del enlace"><Input required={draft.enabled} type="url" placeholder="https://…" value={draft.url} maxLength={1000} onChange={(e) => set({ ...draft, url: e.target.value })} /></Field>
+            <Field label="Texto del enlace"><Input required={draft.enabled} placeholder="Conoce más" value={draft.action} maxLength={45} onChange={(e) => set({ ...draft, action: e.target.value })} /></Field>
+          </div>
+        </> : <>
+          <Field label="ID de la unidad de AdSense" hint="Copia solo el número de data-ad-slot de una unidad de display adaptable.">
+            <Input required={draft.enabled} inputMode="numeric" pattern="[0-9]{1,20}" maxLength={20} value={draft.adsenseSlot} onChange={(e) => set({ ...draft, adsenseSlot: e.target.value })} />
+          </Field>
+          <p className="text-[13px] text-ink-3">ID de editor configurado: <code>{ADSENSE_CLIENT}</code>. Comprueba que Latido esté listo en AdSense, que se reconozca <a className="underline" href="/ads.txt">ads.txt</a> y que hayas configurado los avisos de privacidad y consentimiento que correspondan. Para usar solo este espacio, deja desactivados los anuncios automáticos en Google.</p>
+        </>}
         <label className="flex items-center gap-2 text-[13px] text-ink">
           <input className="size-4" type="checkbox" checked={draft.enabled} onChange={(e) => set({ ...draft, enabled: e.target.checked })} />
-          Mostrar anuncio
+          Mostrar publicidad en la portada
         </label>
         <Button type="submit" tone="primary" busy={busy}>Guardar publicidad</Button>
       </form>
@@ -82,7 +97,6 @@ function AdForm({ value }: { value: AdSettings }) {
 }
 
 const blankTopic: ManagedTopic = { slug: "", name: "", group: "field", definition: "", tags: [], enabled: false };
-const slugFrom = (name: string) => name.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 64).replace(/-$/g, "");
 
 function TopicEditor({ topics, tags }: Pick<EditorialSettings, "topics" | "tags">) {
   const [draft, set] = useState(blankTopic);
@@ -100,7 +114,7 @@ function TopicEditor({ topics, tags }: Pick<EditorialSettings, "topics" | "tags"
           if (result) reset();
         }}>
           <div className="grid gap-4 sm:grid-cols-2">
-            <Field label="Nombre"><Input required maxLength={80} value={draft.name} onChange={(e) => set({ ...draft, name: e.target.value, slug: editing || slugTouched ? draft.slug : slugFrom(e.target.value) })} /></Field>
+            <Field label="Nombre"><Input required maxLength={80} value={draft.name} onChange={(e) => set({ ...draft, name: e.target.value, slug: editing || slugTouched ? draft.slug : slugFrom(e.target.value, 64) })} /></Field>
             <Field label="Dirección del tema" hint="Ejemplo: /topics/redes-electricas. La dirección se conserva al editar."><Input required maxLength={64} pattern="[a-z0-9]+(?:-[a-z0-9]+)*" readOnly={editing} value={draft.slug} onChange={(e) => { setSlugTouched(true); set({ ...draft, slug: e.target.value }); }} /></Field>
           </div>
           <Field label="Grupo"><Select value={draft.group} onChange={(e) => set({ ...draft, group: e.target.value === "genre" ? "genre" : "field" })}><option value="field">Área de cobertura</option><option value="genre">Tipo de contenido</option></Select></Field>
@@ -152,12 +166,21 @@ export default function EditorialAdmin() {
   return (
     <AdminPage title="Configuración editorial" subtitle="Gestiona fuentes, temas, el boletín semanal y la publicidad sin editar código.">
       <div className="space-y-5">
+        <nav aria-label="Secciones de configuración editorial" className="flex flex-wrap gap-2">
+          <ButtonLink to="/admin/sources/new" tone="primary">Agregar fuente</ButtonLink>
+          <ButtonLink to="#temas">Agregar tema</ButtonLink>
+          <ButtonLink to="#publicidad">Configurar publicidad</ButtonLink>
+          <ButtonLink to="#boletin">Configurar boletín</ButtonLink>
+        </nav>
         <Card title="Fuentes de noticias">
-          <p className="mb-3 text-[13px] text-ink-3">Agrega un RSS, previsualiza lo que se puede leer y revisa cómo quedó la fuente.</p>
-          <div className="flex flex-wrap gap-2"><ButtonLink to="/admin/sources/new" tone="primary">Agregar fuente</ButtonLink><ButtonLink to="/admin/sources">Ver fuentes</ButtonLink></div>
+          <p className="mb-3 text-[13px] text-ink-3">Agrega un RSS con el nombre del medio y el enlace. Previsualiza las notas antes de guardarlo y revisa el estado en el listado.</p>
+          <ButtonLink to="/admin/sources">Ver fuentes</ButtonLink>
         </Card>
-        <div className="grid items-start gap-5 xl:grid-cols-2"><NewsletterForm value={settings.newsletter} /><AdForm value={settings.ad} /></div>
-        <TopicEditor topics={settings.topics} tags={settings.tags} />
+        <div id="temas" className="scroll-mt-16"><TopicEditor topics={settings.topics} tags={settings.tags} /></div>
+        <div className="grid items-start gap-5 xl:grid-cols-2">
+          <div id="publicidad" className="scroll-mt-16"><AdForm value={settings.ad} /></div>
+          <div id="boletin" className="scroll-mt-16"><NewsletterForm value={settings.newsletter} /></div>
+        </div>
       </div>
     </AdminPage>
   );

@@ -5,6 +5,7 @@ import { ADMIN } from "@aihot/site";
 import { SIGN_IN_HOME } from "@aihot/contracts/admin";
 import { CATEGORY_KEYS } from "@aihot/contracts/taxonomy";
 import { UNSAFE_decodeViaTurboStream } from "react-router";
+import type { EditorialDisplay } from "@aihot/editorial-controls/types";
 import { fakeApi, startWebServer, type WebServer } from "./web-server.ts";
 
 let web: WebServer;
@@ -99,6 +100,38 @@ test("HTML and navigation share freshness; cookies do not personalize public res
   assert.equal(signedIn.headers.get("Set-Cookie"), null);
   assert.equal(await signedIn.text(), await plain.text());
   assert.ok(apiCookies.every((cookie) => !cookie));
+});
+
+test("AdSense's loader appears once in the head of the unfiltered homepage when its unit is selected", async () => {
+  let ad: EditorialDisplay["ad"] = null;
+  const site = await startWebServer(fakeApi((url) => {
+    if (url.pathname === "/api/site/editorial-display") return { signupUrl: "/boletin", ad };
+    if (url.pathname === "/api/site/timeline") return { filters: {}, cards: [], nextCursor: null, dayCounts: [], hot: null };
+  }));
+  const script = /<script\b[^>]*src="https:\/\/pagead2\.googlesyndication\.com\/pagead\/js\/adsbygoogle\.js\?client=ca-pub-7039079143625258"[^>]*>/g;
+  async function html(path: string) {
+    const res = await fetch(site.origin + path);
+    assert.equal(res.status, 200);
+    return res.text();
+  }
+  try {
+    assert.equal((await html("/")).match(script), null);
+    ad = { mode: "fixed", advertiser: "Patrocinio de ejemplo", text: "Mensaje", url: "https://example.test", action: "Leer" };
+    const fixed = await html("/");
+    assert.match(fixed, /Patrocinio de ejemplo/);
+    assert.match(fixed, /rel="sponsored noreferrer"/);
+    assert.equal(fixed.match(script), null);
+    ad = { mode: "adsense", slot: "0012345678" };
+    const home = await html("/");
+    const tags = home.match(/<head>.*?<\/head>/s)?.[0].match(script);
+    assert.ok(tags && tags.length === 1);
+    assert.match(tags[0]!, /\basync=""/);
+    assert.match(tags[0]!, /crossorigin="anonymous"/);
+    assert.match(home, /<ins\b[^>]+data-ad-slot="0012345678"/);
+    for (const path of [`/?category=${CATEGORY_KEYS.at(-1)}`, "/boletin"]) assert.equal((await html(path)).match(script), null);
+  } finally {
+    await site.stop();
+  }
 });
 
 test("missing routes cannot be hidden by a root-only request; errors and redirects stay uncached", async () => {

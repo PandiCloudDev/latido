@@ -1,6 +1,10 @@
 // Admin display helpers: Beijing wall-clock times, relative ages, compact numbers.
 import { beijingDate, beijingTime } from "@aihot/contracts/time";
 
+export function slugFrom(name: string, max: number): string {
+  return name.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, max).replace(/-$/g, "");
+}
+
 export function bj(iso: string | Date | null | undefined, withYear = false): string {
   if (!iso || Number.isNaN(new Date(iso).getTime())) return "—";
   const date = beijingDate(iso);

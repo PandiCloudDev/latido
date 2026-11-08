@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router";
 import type { Route } from "./+types/source-new";
 import type { AdminSourceCreated, AdminSourcePreview } from "@aihot/contracts/admin";
 import { useAdminAction } from "../../features/admin/action";
-import { bj } from "../../features/admin/format";
+import { bj, slugFrom } from "../../features/admin/format";
 import { KIND_LABEL, MODE_LABEL, SELECTION_CLASS_LABEL, TIER_LABEL } from "../../features/admin/labels";
 import { AdminPage, Button, Card, Empty, Field, Input, Select, Textarea } from "../../features/admin/ui";
 
@@ -24,6 +24,7 @@ export default function NewSource() {
   const navigate = useNavigate();
   const { run, pending } = useAdminAction();
   const [form, setForm] = useState({ id: "", name: "", kind: "rss", tier: "T2", selection_class: "", participation_mode: "editorial", interval_minutes: 30, first_party: false, site_fulltext: SOURCE_DEFAULTS.siteFulltext, syndicate_fulltext: false, tags: "" });
+  const [idEdited, setIdEdited] = useState(false);
   const [rssUrl, setRssUrl] = useState("");
   const [config, setConfig] = useState(JSON.stringify(TEMPLATES.rss, null, 2));
   const [error, setError] = useState<string | null>(null);
@@ -51,16 +52,21 @@ export default function NewSource() {
   };
 
   return (
-    <AdminPage title="Nueva fuente" subtitle="Revisa duplicados y previsualiza primero: prefiere protocolos estables como RSS o JSON; la fuente queda lista solo cuando la primera recolección trae notas reales. Para marcarla como fuente directa hace falta evidencia de quién la opera o enlaces oficiales cruzados.">
+    <AdminPage title="Nueva fuente" subtitle="Para añadir un RSS, escribe el nombre del medio y pega el enlace. Usa Previsualizar para comprobar qué notas trae antes de guardarlo.">
       <div className="grid gap-5 xl:grid-cols-[1fr_420px]">
         <Card title="Definición de la fuente">
           <div className="grid gap-4 sm:grid-cols-2">
-            <Field label="ID" hint="Minúsculas, números y guiones; no se puede cambiar después">
-              <Input value={form.id} onChange={(e) => setForm({ ...form, id: e.target.value.toLowerCase() })} placeholder="openai-blog" />
-            </Field>
             <Field label="Nombre">
-              <Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="OpenAI Blog" />
+              <Input value={form.name} maxLength={200} onChange={(e) => setForm({ ...form, name: e.target.value, id: idEdited ? form.id : slugFrom(e.target.value, 80) })} placeholder="Nombre del medio" />
             </Field>
+            <Field label="ID" hint="Se propone con el nombre. Usa 3 a 80 caracteres: minúsculas, números o guiones.">
+              <Input value={form.id} maxLength={80} onChange={(e) => { setIdEdited(true); setForm({ ...form, id: e.target.value.toLowerCase() }); }} placeholder="nombre-del-medio" />
+            </Field>
+            {form.kind === "rss" && (
+              <Field label="URL del RSS">
+                <Input type="url" value={rssUrl} onChange={(e) => { setRssUrl(e.target.value); setPreview(null); }} placeholder="https://medio.mx/feed.xml" />
+              </Field>
+            )}
             <Field label="Tipo">
               <Select
                 value={form.kind}
@@ -81,7 +87,7 @@ export default function NewSource() {
                 {Object.entries(MODE_LABEL).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
               </Select>
             </Field>
-            <Field label="Nivel" hint="Solo T1 es fuente directa">
+            <Field label="Nivel" hint="Usa T1 solo si puedes comprobar quién opera la fuente o enlazar su sitio oficial.">
               <Select value={form.tier} onChange={(e) => setForm({ ...form, tier: e.target.value })}>
                 {Object.entries(TIER_LABEL).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
               </Select>
@@ -108,11 +114,6 @@ export default function NewSource() {
             </div>
           </div>
           <div className="mt-4">
-            {form.kind === "rss" && (
-              <Field label="URL del RSS" hint="Pega la dirección del feed y usa Previsualizar antes de crear la fuente.">
-                <Input type="url" value={rssUrl} onChange={(e) => { setRssUrl(e.target.value); setPreview(null); }} placeholder="https://medio.mx/feed.xml" />
-              </Field>
-            )}
             {form.kind === "rss" ? (
               <details className="mt-3">
                 <summary className="cursor-pointer text-[13px] text-ink-3">Opciones avanzadas de RSS</summary>
@@ -149,7 +150,7 @@ export default function NewSource() {
             <Button
               tone="primary"
               busy={pending === "create"}
-              disabled={!form.id || !form.name}
+              disabled={!/^[a-z0-9][a-z0-9-]{2,79}$/.test(form.id) || !form.name.trim()}
               onClick={async () => {
                 const c = parsed();
                 if (!c) return;
