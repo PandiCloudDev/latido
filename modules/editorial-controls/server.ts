@@ -12,7 +12,7 @@ import {
   newsletterCounts, newsletterSettings, purgeNewsletter, requestSubscription, sendLatestEdition, unsubscribe,
   unsubscribeSchema,
 } from "./newsletter.ts";
-import type { AdSettings, EditorialDisplay, EditorialSettings, ManagedTopic, NewsletterSettings } from "./types.ts";
+import { ADSENSE_PUBLISHER, type AdSettings, type EditorialDisplay, type EditorialSettings, type ManagedTopic, type NewsletterSettings } from "./types.ts";
 
 const keys = {
   ad: "editorial.ad.home",
@@ -23,7 +23,7 @@ const tags = [...new Set<string>([...CATEGORY_TAGS, ...TOPIC_TAGS])].sort((a, b)
 const allowedTags = new Set(tags);
 const staticSlugs = new Set(TOPICS.map((topic) => topic.slug));
 
-const emptyAd: AdSettings = { enabled: false, advertiser: "", text: "", url: "", action: "" };
+const emptyAd: AdSettings = { enabled: false, mode: "fixed", advertiser: "", text: "", url: "", action: "", adsenseSlot: "" };
 
 const text = (max: number) => z.string().trim().max(max);
 const httpsUrl = (value: string) => {
@@ -41,11 +41,14 @@ const newsletterSchema = z.object({
 }).refine((v) => !v.enabled || v.verified, "Antes de activar, verifica el formulario, la confirmación, la baja y el aviso de privacidad.");
 const adSchema = z.object({
   enabled: z.boolean(),
+  mode: z.enum(["fixed", "adsense"]).default("fixed"),
   advertiser: text(80),
   text: text(220),
   url: optionalUrl,
   action: text(45),
-}).refine((v) => !v.enabled || !!(v.advertiser && v.text && v.url && v.action), "Completa todos los campos antes de mostrar la publicidad.");
+  adsenseSlot: text(20).refine((v) => v === "" || /^\d{1,20}$/.test(v), "Escribe solo el número que aparece en data-ad-slot.").default(""),
+}).refine((v) => !v.enabled || v.mode !== "fixed" || !!(v.advertiser && v.text && v.url && v.action), "Completa los campos del anuncio fijo antes de mostrarlo.")
+  .refine((v) => !v.enabled || v.mode !== "adsense" || !!v.adsenseSlot, "Agrega el número de la unidad de AdSense antes de mostrarla.");
 const topicSchema = z.object({
   slug: text(64).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "Usa minúsculas, números y guiones."),
   name: text(80).min(1),
@@ -58,6 +61,11 @@ const topicSchema = z.object({
 async function setting<T>(key: string, fallback: T, db: Db = sql): Promise<T> {
   const [row] = await db<{ value: T }[]>`SELECT value FROM settings WHERE key = ${key}`;
   return row?.value ?? fallback;
+}
+
+async function adSettings(): Promise<AdSettings> {
+  const result = adSchema.safeParse(await setting(keys.ad, emptyAd));
+  return result.success ? result.data : emptyAd;
 }
 
 async function update<T>(key: string, initial: T, actor: string, change: (before: T) => T): Promise<T> {
@@ -99,9 +107,11 @@ export function saveTopic(input: unknown, actor: string, create: boolean) {
 }
 
 export async function readEditorialDisplay(): Promise<EditorialDisplay> {
-  const [newsletter, ad] = await Promise.all([newsletterSettings(), setting(keys.ad, emptyAd)]);
-  const { enabled, ...copy } = ad;
-  return { signupUrl: canSubscribe(newsletter) ? "/boletin" : null, ad: enabled ? copy : null };
+  const [newsletter, ad] = await Promise.all([newsletterSettings(), adSettings()]);
+  const { enabled, mode, advertiser, text, url, action, adsenseSlot } = ad;
+  const placement: EditorialDisplay["ad"] = !enabled ? null : mode === "fixed"
+    ? { mode, advertiser, text, url, action } : { mode, slot: adsenseSlot };
+  return { signupUrl: canSubscribe(newsletter) ? "/boletin" : null, ad: placement };
 }
 
 export const EDITORIAL_SERVER = defineServerModule({
@@ -116,6 +126,8 @@ export const EDITORIAL_SERVER = defineServerModule({
     })),
   },
   http(app) {
+    app.get("/ads.txt", (_req, reply) => reply.type("text/plain; charset=utf-8").header("Cache-Control", "public, max-age=3600")
+      .send(`google.com, ${ADSENSE_PUBLISHER}, DIRECT, f08c47fec0942fa0\n`));
     app.get("/api/site/editorial-display", async (_req, reply) => {
       reply.header("Cache-Control", "public, max-age=30, s-maxage=30, must-revalidate");
       return readEditorialDisplay();
@@ -143,7 +155,7 @@ export const EDITORIAL_SERVER = defineServerModule({
     });
     app.get("/api/admin/editorial", adminHandler(async (): Promise<EditorialSettings> => {
       const [newsletter, ad, topics, counts] = await Promise.all([
-        newsletterSettings(), setting(keys.ad, emptyAd), setting<ManagedTopic[]>(keys.topics, []), newsletterCounts(),
+        newsletterSettings(), adSettings(), setting<ManagedTopic[]>(keys.topics, []), newsletterCounts(),
       ]);
       return { newsletter: { ...newsletter, smtpConfigured: smtpConfigured(), counts }, ad, topics, tags };
     }));
