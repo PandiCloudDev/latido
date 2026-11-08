@@ -30,7 +30,7 @@ function AdSenseSlot({ slot }: { slot: string }) {
     if (requested.current) return;
     requested.current = true;
     const ads = window as Window & { adsbygoogle?: { push: (request: Record<string, never>) => unknown } };
-    try { (ads.adsbygoogle ??= []).push({}); } catch { /* Ad delivery must not interrupt the page. */ }
+    try { (ads.adsbygoogle ??= new Array<Record<string, never>>()).push({}); } catch { /* Ad delivery must not interrupt the page. */ }
   }, []);
   return (
     <aside aria-label="Publicidad" className="mb-5 min-w-0 rounded-card border border-line bg-surface px-4 py-4 lg:px-5">
