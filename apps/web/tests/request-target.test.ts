@@ -50,3 +50,42 @@ test("origin-form slashes keep the router's homepage and unknown-route semantics
   assert.equal(web.logs(), "");
   assert.ok(upstreamPaths.every((path) => path.startsWith("/api/site/")));
 });
+
+test("newsletter forms retain their public HTTPS origin behind a trusted proxy", async () => {
+  const submissions: string[] = [];
+  const proxied = await startWebServer(fakeApi(async (url, _res, req) => {
+    if (!url.pathname.startsWith("/api/site/newsletter/")) return;
+    for await (const _ of req) { /* consume the form body */ }
+    submissions.push(url.pathname);
+    return { ok: true };
+  }), { TRUST_PROXY: "true" });
+  const publicOrigin = proxied.origin.replace("http:", "https:");
+  function submit(server: WebServer, path: string, origin: string) {
+    return fetch(server.origin + path, {
+      method: "POST",
+      headers: { origin, "x-forwarded-proto": "https", "sec-fetch-site": "same-origin" },
+      body: new URLSearchParams({ email: "reader@example.org", token: "fixture" }),
+    });
+  }
+  try {
+    for (const [path, message] of [
+      ["/boletin", "revisa tu bandeja"],
+      ["/boletin.data", "revisa tu bandeja"],
+      ["/boletin/confirmar.data", "Tu suscripción está confirmada"],
+      ["/boletin/baja.data", "La baja está lista"],
+    ] as const) {
+      const res = await submit(proxied, path, publicOrigin);
+      assert.equal(res.status, 200, `${path}: ${proxied.logs()}`);
+      assert.ok((await res.text()).includes(message));
+    }
+    const foreign = await submit(proxied, "/boletin.data", "https://other.example");
+    assert.equal(foreign.status, 400);
+    await foreign.text();
+    const spoofed = await submit(web, "/boletin.data", web.origin.replace("http:", "https:"));
+    assert.equal(spoofed.status, 400);
+    await spoofed.text();
+    assert.deepEqual(submissions, ["signup", "signup", "confirm", "unsubscribe"].map((intent) => `/api/site/newsletter/${intent}`));
+  } finally {
+    await proxied.stop();
+  }
+});
