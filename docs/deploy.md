@@ -53,7 +53,7 @@ Después arranca con el perfil HTTPS, y Caddy solicitará y renovará el certifi
 docker compose --profile https up -d --build
 ```
 
-Si ya tienes Nginx, no necesitas Caddy: haz proxy inverso hacia `http://127.0.0.1:3000` con `proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;` y `proxy_set_header X-Forwarded-Proto $scheme;` (el inicio de sesión del panel lo usa para saber si la conexión es HTTPS; sin él la cookie pierde el atributo Secure) y define `TRUST_PROXY=true` en `.env`. `SITE_URL` debe ser la dirección que usan los lectores, porque de ella salen los enlaces, el RSS, las imágenes para compartir y el MCP.
+Si ya tienes Nginx, no necesitas Caddy: haz proxy inverso hacia `http://127.0.0.1:3000` con `proxy_set_header Host $http_host;`, `proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;` y `proxy_set_header X-Forwarded-Proto $scheme;`, y define `TRUST_PROXY=true` en `.env`. Así el sitio reconoce la dirección HTTPS original al validar el origen de los formularios y al marcar como segura la cookie del panel. `SITE_URL` debe ser la dirección que usan los lectores, porque de ella salen los enlaces, el RSS, las imágenes para compartir y el MCP.
 
 El MCP acepta por defecto el host de `SITE_URL`, además de `localhost`, `127.0.0.1` y `[::1]`. Otros hosts se agregan en `MCP_ALLOWED_HOSTS`, separados por comas, por ejemplo `extra.example:8443,[2001:db8::1]`. No distingue mayúsculas, las IPv6 van entre corchetes y se admite un puerto decimal entre 0 y 65535, que se ignora al comparar. Las entradas con ruta, usuario o puerto inválido no tienen efecto; alias como `127.1` deben listarse explícitamente, y esta configuración solo afecta la validación de Host, sin ampliar los orígenes permitidos para el navegador.
 

@@ -6,8 +6,8 @@ import { stat } from "node:fs/promises";
 import { createServer } from "node:http";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
-import { createRequestListener } from "@react-router/node";
-import type { ServerBuild } from "react-router";
+import { createRequestListener } from "@remix-run/node-fetch-server";
+import { createRequestHandler, type ServerBuild } from "react-router";
 import { isApiOwned, resolveRedirect } from "@aihot/contracts/http-policy";
 import { BROWSER_MAX_SECONDS } from "./app/lib/api.server.ts";
 import { proxyToApi } from "./app/lib/api-proxy.server.ts";
@@ -16,8 +16,8 @@ import { logError } from "./app/lib/errors.server.ts";
 const PORT = Number(process.env.WEB_PORT || 3000);
 const HOST = process.env.WEB_HOST || "127.0.0.1";
 /**
- * Whether a reverse proxy in front (Caddy, nginx) records the visitor in X-Forwarded-For. Without one
- * the header is never believed: a visitor could name any address and slip past the api's per-visitor
+ * Whether a reverse proxy in front (Caddy, nginx) sets the visitor address and request scheme.
+ * Without one the headers are never believed: a visitor could name any address and slip past the api's per-visitor
  * limits (sign-in attempts, feedback).
  */
 const TRUST_PROXY = process.env.TRUST_PROXY === "true";
@@ -47,7 +47,12 @@ const build: ServerBuild = await import(pathToFileURL(path.resolve(import.meta.d
 const routes = Object.fromEntries(Object.entries(build.routes).map(([id, route]) => [id,
   route?.module.default && !route.module.loader ? { ...route, module: { ...route.module, loader: () => null } } : route,
 ]));
-const ssr = createRequestListener({ build: { ...build, routes }, mode: "production" });
+const render = createRequestHandler({ ...build, routes }, "production");
+const renderPage = (request: Request) => render(request);
+const ssr = createRequestListener(renderPage);
+// The HTTPS proxy connects over HTTP. Restore only its scheme, so the router can compare the
+// form's Origin against the public URL without trusting a visitor-supplied forwarded host.
+const ssrHttps = createRequestListener(renderPage, { protocol: "https:" });
 
 class BadRequest extends Error {}
 
@@ -161,7 +166,7 @@ async function handle(req: import("node:http").IncomingMessage, res: import("nod
 
   if ((req.method === "GET" || req.method === "HEAD") && pathname.includes(".") && (await serveStatic(pathname, res))) return;
   pageResponse(req, res);
-  return ssr(req, res);
+  return (TRUST_PROXY && req.headers["x-forwarded-proto"] === "https" ? ssrHttps : ssr)(req, res);
 }
 
 process.on("unhandledRejection", (reason) => {
