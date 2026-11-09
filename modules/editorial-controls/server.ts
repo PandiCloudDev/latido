@@ -6,10 +6,10 @@ import { CATEGORY_TAGS, TOPIC_TAGS } from "@aihot/backend/editorial/vocabulary";
 import { defineServerModule } from "@aihot/backend/modules";
 import { TOPICS } from "@aihot/backend/publication/topics";
 import { adminHandler } from "../../apps/api/src/routes/admin-auth.ts";
-import { sendMail, smtpConfigured } from "./mail.ts";
+import { smtpConfigured } from "./mail.ts";
 import {
   canSubscribe, confirmationSchema, confirmSubscription, emailSchema, emptyNewsletter, NEWSLETTER_KEY,
-  newsletterCounts, newsletterSettings, purgeNewsletter, requestSubscription, sendLatestEdition, unsubscribe,
+  newsletterCounts, newsletterSettings, purgeNewsletter, requestSubscription, sendLatestEdition, sendTestEdition, unsubscribe,
   unsubscribeSchema,
 } from "./newsletter.ts";
 import { ADSENSE_PUBLISHER, type AdSettings, type EditorialDisplay, type EditorialSettings, type ManagedTopic, type NewsletterSettings } from "./types.ts";
@@ -163,7 +163,8 @@ export const EDITORIAL_SERVER = defineServerModule({
       const { email } = z.object({ email: emailSchema }).parse(req.body);
       if (!smtpConfigured()) throw new Conflict("Falta configurar el remitente SMTP.");
       try {
-        await sendMail({ to: email, subject: "Latido: prueba de envío", text: "Este correo comprueba el remitente del boletín de Latido. No añade esta dirección a la lista." });
+        // Sends the newest weekly as subscribers will get it, so the format itself is what gets checked.
+        await sendTestEdition(email);
       } catch {
         throw new Conflict("El servidor de correo no aceptó la prueba. Revisa la configuración del remitente.");
       }

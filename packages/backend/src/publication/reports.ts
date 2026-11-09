@@ -314,6 +314,38 @@ async function leadCover(itemId: string): Promise<{ url: string; srcSet?: string
   return { url, ...(srcSet ? { srcSet } : {}), width: typeof row.m.width === "number" ? row.m.width : null, height: typeof row.m.height === "number" ? row.m.height : null };
 }
 
+export interface ItemPicture {
+  /** Absolute signed proxy URL, usable outside the site (the newsletter). */
+  url: string;
+  width: number | null;
+  height: number | null;
+}
+
+/**
+ * A picture for each listed item, for surfaces that leave the site (the weekly newsletter): the
+ * item's own first sizeable image as an absolute signed proxy URL. Items without one are left out.
+ * The signature outlives a newsletter's usual reading window.
+ */
+export async function itemPictures(ids: string[], lifetimeSeconds = 14 * 24 * 3600): Promise<Map<string, ItemPicture>> {
+  const unique = [...new Set(ids.filter(Boolean))];
+  const out = new Map<string, ItemPicture>();
+  if (!unique.length) return out;
+  const now = Date.now();
+  const rows = await sql<{ id: string; m: { url: string; width?: number; height?: number } }[]>`
+    SELECT p.article_id AS id, img.m
+    FROM publications p JOIN articles a ON a.id = p.article_id
+    CROSS JOIN LATERAL (
+      SELECT m FROM jsonb_array_elements(coalesce(a.media, '[]'::jsonb)) m
+      WHERE m->>'kind' = 'image' AND coalesce((m->>'width')::numeric, 800) >= 480 LIMIT 1
+    ) img
+    WHERE p.article_id IN ${sql(unique)} AND ${listedCondition(new Date())}`;
+  for (const r of rows) {
+    const url = proxiedImage(r.m.url, "card", true, now, lifetimeSeconds);
+    if (url) out.set(r.id, { url, width: typeof r.m.width === "number" ? r.m.width : null, height: typeof r.m.height === "number" ? r.m.height : null });
+  }
+  return out;
+}
+
 function readingMinutes(text: string): number {
   return Math.max(1, Math.round([...text].length / 450));
 }

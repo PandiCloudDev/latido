@@ -8,7 +8,8 @@ import { listTopicDefinitions } from "@aihot/backend/publication/topics";
 import { buildApp } from "../apps/api/src/app.ts";
 import { EDITORIAL_SERVER, readEditorialDisplay, saveAd, saveTopic } from "../modules/editorial-controls/server.ts";
 import type { Mail } from "../modules/editorial-controls/mail.ts";
-import { confirmSubscription, deliverIssue, newsletterCounts, purgeNewsletter, requestSubscription, unsubscribe } from "../modules/editorial-controls/newsletter.ts";
+import { renderIssueEmail, type EmailEntry, type EmailIssue } from "../modules/editorial-controls/issue-email.ts";
+import { confirmSubscription, deliverIssue, newsletterCounts, purgeNewsletter, requestSubscription, selectEmailSections, unsubscribe } from "../modules/editorial-controls/newsletter.ts";
 
 after(closeDb);
 
@@ -44,6 +45,61 @@ test("weekly email requires confirmation, delivers at most once, and respects un
   assert.deepEqual(await deliverIssue({ ...issue, key: "2026-W48" }, mailer), { sent: 0, failed: 0 });
   const [remaining] = await sql<{ count: number }[]>`SELECT count(*)::int AS count FROM newsletter_subscribers`;
   assert.equal(remaining?.count, 0);
+});
+
+test("the weekly email is an HTML newsletter with every theme and its pictures", () => {
+  const themes = ["Inteligencia artificial", "Productos y gadgets", "Negocios y startups", "Regulación y política digital", "Ciberseguridad", "Videojuegos"];
+  const entry = (theme: number, n: number): EmailEntry => ({
+    id: `item-${theme}-${n}`,
+    title: `Tema ${theme} · nota ${n}`,
+    summary: `Resumen de la nota ${n} del tema ${theme}.`,
+    sourceName: `Fuente ${theme}`,
+    url: `https://latido.news/items/item-${theme}-${n}`,
+    imageUrl: `https://latido.news/api/img-proxy?u=https%3A%2F%2Fexample.test%2F${theme}${n}.jpg&mode=card&exp=1&sig=abc`,
+    publishedAt: new Date("2026-11-06T15:00:00Z"),
+    firstParty: n === 1,
+    highlight: n === 1 && theme === 1,
+  });
+  const sections = themes.map((label, t) => ({ label, entries: [1, 2, 3, 4, 5].map((n) => entry(t + 1, n)) }));
+  const lead = sections[0]!.entries[0]!;
+  const picked = selectEmailSections(sections.flatMap((s) => s.entries.map((entry) => ({ label: s.label, entry }))), lead.id);
+  assert.equal(picked.length, themes.length, "todos los temas deben llegar al correo");
+  assert.equal(picked.reduce((n, s) => n + s.entries.length, 0), 19, "además de la portada, 19 notas");
+  assert.ok(!picked.some((s) => s.entries.some((e) => e.id === lead.id)), "la portada no se repite en las listas");
+  assert.ok(!picked.some((s) => s.entries.some((e) => e.id === "item-2-4")), "el correo se corta en 20 notas");
+  const issue: EmailIssue = {
+    key: "2026-W45",
+    number: 1,
+    headline: lead.title,
+    overview: "La semana en tecnología, negocios y movilidad.",
+    leadUrl: lead.url,
+    coverUrl: "https://latido.news/api/img-proxy?u=https%3A%2F%2Fexample.test%2Fcover.jpg&mode=full&exp=1&sig=abc",
+    coverCaption: null,
+    generatedAt: new Date("2026-11-09T16:00:00Z"),
+    readingMinutes: 8,
+    editionUrl: "https://latido.news/weekly/2026-W45",
+    entryCount: 20,
+    sections: picked,
+  };
+  const { subject, html, text } = renderIssueEmail(issue, { unsubscribeUrl: "https://latido.news/boletin/baja#token" });
+  assert.match(subject, /^Latido semanal: Tema 1 · nota 1/);
+  assert.match(html, /^<!DOCTYPE html>/);
+  assert.match(html, /LATIDO/);
+  assert.match(html, /Boletín semanal/);
+  for (const label of themes) assert.ok(html.includes(label), `falta el tema ${label}`);
+  // One entry per theme each round; the lead is the cover, so 19 more fill the 20.
+  assert.equal((html.match(/Tema \d · nota /g) ?? []).length, 20);
+  assert.ok(!html.includes("Tema 2 · nota 4"), "el correo no debe pasar de 20 notas");
+  assert.ok(html.includes("https://latido.news/api/img-proxy?u=https%3A%2F%2Fexample.test%2Fcover.jpg&amp;mode=full"));
+  assert.ok(html.includes("https://latido.news/api/img-proxy?u=https%3A%2F%2Fexample.test%2F21.jpg&amp;mode=card"));
+  assert.ok(html.includes("https://latido.news/items/item-1-1"));
+  assert.match(html, /Cancelar suscripción/);
+  assert.match(html, /https:\/\/latido\.news\/boletin\/baja#token/);
+  assert.match(text, /Tema 6 · nota 3/);
+  assert.match(text, /Cancelar suscripción/);
+  const unsafe = renderIssueEmail({ ...issue, headline: '<script>alert("x")</script>' }, { unsubscribeUrl: "https://latido.news/boletin/baja#token" });
+  assert.ok(!unsafe.html.includes("<script>"));
+  assert.ok(unsafe.html.includes("&lt;script&gt;"));
 });
 
 test("public signup starts closed and the editorial controls require authentication", async () => {
