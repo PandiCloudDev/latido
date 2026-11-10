@@ -3901,6 +3901,7 @@
         }
       },
       "tier": "T1",
+      "owner_entity_id": "amazon",
       "participation_mode": "editorial",
       "interval_minutes": 180,
       "tags": [
@@ -3981,6 +3982,7 @@
         }
       },
       "tier": "T1",
+      "owner_entity_id": "microsoft",
       "participation_mode": "editorial",
       "interval_minutes": 180,
       "tags": [
@@ -4001,6 +4003,7 @@
         }
       },
       "tier": "T1",
+      "owner_entity_id": "nvidia",
       "participation_mode": "editorial",
       "interval_minutes": 180,
       "tags": [
