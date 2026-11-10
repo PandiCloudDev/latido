@@ -113,7 +113,8 @@ export default function NewsletterSignup() {
               : <p className="text-[15px] text-ink-3">{intent === "confirm" ? "Confirma que quieres recibir las ediciones que elegiste." : "Confirma que quieres dejar de recibir los boletines."}</p>}
             {intent === "preferences" && <>
               <label className="block text-[14px] font-bold text-ink" htmlFor="preferences-frequency">Qué quieres recibir</label>
-              <select id="preferences-frequency" name="frequency" defaultValue="daily" className="block min-h-11 w-full rounded-control border border-line bg-surface px-3 text-base text-ink">
+              <select id="preferences-frequency" name="frequency" defaultValue="" required className="block min-h-11 w-full rounded-control border border-line bg-surface px-3 text-base text-ink">
+                <option value="" disabled>Elige qué quieres recibir</option>
                 {frequencyOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
               </select>
             </>}
