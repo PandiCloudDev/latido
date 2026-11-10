@@ -9,7 +9,7 @@
 
 Nota inicial:
 
-> Puedes leer Latido sin registrarte. Tratamos la información necesaria para que el sitio funcione y para atender tus comentarios. Si eliges recibir el boletín semanal, usamos tu dirección de correo para confirmar tu solicitud y enviarte las ediciones. No vendemos datos personales.
+> Puedes leer Latido sin registrarte. Tratamos la información necesaria para que el sitio funcione y para atender tus comentarios. Si eliges recibir el boletín diario, el semanal o ambos, usamos tu dirección de correo para confirmar tu solicitud y enviarte las ediciones que elegiste. No vendemos datos personales.
 
 ## 1. Responsable
 
@@ -23,13 +23,13 @@ Tus notas guardadas, el historial de lectura, el modo claro u oscuro, las búsqu
 
 Lo que envías desde la página de comentarios, el correo opcional, la dirección de la página desde la que escribes y la captura que decidas adjuntar se guardan en el servidor con la única finalidad de atender tu comentario. Para evitar abusos se guarda además un identificador calculado a partir de la dirección de red y el tipo de navegador, que no permite recuperar esos datos y que se usa para limitar envíos y bloquear fuentes de abuso.
 
-## 4. Boletín semanal por correo
+## 4. Boletines diario y semanal por correo
 
-Si solicitas el boletín, Latido guarda tu dirección de correo, la fecha de solicitud y el estado de confirmación. Antes de incluirte en la lista activa, te enviamos un enlace para que confirmes tu suscripción. El enlace vence después de 48 horas y las solicitudes vencidas se eliminan en la limpieza diaria.
+Si solicitas los boletines, Latido guarda tu dirección de correo, la fecha de solicitud, el estado de confirmación y qué ediciones elegiste (diaria, semanal o ambas). Antes de incluirte en la lista activa, te enviamos un enlace para que confirmes tu suscripción. El enlace vence después de 48 horas y las solicitudes vencidas se eliminan en la limpieza diaria.
 
-Usamos tu dirección para enviar el boletín semanal y eliminamos en la limpieza diaria los registros de intentos de entrega con más de 90 días. Hostinger Mail recibe la dirección y el mensaje necesarios para entregar el correo. La lista de suscripciones se administra y se guarda en el servidor de Latido.
+Usamos tu dirección para enviar las ediciones que elegiste y eliminamos en la limpieza diaria los registros de intentos de entrega con más de 90 días. Hostinger Mail recibe la dirección y el mensaje necesarios para entregar el correo. La lista de suscripciones se administra y se guarda en el servidor de Latido.
 
-Puedes cancelar la suscripción desde el enlace incluido en cualquier edición. La baja elimina tu dirección de la lista activa y el registro de entrega asociado. Si una copia de respaldo anterior contiene tu dirección, permanecerá en esa copia hasta que se retire el respaldo. Si restauramos una copia, verificaremos las bajas posteriores antes de reanudar los envíos.
+Puedes cambiar lo que recibes o cancelar la suscripción desde los enlaces incluidos en cualquier edición. La baja elimina tu dirección de la lista activa y el registro de entrega asociado. Si una copia de respaldo anterior contiene tu dirección, permanecerá en esa copia hasta que se retire el respaldo. Si restauramos una copia, verificaremos las bajas posteriores antes de reanudar los envíos.
 
 ## 5. Registros del servidor
 

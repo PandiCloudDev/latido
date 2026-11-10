@@ -3,6 +3,10 @@ export interface NewsletterSettings {
   enabledAt: string | null;
 }
 
+/** What a confirmed subscriber receives. Existing rows default to the weekly edition. */
+export type NewsletterFrequency = "daily" | "weekly" | "both";
+export const NEWSLETTER_FREQUENCIES: readonly NewsletterFrequency[] = ["daily", "weekly", "both"];
+
 export interface FixedAd {
   advertiser: string;
   text: string;

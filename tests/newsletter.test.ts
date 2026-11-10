@@ -9,7 +9,7 @@ import { buildApp } from "../apps/api/src/app.ts";
 import { EDITORIAL_SERVER, readEditorialDisplay, saveAd, saveTopic } from "../modules/editorial-controls/server.ts";
 import type { Mail } from "../modules/editorial-controls/mail.ts";
 import { renderIssueEmail, type EmailEntry, type EmailIssue } from "../modules/editorial-controls/issue-email.ts";
-import { confirmSubscription, deliverIssue, newsletterCounts, purgeNewsletter, requestSubscription, selectEmailSections, unsubscribe } from "../modules/editorial-controls/newsletter.ts";
+import { confirmSubscription, deliverIssue, newsletterCounts, purgeNewsletter, requestSubscription, selectEmailSections, unsubscribe, updatePreferences } from "../modules/editorial-controls/newsletter.ts";
 
 after(closeDb);
 
@@ -45,6 +45,36 @@ test("weekly email requires confirmation, delivers at most once, and respects un
   assert.deepEqual(await deliverIssue({ ...issue, key: "2026-W48" }, mailer), { sent: 0, failed: 0 });
   const [remaining] = await sql<{ count: number }[]>`SELECT count(*)::int AS count FROM newsletter_subscribers`;
   assert.equal(remaining?.count, 0);
+});
+
+test("daily and weekly subscriptions only receive the edition they chose, and preferences change", async () => {
+  const out: Mail[] = [];
+  const mailer = async (mail: Mail) => { out.push(mail); };
+  await requestSubscription("daily@example.test", mailer, "daily");
+  await requestSubscription("weekly@example.test", mailer, "weekly");
+  for (const mail of out) {
+    const token = mail.text.match(/\/confirmar#([\w-]+)/)?.[1];
+    assert.ok(token);
+    assert.equal(await confirmSubscription(token), true);
+  }
+  out.length = 0;
+  const daily = { key: "2026-11-10", generatedAt: new Date(Date.now() + 1000), headline: "El día en Latido", leadParagraph: "Resumen del día.", sections: [] };
+  assert.deepEqual(await deliverIssue(daily, mailer, null, "daily"), { sent: 1, failed: 0 });
+  assert.deepEqual(out.map((m) => m.to), ["daily@example.test"]);
+  assert.match(out[0]!.subject, /^Latido diario:/);
+  out.length = 0;
+  const weekly = { key: "2026-W46", generatedAt: new Date(Date.now() + 1000), headline: "La semana en Latido", leadParagraph: null, sections: [] };
+  assert.deepEqual(await deliverIssue(weekly, mailer, null, "weekly"), { sent: 1, failed: 0 });
+  assert.deepEqual(out.map((m) => m.to), ["weekly@example.test"]);
+  assert.match(out[0]!.subject, /^Latido semanal:/);
+
+  const [dailyRow] = await sql<{ unsubscribe_key: string }[]>`SELECT unsubscribe_key FROM newsletter_subscribers WHERE email = 'daily@example.test'`;
+  assert.equal(await updatePreferences(dailyRow!.unsubscribe_key, "weekly"), true);
+  const [changed] = await sql<{ frequency: string }[]>`SELECT frequency FROM newsletter_subscribers WHERE email = 'daily@example.test'`;
+  assert.equal(changed?.frequency, "weekly");
+  await unsubscribe(dailyRow!.unsubscribe_key);
+  const [weeklyRow] = await sql<{ unsubscribe_key: string }[]>`SELECT unsubscribe_key FROM newsletter_subscribers WHERE email = 'weekly@example.test'`;
+  await unsubscribe(weeklyRow!.unsubscribe_key);
 });
 
 test("the weekly email is an HTML newsletter with every theme and its pictures", () => {
@@ -100,6 +130,45 @@ test("the weekly email is an HTML newsletter with every theme and its pictures",
   const unsafe = renderIssueEmail({ ...issue, headline: '<script>alert("x")</script>' }, { unsubscribeUrl: "https://latido.news/boletin/baja#token" });
   assert.ok(!unsafe.html.includes("<script>"));
   assert.ok(unsafe.html.includes("&lt;script&gt;"));
+});
+
+test("the daily email uses daily labels and offers the preferences link", () => {
+  const issue: EmailIssue = {
+    kind: "daily",
+    key: "2026-11-10",
+    number: null,
+    headline: "Lo que pasó ayer",
+    overview: "El resumen del día anterior.",
+    leadUrl: "https://latido.news/daily/2026-11-10",
+    coverUrl: null,
+    coverCaption: null,
+    generatedAt: new Date("2026-11-10T14:00:00Z"),
+    readingMinutes: 5,
+    editionUrl: "https://latido.news/daily/2026-11-10",
+    entryCount: 1,
+    sections: [{ label: "Energía", entries: [{
+      id: "item-1",
+      title: "Una nota del día",
+      summary: "Resumen de la nota.",
+      sourceName: "Fuente",
+      url: "https://latido.news/items/item-1",
+      imageUrl: null,
+      publishedAt: new Date("2026-11-10T13:00:00Z"),
+      firstParty: false,
+      highlight: true,
+    }] }],
+  };
+  const { subject, html, text } = renderIssueEmail(issue, {
+    unsubscribeUrl: "https://latido.news/boletin/baja#token",
+    preferencesUrl: "https://latido.news/boletin/preferencias#token",
+  });
+  assert.match(subject, /^Latido diario: Lo que pasó ayer/);
+  assert.match(html, /Boletín diario/);
+  assert.match(html, /Lo más importante del día/);
+  assert.match(html, /Cambiar preferencias/);
+  assert.match(html, /https:\/\/latido\.news\/boletin\/preferencias#token/);
+  assert.match(text, /LATIDO · BOLETÍN DIARIO/);
+  assert.match(text, /Cambiar preferencias: https:\/\/latido\.news\/boletin\/preferencias#token/);
 });
 
 test("public signup starts closed and the editorial controls require authentication", async () => {

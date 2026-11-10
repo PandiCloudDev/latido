@@ -2,15 +2,20 @@ import { createHash, randomBytes, randomUUID } from "node:crypto";
 import { z } from "zod";
 import { config } from "@aihot/backend/config";
 import { sql } from "@aihot/backend/db";
-import { itemUrl, periodUrl } from "@aihot/backend/publication/links";
+import { itemUrl, dailyUrl, periodUrl } from "@aihot/backend/publication/links";
 import { feedIssues, itemPictures, loadReport, type FeedIssue } from "@aihot/backend/publication/reports";
 import type { ReportCitation, ReportDetail } from "@aihot/contracts/site";
 import { renderIssueEmail, type EmailEntry, type EmailIssue, type EmailSection } from "./issue-email.ts";
 import { sendMail, smtpConfigured, type Mailer } from "./mail.ts";
-import type { NewsletterSettings } from "./types.ts";
+import { NEWSLETTER_FREQUENCIES, type NewsletterFrequency, type NewsletterSettings } from "./types.ts";
 
 export const NEWSLETTER_KEY = "editorial.newsletter";
 export const emptyNewsletter: NewsletterSettings = { enabled: false, enabledAt: null };
+export const newsletterFrequencySchema = z.enum(NEWSLETTER_FREQUENCIES as [NewsletterFrequency, ...NewsletterFrequency[]]);
+export type DeliveryKind = "daily" | "weekly";
+
+const frequencyLabel = (frequency: NewsletterFrequency) => frequency === "daily" ? "boletín diario"
+  : frequency === "weekly" ? "boletín semanal" : "boletines diario y semanal";
 
 export async function newsletterSettings(): Promise<NewsletterSettings> {
   const [row] = await sql<{ value: NewsletterSettings }[]>`SELECT value FROM settings WHERE key = ${NEWSLETTER_KEY}`;
@@ -36,8 +41,9 @@ function logMailFailure(message: string) {
   console.warn(`[newsletter] ${message}`);
 }
 
-export async function requestSubscription(input: string, mailer: Mailer = sendMail): Promise<void> {
+export async function requestSubscription(input: string, mailer: Mailer = sendMail, frequency: NewsletterFrequency = "weekly"): Promise<void> {
   const email = emailSchema.parse(input);
+  const selected = newsletterFrequencySchema.parse(frequency);
   const token = randomBytes(32).toString("base64url");
   const confirmationHash = hash(token);
   const queued = await sql.begin(async (tx) => {
@@ -47,9 +53,9 @@ export async function requestSubscription(input: string, mailer: Mailer = sendMa
       SELECT count(*) >= 30 AS limited FROM newsletter_subscribers WHERE requested_at > now() - interval '15 minutes'`;
     if (rate?.limited) return false;
     const changed = await tx`
-      INSERT INTO newsletter_subscribers (id, email, confirmation_hash, unsubscribe_key)
-      VALUES (${randomUUID()}, ${email}, ${confirmationHash}, ${randomUUID()})
-      ON CONFLICT (email) DO UPDATE SET confirmation_hash = EXCLUDED.confirmation_hash, requested_at = now()
+      INSERT INTO newsletter_subscribers (id, email, confirmation_hash, unsubscribe_key, frequency)
+      VALUES (${randomUUID()}, ${email}, ${confirmationHash}, ${randomUUID()}, ${selected})
+      ON CONFLICT (email) DO UPDATE SET confirmation_hash = EXCLUDED.confirmation_hash, requested_at = now(), frequency = EXCLUDED.frequency
       WHERE newsletter_subscribers.confirmed_at IS NULL AND newsletter_subscribers.requested_at <= now() - interval '15 minutes'
       RETURNING id`;
     return changed.length > 0;
@@ -60,7 +66,7 @@ export async function requestSubscription(input: string, mailer: Mailer = sendMa
       to: email,
       subject: "Confirma tu suscripción al boletín de Latido",
       text: [
-        "Pediste recibir el boletín semanal de Latido. Abre este enlace y confirma tu suscripción:",
+        `Pediste recibir el ${frequencyLabel(selected)} de Latido. Abre este enlace y confirma tu suscripción:`,
         link("confirmar", token),
         "El enlace vence en 48 horas. Si no pediste este correo, puedes ignorarlo.",
       ].join("\n\n"),
@@ -68,6 +74,17 @@ export async function requestSubscription(input: string, mailer: Mailer = sendMa
   } catch {
     logMailFailure("No se pudo enviar una confirmación.");
   }
+}
+
+/** Changes what a confirmed subscriber receives, using the same key that powers the unsubscribe link. */
+export async function updatePreferences(input: string, frequency: NewsletterFrequency): Promise<boolean> {
+  const key = unsubscribeSchema.parse(input);
+  const selected = newsletterFrequencySchema.parse(frequency);
+  const rows = await sql`
+    UPDATE newsletter_subscribers SET frequency = ${selected}
+    WHERE unsubscribe_key = ${key} AND confirmed_at IS NOT NULL
+    RETURNING id`;
+  return rows.length === 1;
 }
 
 export async function confirmSubscription(input: string): Promise<boolean> {
@@ -122,7 +139,7 @@ export function selectEmailSections(entries: Array<{ label: string; entry: Email
 }
 
 /** The issue as the email shows it: its lead, every theme's entries, pictures signed for weeks. */
-async function composeEmailIssue(report: ReportDetail): Promise<EmailIssue> {
+async function composeEmailIssue(report: ReportDetail, kind: DeliveryKind = "weekly"): Promise<EmailIssue> {
   const items: ReportCitation[] = report.sections.flatMap((section) => section.items)
     .filter((item) => item.available && item.itemId);
   const seen = new Set<string>();
@@ -159,60 +176,68 @@ async function composeEmailIssue(report: ReportDetail): Promise<EmailIssue> {
   const leadId = lead?.entry.id ?? "";
   const sections = selectEmailSections(entries, leadId);
   const firstPicture = entries.find(({ entry }) => entry.imageUrl)?.entry.imageUrl ?? null;
+  const editionUrl = kind === "daily" ? dailyUrl(report.key) : periodUrl("weekly", report.key);
   return {
     key: report.key,
-    number: report.issueNumber,
+    kind,
+    number: kind === "weekly" ? report.issueNumber : null,
     headline: report.lead?.title ?? lead?.entry.title ?? report.title,
     overview: report.overview ?? report.lead?.leadParagraph ?? null,
-    leadUrl: lead?.entry.url ?? periodUrl("weekly", report.key),
+    leadUrl: lead?.entry.url ?? editionUrl,
     // The lead's own picture is signed for weeks; the issue's cover is signed for the site's shorter
     // window, and the issue's own share card closes the list when no entry has a picture.
     coverUrl: lead?.entry.imageUrl ?? absoluteUrl(report.cover?.url) ?? firstPicture
-      ?? `${config.siteUrl}/og/reports/weekly/${encodeURIComponent(report.key)}.png`,
+      ?? `${config.siteUrl}/og/reports/${kind}/${encodeURIComponent(report.key)}.png`,
     coverCaption: report.cover?.caption ?? null,
     generatedAt: new Date(report.generatedAt),
     readingMinutes: report.readingMinutes,
-    editionUrl: periodUrl("weekly", report.key),
+    editionUrl,
     entryCount: (lead ? 1 : 0) + sections.reduce((n, section) => n + section.entries.length, 0),
     sections,
   };
 }
 
-function editionMail(issue: FeedIssue, recipient: Recipient, formatted: EmailIssue | null) {
+function editionMail(issue: FeedIssue, recipient: Recipient, formatted: EmailIssue | null, kind: DeliveryKind = "weekly") {
+  const preferencesUrl = link("preferencias", recipient.unsubscribe_key);
+  const label = kind === "daily" ? "diario" : "semanal";
   if (formatted) {
-    const { subject, html, text } = renderIssueEmail(formatted, { unsubscribeUrl: link("baja", recipient.unsubscribe_key) });
+    const { subject, html, text } = renderIssueEmail(formatted, { unsubscribeUrl: link("baja", recipient.unsubscribe_key), preferencesUrl });
     return { to: recipient.email, subject, text, html };
   }
   const headlines = issue.sections.flatMap((section) => section.items).slice(0, EMAIL_ENTRIES);
+  const editionUrl = kind === "daily" ? dailyUrl(issue.key) : periodUrl("weekly", issue.key);
   return {
     to: recipient.email,
-    subject: `Latido semanal: ${(issue.headline ?? issue.key).replace(/[\r\n]+/g, " ").slice(0, 160)}`,
+    subject: `Latido ${label}: ${(issue.headline ?? issue.key).replace(/[\r\n]+/g, " ").slice(0, 160)}`,
     text: [
-      "El boletín semanal de Latido",
+      `El boletín ${label} de Latido`,
       issue.headline,
       issue.leadParagraph,
       ...headlines.map(({ title, link: url }) => `${title}\n${url}`),
-      `Lee la edición completa: ${config.siteUrl}/weekly/${encodeURIComponent(issue.key)}`,
+      `Lee la edición completa: ${editionUrl}`,
       `Cancelar suscripción: ${link("baja", recipient.unsubscribe_key)}`,
+      `Cambiar preferencias: ${preferencesUrl}`,
     ].filter(Boolean).join("\n\n"),
   };
 }
 
-export async function deliverIssue(issue: FeedIssue, mailer: Mailer = sendMail, report?: ReportDetail | null) {
+export async function deliverIssue(issue: FeedIssue, mailer: Mailer = sendMail, report?: ReportDetail | null, kind: DeliveryKind = "weekly") {
   // The email's body comes from the stored issue; without one the plain-text notice still goes out.
-  const detail = report !== undefined ? report : await loadReport("weekly", issue.key);
+  const detail = report !== undefined ? report : await loadReport(kind, issue.key);
   let formatted: EmailIssue | null = null;
   if (detail) {
     try {
-      formatted = await composeEmailIssue(detail);
+      formatted = await composeEmailIssue(detail, kind);
     } catch {
-      logMailFailure("No se pudo preparar el formato HTML de la edición semanal; se envía en texto.");
+      logMailFailure(`No se pudo preparar el formato HTML de la edición ${kind === "daily" ? "diaria" : "semanal"}; se envía en texto.`);
     }
   }
+  const frequencies = kind === "daily" ? ["daily", "both"] : ["weekly", "both"];
   const batch = await sql<Recipient[]>`
     SELECT s.id, s.email, s.unsubscribe_key
     FROM newsletter_subscribers s
     WHERE s.confirmed_at <= ${issue.generatedAt}
+      AND s.frequency = ANY(${frequencies})
       AND NOT EXISTS (SELECT 1 FROM newsletter_deliveries d WHERE d.issue_key = ${issue.key} AND d.subscriber_id = s.id)
     ORDER BY s.confirmed_at, s.id LIMIT 50`;
   let sent = 0, failed = 0;
@@ -228,7 +253,7 @@ export async function deliverIssue(issue: FeedIssue, mailer: Mailer = sendMail, 
       if (!claim) return;
       let status: "sent" | "failed";
       try {
-        await mailer(editionMail(issue, claim, formatted));
+        await mailer(editionMail(issue, claim, formatted, kind));
         status = "sent";
         sent++;
       } catch {
@@ -239,7 +264,7 @@ export async function deliverIssue(issue: FeedIssue, mailer: Mailer = sendMail, 
       await sql`UPDATE newsletter_deliveries SET status = ${status} WHERE issue_key = ${issue.key} AND subscriber_id = ${claim.id}`;
     }));
   }
-  if (failed) logMailFailure(`No se pudieron entregar ${failed} copias de la edición semanal.`);
+  if (failed) logMailFailure(`No se pudieron entregar ${failed} copias de la edición ${kind === "daily" ? "diaria" : "semanal"}.`);
   return { sent, failed };
 }
 
@@ -250,23 +275,39 @@ export async function sendLatestEdition() {
   if (!issue || issue.generatedAt < new Date(settings.enabledAt) || Date.now() - issue.generatedAt.getTime() > 48 * 3600_000) {
     return { sent: 0, failed: 0 };
   }
-  return deliverIssue(issue);
+  return deliverIssue(issue, sendMail, undefined, "weekly");
 }
 
 /**
- * The admin's "send a test" action: the newest weekly as subscribers will get it, marked as a test.
- * Without a stored weekly it falls back to a bare message that only checks the sender.
+ * The daily edition goes out a few minutes after the daily report is composed at 08:00. The report is
+ * written by rule, so sending it adds no model calls; only subscribers who chose the daily (or both)
+ * receive it. The same issue key is never sent twice.
  */
-export async function sendTestEdition(email: string, mailer: Mailer = sendMail): Promise<{ formatted: boolean }> {
-  const [issue] = await feedIssues("weekly", 1);
-  const detail = issue ? await loadReport("weekly", issue.key) : null;
+export async function sendLatestDaily() {
+  const settings = await newsletterSettings();
+  if (!canSubscribe(settings) || !settings.enabledAt) return { sent: 0, failed: 0 };
+  const [issue] = await feedIssues("daily", 1);
+  if (!issue || issue.generatedAt < new Date(settings.enabledAt) || Date.now() - issue.generatedAt.getTime() > 6 * 3600_000) {
+    return { sent: 0, failed: 0 };
+  }
+  return deliverIssue(issue, sendMail, undefined, "daily");
+}
+
+/**
+ * The admin's "send a test" action: the newest edition of the chosen kind as subscribers will get it,
+ * marked as a test. Without a stored edition it falls back to a bare message that only checks the sender.
+ */
+export async function sendTestEdition(email: string, kind: DeliveryKind = "weekly", mailer: Mailer = sendMail): Promise<{ formatted: boolean }> {
+  const [issue] = await feedIssues(kind, 1);
+  const detail = issue ? await loadReport(kind, issue.key) : null;
   if (!issue || !detail) {
     await mailer({ to: email, subject: "Latido: prueba de envío", text: "Este correo comprueba el remitente del boletín de Latido. No añade esta dirección a la lista." });
     return { formatted: false };
   }
-  const formatted = await composeEmailIssue(detail);
+  const formatted = await composeEmailIssue(detail, kind);
   const mail = renderIssueEmail(formatted, {
     unsubscribeUrl: `${config.siteUrl}/boletin/baja#00000000-0000-4000-8000-000000000000`,
+    preferencesUrl: `${config.siteUrl}/boletin/preferencias#00000000-0000-4000-8000-000000000000`,
     preview: true,
   });
   await mailer({ to: email, ...mail });

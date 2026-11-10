@@ -9,8 +9,8 @@ import { adminHandler } from "../../apps/api/src/routes/admin-auth.ts";
 import { smtpConfigured } from "./mail.ts";
 import {
   canSubscribe, confirmationSchema, confirmSubscription, emailSchema, emptyNewsletter, NEWSLETTER_KEY,
-  newsletterCounts, newsletterSettings, purgeNewsletter, requestSubscription, sendLatestEdition, sendTestEdition, unsubscribe,
-  unsubscribeSchema,
+  newsletterCounts, newsletterFrequencySchema, newsletterSettings, purgeNewsletter, requestSubscription,
+  sendLatestDaily, sendLatestEdition, sendTestEdition, unsubscribe, unsubscribeSchema, updatePreferences,
 } from "./newsletter.ts";
 import { ADSENSE_PUBLISHER, type AdSettings, type EditorialDisplay, type EditorialSettings, type ManagedTopic, type NewsletterSettings } from "./types.ts";
 
@@ -118,6 +118,7 @@ export const EDITORIAL_SERVER = defineServerModule({
   name: "editorial-controls",
   schedules: [
     { name: "editorial-controls.newsletter", cron: "*/5 * * * *", run: sendLatestEdition, when: smtpConfigured },
+    { name: "editorial-controls.daily", cron: "*/5 * * * *", run: sendLatestDaily, when: smtpConfigured },
     { name: "editorial-controls.retention", cron: "45 3 * * *", missed: "once", run: purgeNewsletter },
   ],
   topics: {
@@ -135,10 +136,20 @@ export const EDITORIAL_SERVER = defineServerModule({
     app.post("/api/site/newsletter/signup", { bodyLimit: 2048 }, async (req, reply) => {
       reply.header("Cache-Control", "no-store");
       if (!canSubscribe(await newsletterSettings())) return reply.code(503).send({ ok: false });
-      const parsed = z.object({ email: emailSchema, website: z.string().max(300).optional() }).safeParse(req.body);
+      const parsed = z.object({
+        email: emailSchema,
+        frequency: newsletterFrequencySchema.default("daily"),
+        website: z.string().max(300).optional(),
+      }).safeParse(req.body);
       if (!parsed.success) return reply.code(400).send({ ok: false });
-      if (!parsed.data.website) await requestSubscription(parsed.data.email);
+      if (!parsed.data.website) await requestSubscription(parsed.data.email, undefined, parsed.data.frequency);
       return reply.code(202).send({ ok: true });
+    });
+    app.post("/api/site/newsletter/preferences", { bodyLimit: 2048 }, async (req, reply) => {
+      reply.header("Cache-Control", "no-store");
+      const parsed = z.object({ token: unsubscribeSchema, frequency: newsletterFrequencySchema }).safeParse(req.body);
+      if (!parsed.success) return reply.code(400).send({ ok: false });
+      return { ok: await updatePreferences(parsed.data.token, parsed.data.frequency) };
     });
     app.post("/api/site/newsletter/confirm", { bodyLimit: 2048 }, async (req, reply) => {
       reply.header("Cache-Control", "no-store");
@@ -160,11 +171,14 @@ export const EDITORIAL_SERVER = defineServerModule({
       return { newsletter: { ...newsletter, smtpConfigured: smtpConfigured(), counts }, ad, topics, tags };
     }));
     app.post("/api/admin/editorial/newsletter/test", adminHandler(async (req) => {
-      const { email } = z.object({ email: emailSchema }).parse(req.body);
+      const { email, kind } = z.object({
+        email: emailSchema,
+        kind: z.enum(["daily", "weekly"]).default("weekly"),
+      }).parse(req.body);
       if (!smtpConfigured()) throw new Conflict("Falta configurar el remitente SMTP.");
       try {
-        // Sends the newest weekly as subscribers will get it, so the format itself is what gets checked.
-        await sendTestEdition(email);
+        // Sends the newest edition of the chosen kind as subscribers will get it, so the format itself is what gets checked.
+        await sendTestEdition(email, kind);
       } catch {
         throw new Conflict("El servidor de correo no aceptó la prueba. Revisa la configuración del remitente.");
       }
