@@ -4,11 +4,15 @@ import { SITE } from "@aihot/site";
 import { adminGet } from "@aihot/web/lib/admin.server";
 import { useAdminAction } from "@aihot/web/features/admin/action";
 import { slugFrom } from "@aihot/web/features/admin/format";
-import { AdminPage, Badge, Button, ButtonLink, Card, Field, Input, Select, Textarea } from "@aihot/web/features/admin/ui";
-import { ADSENSE_CLIENT, type AdSettings, type EditorialSettings, type ManagedTopic } from "../types.ts";
+import { AdminPage, Badge, Button, ButtonLink, Card, DataTable, Field, Input, Select, Textarea, Time } from "@aihot/web/features/admin/ui";
+import { ADSENSE_CLIENT, type AdSettings, type EditorialSettings, type ManagedTopic, type NewsletterFrequency, type NewsletterSubscriber } from "../types.ts";
 
-export function loader({ request }: { request: Request }) {
-  return adminGet<EditorialSettings>(request, "/api/admin/editorial");
+export async function loader({ request }: { request: Request }) {
+  const [settings, { subscribers }] = await Promise.all([
+    adminGet<EditorialSettings>(request, "/api/admin/editorial"),
+    adminGet<{ subscribers: NewsletterSubscriber[] }>(request, "/api/admin/editorial/newsletter/subscribers"),
+  ]);
+  return { ...settings, subscribers };
 }
 
 export const meta = () => [{ title: `Configuración editorial · ${SITE.name} Panel` }];
@@ -103,6 +107,34 @@ function AdForm({ value }: { value: AdSettings }) {
   );
 }
 
+const frequencyLabel: Record<NewsletterFrequency, string> = { daily: "Diario", weekly: "Semanal", both: "Diario y semanal" };
+
+function SubscriberList({ subscribers }: { subscribers: NewsletterSubscriber[] }) {
+  const [query, setQuery] = useState("");
+  const q = query.trim().toLowerCase();
+  const rows = q ? subscribers.filter((s) => s.email.includes(q)) : subscribers;
+  const confirmed = subscribers.filter((s) => s.confirmedAt).length;
+  return (
+    <Card title="Suscriptores del boletín" right={<Badge>{confirmed} confirmadas · {subscribers.length - confirmed} pendientes</Badge>}>
+      <p className="mb-3 text-[13px] text-ink-3">Las direcciones pendientes aún no confirman su correo y se borran solas a las 48 horas. Quien se da de baja desaparece de la lista.</p>
+      {subscribers.length > 10 && <div className="mb-3 max-w-sm"><Field label="Buscar correo"><Input type="search" value={query} onChange={(e) => setQuery(e.target.value)} /></Field></div>}
+      <DataTable
+        rows={rows}
+        rowKey={(s) => s.email}
+        empty={q ? "Ningún correo coincide con la búsqueda." : "Todavía no hay suscriptores."}
+        columns={[
+          { key: "email", label: "Correo", render: (s) => <span className="break-all font-medium text-ink">{s.email}</span> },
+          { key: "frequency", label: "Recibe", render: (s) => frequencyLabel[s.frequency] ?? s.frequency },
+          { key: "status", label: "Estado", render: (s) => <Badge tone={s.confirmedAt ? "ok" : undefined}>{s.confirmedAt ? "Confirmada" : "Pendiente"}</Badge> },
+          { key: "since", label: "Desde", render: (s) => <Time at={s.confirmedAt ?? s.requestedAt} /> },
+          { key: "last", label: "Último envío", render: (s) => <Time at={s.lastSentAt} /> },
+          { key: "sent", label: "Envíos", align: "right", render: (s) => s.sent },
+        ]}
+      />
+    </Card>
+  );
+}
+
 const blankTopic: ManagedTopic = { slug: "", name: "", group: "field", definition: "", tags: [], enabled: false };
 
 function TopicEditor({ topics, tags }: Pick<EditorialSettings, "topics" | "tags">) {
@@ -178,6 +210,7 @@ export default function EditorialAdmin() {
           <ButtonLink to="#temas">Agregar tema</ButtonLink>
           <ButtonLink to="#publicidad">Configurar publicidad</ButtonLink>
           <ButtonLink to="#boletin">Configurar boletín</ButtonLink>
+          <ButtonLink to="#suscriptores">Ver suscriptores</ButtonLink>
         </nav>
         <Card title="Fuentes de noticias">
           <p className="mb-3 text-[13px] text-ink-3">Agrega un RSS con el nombre del medio y el enlace. Previsualiza las notas antes de guardarlo y revisa el estado en el listado.</p>
@@ -188,6 +221,7 @@ export default function EditorialAdmin() {
           <div id="publicidad" className="scroll-mt-16"><AdForm value={settings.ad} /></div>
           <div id="boletin" className="scroll-mt-16"><NewsletterForm value={settings.newsletter} /></div>
         </div>
+        <div id="suscriptores" className="scroll-mt-16"><SubscriberList subscribers={settings.subscribers} /></div>
       </div>
     </AdminPage>
   );

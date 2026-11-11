@@ -9,7 +9,7 @@ import { buildApp } from "../apps/api/src/app.ts";
 import { EDITORIAL_SERVER, readEditorialDisplay, saveAd, saveTopic } from "../modules/editorial-controls/server.ts";
 import type { Mail } from "../modules/editorial-controls/mail.ts";
 import { renderIssueEmail, type EmailEntry, type EmailIssue } from "../modules/editorial-controls/issue-email.ts";
-import { confirmSubscription, deliverIssue, newsletterCounts, purgeNewsletter, requestSubscription, selectEmailSections, unsubscribe, updatePreferences } from "../modules/editorial-controls/newsletter.ts";
+import { confirmSubscription, deliverIssue, listSubscribers, newsletterCounts, purgeNewsletter, requestSubscription, selectEmailSections, unsubscribe, updatePreferences } from "../modules/editorial-controls/newsletter.ts";
 
 after(closeDb);
 
@@ -38,6 +38,7 @@ test("weekly email requires confirmation, delivers at most once, and respects un
   await Promise.all([deliverIssue(issue, mailer), deliverIssue(issue, mailer)]);
   assert.deepEqual(out.map((m) => m.to), ["reader@example.test", "pending@example.test", "reader@example.test"]);
   assert.deepEqual(await newsletterCounts(), { active: 1, pending: 0, sent: 1, failed: 0 });
+  assert.deepEqual((await listSubscribers()).map((s) => [s.email, !!s.confirmedAt, s.sent, !!s.lastSentAt]), [["reader@example.test", true, 1, true]]);
   const optOut = out[2]!.text.match(/\/baja#([\w-]+)/)?.[1];
   assert.ok(optOut);
   await unsubscribe(optOut);
@@ -178,6 +179,7 @@ test("public signup starts closed and the editorial controls require authenticat
     assert.equal((await app.inject({ method: "POST", url: "/api/site/newsletter/signup", payload: { email: "test@example.test" } })).statusCode, 503);
     assert.equal((await app.inject({ method: "GET", url: "/api/site/newsletter/unsubscribe?token=fake" })).statusCode, 404);
     assert.equal((await app.inject({ method: "GET", url: "/api/admin/editorial" })).statusCode, 401);
+    assert.equal((await app.inject({ method: "GET", url: "/api/admin/editorial/newsletter/subscribers" })).statusCode, 401);
     assert.deepEqual(await readEditorialDisplay(), { signupUrl: null, ad: null });
     const ads = await app.inject({ method: "GET", url: "/ads.txt" });
     assert.equal(ads.statusCode, 200);

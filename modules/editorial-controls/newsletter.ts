@@ -7,7 +7,7 @@ import { feedIssues, itemPictures, loadReport, type FeedIssue } from "@aihot/bac
 import type { ReportCitation, ReportDetail } from "@aihot/contracts/site";
 import { renderIssueEmail, type EmailEntry, type EmailIssue, type EmailSection } from "./issue-email.ts";
 import { sendMail, smtpConfigured, type Mailer } from "./mail.ts";
-import { NEWSLETTER_FREQUENCIES, type NewsletterFrequency, type NewsletterSettings } from "./types.ts";
+import { NEWSLETTER_FREQUENCIES, type NewsletterFrequency, type NewsletterSettings, type NewsletterSubscriber } from "./types.ts";
 
 export const NEWSLETTER_KEY = "editorial.newsletter";
 export const emptyNewsletter: NewsletterSettings = { enabled: false, enabledAt: null };
@@ -322,6 +322,20 @@ export async function newsletterCounts() {
       count(*) FILTER (WHERE status <> 'sent')::int AS failed FROM newsletter_deliveries WHERE attempted_at > now() - interval '30 days'`,
   ]);
   return { active: list!.active, pending: list!.pending, sent: delivery!.sent, failed: delivery!.failed };
+}
+
+/** The list as the admin sees it: confirmed addresses first, then requests still waiting for confirmation. */
+export async function listSubscribers(): Promise<NewsletterSubscriber[]> {
+  return sql<NewsletterSubscriber[]>`
+    SELECT s.email, s.frequency, s.requested_at AS "requestedAt", s.confirmed_at AS "confirmedAt",
+      max(d.attempted_at) FILTER (WHERE d.status = 'sent') AS "lastSentAt",
+      count(d.issue_key) FILTER (WHERE d.status = 'sent')::int AS sent
+    FROM newsletter_subscribers s
+    LEFT JOIN newsletter_deliveries d ON d.subscriber_id = s.id
+    WHERE s.confirmed_at IS NOT NULL OR s.requested_at > now() - interval '48 hours'
+    GROUP BY s.id
+    ORDER BY (s.confirmed_at IS NULL), coalesce(s.confirmed_at, s.requested_at) DESC
+    LIMIT 2000`;
 }
 
 export async function purgeNewsletter() {

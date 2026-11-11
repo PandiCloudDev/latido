@@ -8,7 +8,7 @@ import { TOPICS } from "@aihot/backend/publication/topics";
 import { adminHandler } from "../../apps/api/src/routes/admin-auth.ts";
 import { smtpConfigured } from "./mail.ts";
 import {
-  canSubscribe, confirmationSchema, confirmSubscription, emailSchema, emptyNewsletter, NEWSLETTER_KEY,
+  canSubscribe, confirmationSchema, confirmSubscription, emailSchema, emptyNewsletter, listSubscribers, NEWSLETTER_KEY,
   newsletterCounts, newsletterFrequencySchema, newsletterSettings, purgeNewsletter, requestSubscription,
   sendLatestDaily, sendLatestEdition, sendTestEdition, unsubscribe, unsubscribeSchema, updatePreferences,
 } from "./newsletter.ts";
@@ -169,6 +169,10 @@ export const EDITORIAL_SERVER = defineServerModule({
         newsletterSettings(), adSettings(), setting<ManagedTopic[]>(keys.topics, []), newsletterCounts(),
       ]);
       return { newsletter: { ...newsletter, smtpConfigured: smtpConfigured(), counts }, ad, topics, tags };
+    }));
+    app.get("/api/admin/editorial/newsletter/subscribers", adminHandler(async (_req, reply) => {
+      reply.header("Cache-Control", "no-store");
+      return { subscribers: await listSubscribers() };
     }));
     app.post("/api/admin/editorial/newsletter/test", adminHandler(async (req) => {
       const { email, kind } = z.object({
