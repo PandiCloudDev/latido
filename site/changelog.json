@@ -1,13 +1,52 @@
 {
-  "latestVersion": "2026-10-01T08:00",
+  "latestVersion": "2026-11-10T14:30",
   "releases": [
     {
-      "date": "2026-10-01",
+      "date": "2026-11-10",
+      "time": "14:30",
+      "kind": "Novedad",
+      "title": "Boletín diario por correo",
+      "body": [
+        "Además del resumen semanal, ahora puedes recibir cada mañana el boletín diario en tu correo.",
+        "Elige si quieres el diario, el semanal o ambos desde el enlace de preferencias que viene en cada correo."
+      ]
+    },
+    {
+      "date": "2026-11-10",
+      "time": "13:20",
+      "kind": "Novedad",
+      "title": "Más de 200 fuentes y cobertura de energía",
+      "body": [
+        "Latido sigue ahora más de 200 fuentes. Sumamos medios de energía de México, Latinoamérica, España y el mundo: petróleo y gas, renovables, almacenamiento, hidrógeno, nuclear y minería.",
+        "También ampliamos la electromovilidad y la tecnología y los negocios de la región."
+      ]
+    },
+    {
+      "date": "2026-11-09",
+      "time": "11:34",
+      "kind": "Mejora",
+      "title": "Un boletín semanal más completo",
+      "body": [
+        "El resumen semanal llega con portada, fotos y las 20 noticias más importantes agrupadas por tema, cada una con su fuente, resumen y enlace.",
+        "Las noticias de energía tienen más espacio en la selección."
+      ]
+    },
+    {
+      "date": "2026-11-07",
+      "time": "22:50",
+      "kind": "Novedad",
+      "title": "Suscripción por correo",
+      "body": [
+        "Ya puedes suscribirte para recibir en tu correo el resumen semanal de Latido. Confirmas tu dirección una vez y puedes darte de baja cuando quieras."
+      ]
+    },
+    {
+      "date": "2026-11-07",
       "time": "08:00",
       "kind": "Aviso",
       "title": "El sitio está en línea",
       "body": [
-        "Latido nace sobre el motor de código abierto AIHOT: sigue las fuentes, selecciona lo importante, agrupa las notas sobre lo mismo y publica un boletín diario."
+        "Latido sigue las fuentes, selecciona lo importante, agrupa las notas sobre el mismo hecho y publica un boletín diario de tecnología, negocios, energía y electromovilidad."
       ]
     }
   ]
