@@ -393,6 +393,18 @@ export async function collectSource(sourceId: string, opts: { force?: boolean; x
     if (found) { nextCursor.detailDatedOut = datedOut; nextCursor.detailRetries = reads.retries; }
     if (!d || !Object.keys(nextCursor.detailDatedOut ?? {}).length) delete nextCursor.detailDatedOut;
     if (!d || !Object.keys(nextCursor.detailRetries ?? {}).length) delete nextCursor.detailRetries;
+    // Latido: optional daily cap of new entries per source (config._aihot.maxPerDay, Mexico City day).
+    // Entries already stored still pass (revisions); the newest new ones fill what is left of the day.
+    const maxPerDay = Number(source.config._aihot?.maxPerDay ?? 0);
+    if (!firstImport && maxPerDay > 0) {
+      const [{ today }] = await sql<{ today: number }[]>`SELECT count(*)::int AS today FROM articles
+        WHERE source_id = ${sourceId} AND NOT backfill
+          AND discovered_at >= (date_trunc('day', now() AT TIME ZONE 'America/Mexico_City') AT TIME ZONE 'America/Mexico_City')`;
+      const fresh = candidates.filter((c) => !known.has(c.identityKey!))
+        .sort((a, b) => (b.publishedAt?.getTime() ?? 0) - (a.publishedAt?.getTime() ?? 0));
+      const keep = new Set(fresh.slice(0, Math.max(0, maxPerDay - today)).map((c) => c.identityKey!));
+      candidates = candidates.filter((c) => known.has(c.identityKey!) || keep.has(c.identityKey!));
+    }
     const stored = await store(sourceId, candidates, firstImport ? "first-import" : null);
     ({ created, revised } = stored);
     for (const id of await fillScheduledPublications(sourceId)) await queueProcessing(id);
@@ -563,8 +575,9 @@ export async function adaptIntervals(): Promise<{ updated: number }> {
     // Editorial sites and feeds are looked at hourly at least (they cost nothing);
     // editorial X and listings read through Jina stop at two hours (paid per call, within their budgets);
     // hot signals may wait longer.
-    const max = r.participation_mode === "hot_signal" ? 180 : r.kind === "x_search" || r.paid_listing ? 120 : 60;
-    const min = r.paid_listing ? PAID_LISTING_FLOOR : 15;
+    // Latido: feeds at most every 2 h and at least every 30 min (was 60 / 15) to spread out the reading.
+    const max = r.participation_mode === "hot_signal" ? 180 : r.kind === "x_search" || r.paid_listing ? 120 : 120;
+    const min = r.paid_listing ? PAID_LISTING_FLOOR : 30;
     // X accounts read by shard follow the shard's pace, whatever their own volume.
     const own = shardHandle(r) ? shardMinutes(r.participation_mode, r.uses) : perDay <= 0.15 ? max : Math.round(Math.min(max, Math.max(min, (24 * 60) / (perDay * 3))));
     // Another use may want the source sooner, never later, and a paid listing still waits its hour.
