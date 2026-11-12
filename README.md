@@ -35,7 +35,7 @@
 
 [Latido](https://latido.news) es un radar de noticias de tecnología, negocios, energía y electromovilidad escrito en español, con una prioridad editorial clara: primero México, después Latinoamérica y, al final, lo global que sí mueve el tablero en la región. Cubre inteligencia artificial, productos y gadgets, startups y fintech, telecomunicaciones, ciberseguridad, regulación digital y videojuegos, además de inversión, industria, proyectos energéticos y transporte eléctrico.
 
-Todos los días recoge notas de hasta 89 fuentes configuradas, las filtra con un modelo de lenguaje, califica dos veces y por separado las que prometen, y redacta para cada una un titular informativo y un resumen que responde primero a la pregunta del lector. Cuando varios medios cuentan la misma historia, la agrupa en un solo **evento** y la ordena según cuántas fuentes independientes están hablando de ella. Cada mañana publica el boletín *Latido diario*, los lunes el semanal y el día 1 de cada mes el mensual.
+Todos los días recoge notas de hasta 212 fuentes configuradas, las filtra con un modelo de lenguaje, califica dos veces y por separado las que prometen, y redacta para cada una un titular informativo y un resumen que responde primero a la pregunta del lector. Cuando varios medios cuentan la misma historia, la agrupa en un solo **evento** y la ordena según cuántas fuentes independientes están hablando de ella. Cada mañana publica el boletín *Latido diario*, los lunes el semanal y el día 1 de cada mes el mensual.
 
 Este repositorio es el sitio completo: la web pública, el panel de administración, el flujo de selección, el algoritmo de agrupación y de temperatura, y **el texto íntegro de cada prompt y de cada umbral de selección**, para que cualquiera pueda auditar con qué criterio se elige lo que se publica.
 
@@ -80,7 +80,7 @@ La **temperatura** se calcula por evento y no por nota: dentro de 48 horas cada 
 
 ## Cobertura
 
-El catálogo incluye 20 canales nuevos de negocios, 10 de energía y 5 de electromovilidad, además de los 54 originales.
+El catálogo suma 212 fuentes: 79 de energía, 16 de electromovilidad y 117 de tecnología, negocios y regulación.
 
 | Categoría | Qué entra |
 |---|---|
@@ -94,7 +94,7 @@ El catálogo incluye 20 canales nuevos de negocios, 10 de energía y 5 de electr
 | Videojuegos | Industria, consolas, estudios y lanzamientos |
 | Guías y análisis | Reseñas, comparativas, explicaciones, entrevistas y opinión con argumento |
 
-Las fuentes combinan blogs oficiales (OpenAI, Google, NVIDIA, Microsoft, Apple, Samsung México), medios mexicanos y latinoamericanos (Expansión, El Universal, DPL News, Bloomberg Línea, LatamList, Contxto, Infobae, El Tiempo, Clarín, La Nación, entre otros) y referencias internacionales como TechCrunch, The Verge, Rest of World o BleepingComputer. La lista completa está en [`industry/sources.json`](industry/sources.json).
+Las fuentes combinan blogs oficiales (OpenAI, Google, NVIDIA, Microsoft, Apple, Samsung México), medios mexicanos y latinoamericanos (Expansión, El Universal, DPL News, Bloomberg Línea, LatamList, Contxto, Infobae, El Tiempo, Clarín, La Nación, entre otros), una cobertura amplia del sector energético (Industry & Energy Magazine, Energía Hoy, Energía a Debate, Petróleo y Energía, Zafranet, pv magazine, El Periódico de la Energía, OilPrice, Utility Dive y las ediciones de pv magazine en Estados Unidos, India, China, Alemania, Francia y Australia, entre otros) y referencias internacionales como TechCrunch, The Verge, Rest of World o BleepingComputer. La lista completa está en [`industry/sources.json`](industry/sources.json).
 
 ## Ponlo en marcha
 

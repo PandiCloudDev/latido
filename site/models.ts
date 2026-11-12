@@ -39,6 +39,22 @@ export const PRESETS: Record<string, ModelPreset> = {
     service: "mimo", model: "mimo-v2.6-flash", baseUrlEnv: "XIAOMI_MIMO_BASE_URL", apiKeyEnv: "XIAOMI_MIMO_API_KEY",
     extra: { thinking: { type: "disabled" } }, jsonMode: true,
   },
+  // Latido: free model on the office iMac M1 (Ollama, OpenAI-compatible), reached through a reverse SSH
+  // tunnel. A step routed here (PREFILTER_MODEL=local-m1, etc.) falls over to deepseek-respaldo whenever
+  // the iMac is off: connection refused or a timeout counts as an outage, and after 10 failures in
+  // 5 minutes the circuit skips the iMac for 5 minutes before probing it again.
+  "local-m1": {
+    service: "local", baseUrlEnv: "LOCAL_LLM_BASE_URL", apiKeyEnv: "LOCAL_LLM_API_KEY",
+    get model() { return process.env.LOCAL_LLM_MODEL ?? ""; },
+    get extra() { return process.env.LOCAL_LLM_EXTRA_JSON ? JSON.parse(process.env.LOCAL_LLM_EXTRA_JSON) as Record<string, unknown> : undefined; },
+    jsonMode: true,
+  },
+  // The paid backup for every step that may run on the iMac: the same DeepSeek account and prices as default.
+  "deepseek-respaldo": {
+    service: "llm", model: "deepseek-flash", baseUrlEnv: "LLM_BASE_URL", apiKeyEnv: "LLM_API_KEY",
+    extra: { thinking: { type: "disabled" } }, jsonMode: true,
+    fallbackFor: Object.fromEntries(["prefilter", "score", "summarize", "understand", "structure", "group", "groupReview", "digest", "wording", "feedback"].map(step => [step, "local-m1"])),
+  },
   "qwen3-vl-flash": {
     service: "dashscope", model: "qwen3-vl-flash", baseUrlEnv: "DASHSCOPE_BASE_URL", apiKeyEnv: "DASHSCOPE_API_KEY",
     extra: { enable_thinking: false }, jsonMode: false, vision: true,

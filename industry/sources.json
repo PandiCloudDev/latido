@@ -593,7 +593,8 @@
         "Industria TI"
       ],
       "site_fulltext": false,
-      "syndicate_fulltext": false
+      "syndicate_fulltext": false,
+      "enabled": false
     },
     {
       "id": "rss-it-masters-mag",
@@ -703,7 +704,8 @@
         "Tecnología"
       ],
       "site_fulltext": false,
-      "syndicate_fulltext": false
+      "syndicate_fulltext": false,
+      "enabled": false
     },
     {
       "id": "rss-enter-co",
@@ -725,7 +727,8 @@
         "Tecnología"
       ],
       "site_fulltext": false,
-      "syndicate_fulltext": false
+      "syndicate_fulltext": false,
+      "enabled": false
     },
     {
       "id": "rss-impacto-tic",
@@ -747,7 +750,8 @@
         "Tecnología"
       ],
       "site_fulltext": false,
-      "syndicate_fulltext": false
+      "syndicate_fulltext": false,
+      "enabled": false
     },
     {
       "id": "rss-el-tiempo-tecnosfera",
@@ -1020,7 +1024,8 @@
       "config": {
         "feedUrl": "https://www.xataka.com/index.xml",
         "_aihot": {
-          "initialBackfillLimit": 8
+          "initialBackfillLimit": 8,
+          "maxPerDay": 30
         }
       },
       "tier": "T2",
@@ -1055,7 +1060,8 @@
         "Gadgets"
       ],
       "site_fulltext": false,
-      "syndicate_fulltext": false
+      "syndicate_fulltext": false,
+      "enabled": false
     },
     {
       "id": "rss-hipertextual",
@@ -1099,7 +1105,8 @@
         "Software"
       ],
       "site_fulltext": false,
-      "syndicate_fulltext": false
+      "syndicate_fulltext": false,
+      "enabled": false
     },
     {
       "id": "rss-wwwhat-s-new",
@@ -1165,7 +1172,8 @@
         "Gadgets"
       ],
       "site_fulltext": false,
-      "syndicate_fulltext": false
+      "syndicate_fulltext": false,
+      "enabled": false
     },
     {
       "id": "rss-finextra",
@@ -1187,7 +1195,8 @@
         "Fintech"
       ],
       "site_fulltext": false,
-      "syndicate_fulltext": false
+      "syndicate_fulltext": false,
+      "enabled": false
     },
     {
       "id": "rss-elfinanciero-empresas",
@@ -1267,7 +1276,8 @@
         "Negocios"
       ],
       "site_fulltext": false,
-      "syndicate_fulltext": false
+      "syndicate_fulltext": false,
+      "enabled": false
     },
     {
       "id": "rss-valora-analitik",
@@ -1288,7 +1298,8 @@
         "Negocios"
       ],
       "site_fulltext": false,
-      "syndicate_fulltext": false
+      "syndicate_fulltext": false,
+      "enabled": false
     },
     {
       "id": "rss-ambito-negocios",
@@ -1308,7 +1319,8 @@
         "Negocios"
       ],
       "site_fulltext": false,
-      "syndicate_fulltext": false
+      "syndicate_fulltext": false,
+      "enabled": false
     },
     {
       "id": "rss-el-cronista-negocios",
@@ -1328,7 +1340,8 @@
         "Negocios"
       ],
       "site_fulltext": false,
-      "syndicate_fulltext": false
+      "syndicate_fulltext": false,
+      "enabled": false
     },
     {
       "id": "rss-primicias-economia",
@@ -1348,7 +1361,8 @@
         "Negocios"
       ],
       "site_fulltext": false,
-      "syndicate_fulltext": false
+      "syndicate_fulltext": false,
+      "enabled": false
     },
     {
       "id": "rss-la-jornada-economia",
@@ -1448,7 +1462,8 @@
         "Negocios"
       ],
       "site_fulltext": false,
-      "syndicate_fulltext": false
+      "syndicate_fulltext": false,
+      "enabled": false
     },
     {
       "id": "rss-valor-empresas",
@@ -1457,7 +1472,8 @@
       "config": {
         "feedUrl": "https://valor.globo.com/rss/valor/empresas/",
         "_aihot": {
-          "initialBackfillLimit": 3
+          "initialBackfillLimit": 3,
+          "maxPerDay": 30
         }
       },
       "tier": "T2",
@@ -1528,7 +1544,8 @@
         "Negocios"
       ],
       "site_fulltext": false,
-      "syndicate_fulltext": false
+      "syndicate_fulltext": false,
+      "enabled": false
     },
     {
       "id": "rss-la-nacion-cr-economia",
@@ -1788,7 +1805,8 @@
         "Energía"
       ],
       "site_fulltext": false,
-      "syndicate_fulltext": false
+      "syndicate_fulltext": false,
+      "enabled": false
     },
     {
       "id": "rss-latam-mobility",
@@ -1848,7 +1866,8 @@
         "Electromovilidad"
       ],
       "site_fulltext": false,
-      "syndicate_fulltext": false
+      "syndicate_fulltext": false,
+      "enabled": false
     },
     {
       "id": "rss-electrive",
@@ -1868,7 +1887,8 @@
         "Electromovilidad"
       ],
       "site_fulltext": false,
-      "syndicate_fulltext": false
+      "syndicate_fulltext": false,
+      "enabled": false
     },
     {
       "id": "rss-movilidad-electrica",
@@ -1886,6 +1906,2517 @@
       "tags": [
         "Global",
         "Electromovilidad"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-industry-energy",
+      "name": "Industry & Energy Magazine",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://energymagazine.mx/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "México",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-energy-commerce",
+      "name": "Energy & Commerce",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://energyandcommerce.com.mx/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "México",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-petroleo-energia",
+      "name": "Petróleo y Energía",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://petroleoenergia.com/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "México",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-zafranet",
+      "name": "Zafranet",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.zafranet.com/category/noticias-energia/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "México",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-contralinea-energia",
+      "name": "Contralínea · Energía",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://contralinea.com.mx/tag/energia/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "México",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-pv-magazine-mexico",
+      "name": "pv magazine México",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.pv-magazine-mexico.com/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "México",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-mineria-en-linea",
+      "name": "Minería en Línea",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://mineriaenlinea.com/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 180,
+      "tags": [
+        "México",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-amdee",
+      "name": "AMDEE",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://amdee.org/es_es/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T1_5",
+      "participation_mode": "editorial",
+      "interval_minutes": 240,
+      "tags": [
+        "México",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-elfinanciero-economia",
+      "name": "El Financiero · Economía",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.elfinanciero.com.mx/arc/outboundfeeds/rss/category/economia/?outputType=xml",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "México",
+        "Negocios"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-el-universal-cartera",
+      "name": "El Universal · Cartera",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.eluniversal.com.mx/arc/outboundfeeds/rss/category/cartera/?outputType=xml",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "México",
+        "Negocios"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-excelsior-tecnologia",
+      "name": "Excélsior · Tecnología",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.excelsior.com.mx/rss/tecnologia",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "México",
+        "Tecnología"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-alto-nivel",
+      "name": "Alto Nivel",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.altonivel.com.mx/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "México",
+        "Negocios"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false,
+      "enabled": false
+    },
+    {
+      "id": "rss-merca20",
+      "name": "Merca2.0",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.merca20.com/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "México",
+        "Negocios"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false,
+      "enabled": false
+    },
+    {
+      "id": "rss-el-contribuyente",
+      "name": "El Contribuyente",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.elcontribuyente.mx/rss.xml",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 180,
+      "tags": [
+        "México",
+        "Negocios"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-tecnoempresa",
+      "name": "TecnoEmpresa",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://tecnoempresa.mx/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 180,
+      "tags": [
+        "México",
+        "TI empresarial"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false,
+      "enabled": false
+    },
+    {
+      "id": "rss-isopixel",
+      "name": "Isopixel",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://isopixel.net/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 180,
+      "tags": [
+        "México",
+        "Tecnología"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-emprendedor",
+      "name": "Emprendedor",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://emprendedor.com/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 180,
+      "tags": [
+        "México",
+        "Startups"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-el-pais-economia",
+      "name": "El País · Economía",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://feeds.elpais.com/mrss-s/pages/ep/site/elpais.com/section/economia/portada",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Negocios"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-motorpasion-mx",
+      "name": "Motorpasión México",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.motorpasion.com.mx/feedburner.xml",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "México",
+        "Electromovilidad"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-click-petroleo-gas",
+      "name": "Click Petróleo e Gás",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://clickpetroleoegas.com.br/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Brasil",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false,
+      "enabled": false
+    },
+    {
+      "id": "rss-petronoticias",
+      "name": "Petronotícias",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://petronoticias.com.br/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Brasil",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-surtidores-latam",
+      "name": "Surtidores Latam",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://surtidoreslatam.com/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Latinoamérica",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-rumbo-minero",
+      "name": "Rumbo Minero",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.rumbominero.com/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Perú",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false,
+      "enabled": false
+    },
+    {
+      "id": "rss-energiminas",
+      "name": "Energiminas",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://energiminas.com/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Perú",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false,
+      "enabled": false
+    },
+    {
+      "id": "rss-mineria-energia",
+      "name": "Revista Minería & Energía",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://mineriaenergia.com/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Perú",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-eh-plus",
+      "name": "EH+",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://ehplus.do/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 180,
+      "tags": [
+        "República Dominicana",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false,
+      "enabled": false
+    },
+    {
+      "id": "rss-el-periodico-energia",
+      "name": "El Periódico de la Energía",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://elperiodicodelaenergia.com/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false,
+      "enabled": false
+    },
+    {
+      "id": "rss-energy-news-es",
+      "name": "Energy News",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.energynews.es/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-renovables-verdes",
+      "name": "Renovables Verdes",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.renovablesverdes.com/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 180,
+      "tags": [
+        "Global",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false,
+      "enabled": false
+    },
+    {
+      "id": "rss-solar-news",
+      "name": "Solar News",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.solarnews.es/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 180,
+      "tags": [
+        "Global",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false,
+      "enabled": false
+    },
+    {
+      "id": "rss-pv-magazine-espana",
+      "name": "pv magazine España",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.pv-magazine.es/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-pv-magazine-global",
+      "name": "pv magazine",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.pv-magazine.com/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-pv-magazine-usa",
+      "name": "pv magazine USA",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.pv-magazine-usa.com/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-pv-magazine-india",
+      "name": "pv magazine India",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.pv-magazine-india.com/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false,
+      "enabled": false
+    },
+    {
+      "id": "rss-pv-magazine-china",
+      "name": "pv magazine China",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.pv-magazine-china.com/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-pv-magazine-germany",
+      "name": "pv magazine Germany",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.pv-magazine.de/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false,
+      "enabled": false
+    },
+    {
+      "id": "rss-pv-magazine-france",
+      "name": "pv magazine France",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.pv-magazine.fr/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false,
+      "enabled": false
+    },
+    {
+      "id": "rss-pv-magazine-australia",
+      "name": "pv magazine Australia",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.pv-magazine-australia.com/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false,
+      "enabled": false
+    },
+    {
+      "id": "rss-reneweconomy",
+      "name": "RenewEconomy",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://reneweconomy.com.au/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false,
+      "enabled": false
+    },
+    {
+      "id": "rss-mercom-india",
+      "name": "Mercom India",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://mercomindia.com/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false,
+      "enabled": false
+    },
+    {
+      "id": "rss-greenunivers",
+      "name": "GreenUnivers",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.greenunivers.com/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 180,
+      "tags": [
+        "Global",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false,
+      "enabled": false
+    },
+    {
+      "id": "rss-qualenergia",
+      "name": "QualEnergia",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.qualenergia.it/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 180,
+      "tags": [
+        "Global",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false,
+      "enabled": false
+    },
+    {
+      "id": "rss-wysokienapiecie",
+      "name": "WysokieNapiecie",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://wysokienapiecie.pl/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 180,
+      "tags": [
+        "Global",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-oilprice",
+      "name": "OilPrice",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://oilprice.com/rss.xml",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false,
+      "enabled": false
+    },
+    {
+      "id": "rss-oil-gas-journal",
+      "name": "Oil & Gas Journal",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.ogj.com/__rss/website-scheduled-content.xml?input=%7B%22sectionAlias%22%3A%22home%22%7D",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-natural-gas-intelligence",
+      "name": "Natural Gas Intelligence",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.naturalgasintel.com/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false,
+      "enabled": false
+    },
+    {
+      "id": "rss-lng-prime",
+      "name": "LNG Prime",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://lngprime.com/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false,
+      "enabled": false
+    },
+    {
+      "id": "rss-offshore-energy",
+      "name": "Offshore Energy",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.offshore-energy.biz/feed",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false,
+      "enabled": false
+    },
+    {
+      "id": "rss-offshore-engineer",
+      "name": "Offshore Engineer",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.oedigital.com/news/latest?format=feed",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false,
+      "enabled": false
+    },
+    {
+      "id": "rss-power-magazine",
+      "name": "POWER Magazine",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.powermag.com/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-power-technology",
+      "name": "Power Technology",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.power-technology.com/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false,
+      "enabled": false
+    },
+    {
+      "id": "rss-ns-energy",
+      "name": "NS Energy",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.nsenergybusiness.com/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-utility-dive",
+      "name": "Utility Dive",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.utilitydive.com/feeds/news/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false,
+      "enabled": false
+    },
+    {
+      "id": "rss-renewable-energy-world",
+      "name": "Renewable Energy World",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.renewableenergyworld.com/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-pv-tech",
+      "name": "PV Tech",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.pv-tech.org/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false,
+      "enabled": false
+    },
+    {
+      "id": "rss-solar-power-world",
+      "name": "Solar Power World",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.solarpowerworldonline.com/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false,
+      "enabled": false
+    },
+    {
+      "id": "rss-ess-news",
+      "name": "ESS News",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.ess-news.com/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false,
+      "enabled": false
+    },
+    {
+      "id": "rss-cleantechnica",
+      "name": "CleanTechnica",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://cleantechnica.com/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false,
+      "enabled": false
+    },
+    {
+      "id": "rss-canary-media",
+      "name": "Canary Media",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.canarymedia.com/rss.rss",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-inside-climate-news",
+      "name": "Inside Climate News",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://insideclimatenews.org/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 180,
+      "tags": [
+        "Global",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false,
+      "enabled": false
+    },
+    {
+      "id": "rss-carbon-brief",
+      "name": "Carbon Brief",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.carbonbrief.org/feed",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 180,
+      "tags": [
+        "Global",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-climate-home-news",
+      "name": "Climate Home News",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.climatechangenews.com/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 180,
+      "tags": [
+        "Global",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-energy-monitor",
+      "name": "Energy Monitor",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.energymonitor.ai/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 180,
+      "tags": [
+        "Global",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-energy-live-news",
+      "name": "Energy Live News",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.energylivenews.com/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false,
+      "enabled": false
+    },
+    {
+      "id": "rss-businessgreen",
+      "name": "BusinessGreen",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.businessgreen.com/feeds/rss",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false,
+      "enabled": false
+    },
+    {
+      "id": "rss-edie",
+      "name": "Edie",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.edie.net/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 180,
+      "tags": [
+        "Global",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false,
+      "enabled": false
+    },
+    {
+      "id": "rss-balkan-green-energy",
+      "name": "Balkan Green Energy News",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://balkangreenenergynews.com/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 180,
+      "tags": [
+        "Global",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-clean-energy-wire",
+      "name": "Clean Energy Wire",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.cleanenergywire.org/rss.xml",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 180,
+      "tags": [
+        "Global",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-energy-transition",
+      "name": "Energy Transition",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://energytransition.org/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 180,
+      "tags": [
+        "Global",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-yale-e360",
+      "name": "Yale E360",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://e360.yale.edu/feed.xml",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 180,
+      "tags": [
+        "Global",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-grist",
+      "name": "Grist",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://grist.org/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 180,
+      "tags": [
+        "Global",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-heatmap",
+      "name": "Heatmap",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://heatmap.news/feeds/feed.rss",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false,
+      "enabled": false
+    },
+    {
+      "id": "rss-latitude-media",
+      "name": "Latitude Media",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.latitudemedia.com/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-fuel-cells-works",
+      "name": "Fuel Cells Works",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://fuelcellsworks.com/feed",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 180,
+      "tags": [
+        "Global",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false,
+      "enabled": false
+    },
+    {
+      "id": "rss-hydrogen-central",
+      "name": "Hydrogen Central",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://hydrogen-central.com/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 180,
+      "tags": [
+        "Global",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false,
+      "enabled": false
+    },
+    {
+      "id": "rss-world-nuclear-news",
+      "name": "World Nuclear News",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.world-nuclear-news.org/rss/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 180,
+      "tags": [
+        "Global",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false,
+      "enabled": false
+    },
+    {
+      "id": "rss-windpower-monthly",
+      "name": "Windpower Monthly",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.windpowermonthly.com/rss/news",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-windeurope",
+      "name": "WindEurope",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://windeurope.org/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T1_5",
+      "participation_mode": "editorial",
+      "interval_minutes": 240,
+      "tags": [
+        "Global",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-expansion-espana",
+      "name": "Expansión España",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.expansion.com/rss/portada.xml",
+        "_aihot": {
+          "initialBackfillLimit": 3,
+          "maxPerDay": 30
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Negocios"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-bbc-mundo",
+      "name": "BBC Mundo",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://feeds.bbci.co.uk/mundo/rss.xml",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Negocios"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false,
+      "enabled": false
+    },
+    {
+      "id": "rss-bbc-business",
+      "name": "BBC Business",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://feeds.bbci.co.uk/news/business/rss.xml",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Negocios"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-guardian-business",
+      "name": "The Guardian · Negocios",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.theguardian.com/uk/business/rss",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Negocios"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-guardian-environment",
+      "name": "The Guardian · Medio ambiente",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.theguardian.com/environment/rss",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-cnbc-energy",
+      "name": "CNBC · Energía",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.cnbc.com/id/19836768/device/rss/rss.html",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Energía"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-cnbc-tech",
+      "name": "CNBC · Tecnología",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.cnbc.com/id/19854910/device/rss/rss.html",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Tecnología"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-dw-business",
+      "name": "DW · Negocios",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://rss.dw.com/rdf/rss-en-bus",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Negocios"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-france24-business",
+      "name": "France 24 · Negocios",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.france24.com/en/business/rss",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Negocios"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-euronews-business",
+      "name": "Euronews · Negocios",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.euronews.com/rss?level=theme&name=business",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Negocios"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-euractiv",
+      "name": "Euractiv",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.euractiv.com/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Regulación"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false,
+      "enabled": false
+    },
+    {
+      "id": "rss-france24-es",
+      "name": "France 24 Español · Economía",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.france24.com/es/economia/rss",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Negocios"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-insideevs",
+      "name": "InsideEVs",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://insideevs.com/rss/articles/all/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Electromovilidad"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-charged-evs",
+      "name": "Charged EVs",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://chargedevs.com/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Electromovilidad"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-automotive-world",
+      "name": "Automotive World",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.automotiveworld.com/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Electromovilidad"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false,
+      "enabled": false
+    },
+    {
+      "id": "rss-just-auto",
+      "name": "Just Auto",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.just-auto.com/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Electromovilidad"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-autocar",
+      "name": "Autocar",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.autocar.co.uk/rss",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Electromovilidad"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-motorpasion",
+      "name": "Motorpasión",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.motorpasion.com/feedburner.xml",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Electromovilidad"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false,
+      "enabled": false
+    },
+    {
+      "id": "rss-ev-central",
+      "name": "EV Central",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://evcentral.com.au/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Electromovilidad"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-the-driven",
+      "name": "The Driven",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://thedriven.io/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Electromovilidad"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-teslarati",
+      "name": "Teslarati",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.teslarati.com/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Electromovilidad"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-electrive-de",
+      "name": "electrive (Alemania)",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.electrive.net/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Electromovilidad"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false,
+      "enabled": false
+    },
+    {
+      "id": "rss-aws-blog",
+      "name": "AWS Blog",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://aws.amazon.com/blogs/aws/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T1",
+      "owner_entity_id": "amazon",
+      "participation_mode": "editorial",
+      "interval_minutes": 180,
+      "tags": [
+        "Global",
+        "Nube y centros de datos"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-cloudflare-blog",
+      "name": "Cloudflare Blog",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://blog.cloudflare.com/rss/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T1",
+      "participation_mode": "editorial",
+      "interval_minutes": 180,
+      "tags": [
+        "Global",
+        "Ciberseguridad"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-github-blog",
+      "name": "GitHub Blog",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://github.blog/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T1",
+      "participation_mode": "editorial",
+      "interval_minutes": 180,
+      "tags": [
+        "Global",
+        "Software"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-stackoverflow-blog",
+      "name": "Stack Overflow Blog",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://stackoverflow.blog/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T1",
+      "participation_mode": "editorial",
+      "interval_minutes": 180,
+      "tags": [
+        "Global",
+        "Software"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-microsoft-research",
+      "name": "Microsoft Research",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.microsoft.com/en-us/research/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T1",
+      "owner_entity_id": "microsoft",
+      "participation_mode": "editorial",
+      "interval_minutes": 180,
+      "tags": [
+        "Global",
+        "IA"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-nvidia-developer",
+      "name": "NVIDIA Developer",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://developer.nvidia.com/blog/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T1",
+      "owner_entity_id": "nvidia",
+      "participation_mode": "editorial",
+      "interval_minutes": 180,
+      "tags": [
+        "Global",
+        "IA"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-mistral-ai",
+      "name": "Mistral AI",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://mistral.ai/news/rss",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T1",
+      "participation_mode": "editorial",
+      "interval_minutes": 180,
+      "tags": [
+        "Global",
+        "IA"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-ars-technica",
+      "name": "Ars Technica",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://arstechnica.com/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Tecnología"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false,
+      "enabled": false
+    },
+    {
+      "id": "rss-wired",
+      "name": "Wired",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.wired.com/feed/rss",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Tecnología"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-engadget",
+      "name": "Engadget",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.engadget.com/category/news/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Gadgets"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-cnet",
+      "name": "CNET",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.cnet.com/rss/all/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Gadgets"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false,
+      "enabled": false
+    },
+    {
+      "id": "rss-zdnet",
+      "name": "ZDNet",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.zdnet.com/rss/all/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "TI empresarial"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false,
+      "enabled": false
+    },
+    {
+      "id": "rss-mit-tech-review",
+      "name": "MIT Technology Review",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.technologyreview.com/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Tecnología"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-ieee-spectrum",
+      "name": "IEEE Spectrum",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://spectrum.ieee.org/feeds/feed.rss",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Tecnología"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-nature",
+      "name": "Nature",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://www.nature.com/nature.rss",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 180,
+      "tags": [
+        "Global",
+        "Estudio o investigación"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false,
+      "enabled": false
+    },
+    {
+      "id": "rss-the-decoder",
+      "name": "The Decoder",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://the-decoder.com/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "IA"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-simon-willison",
+      "name": "Simon Willison",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://simonwillison.net/atom/everything/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 180,
+      "tags": [
+        "Global",
+        "IA"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-import-ai",
+      "name": "Import AI",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://importai.substack.com/feed",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 180,
+      "tags": [
+        "Global",
+        "IA"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-infoq",
+      "name": "InfoQ",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://feed.infoq.com/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Software"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-the-register",
+      "name": "The Register",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://api.theregister.com/api/v1/article?orderBy=published&site_id=2&remapper=rss&content=node",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Tecnología"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-wired-es",
+      "name": "Wired en Español",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://es.wired.com/feed/rss",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Tecnología"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-gizmodo-es",
+      "name": "Gizmodo en Español",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://es.gizmodo.com/feed",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Global",
+        "Tecnología"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false,
+      "enabled": false
+    },
+    {
+      "id": "rss-startups-latam",
+      "name": "Startups LatAm",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://startupslatam.com/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T2",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Latinoamérica",
+        "Startups"
       ],
       "site_fulltext": false,
       "syndicate_fulltext": false
