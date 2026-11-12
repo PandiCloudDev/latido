@@ -575,11 +575,13 @@ export async function adaptIntervals(): Promise<{ updated: number }> {
     // Editorial sites and feeds are looked at hourly at least (they cost nothing);
     // editorial X and listings read through Jina stop at two hours (paid per call, within their budgets);
     // hot signals may wait longer.
-    // Latido: feeds at most every 2 h and at least every 30 min (was 60 / 15) to spread out the reading.
-    const max = r.participation_mode === "hot_signal" ? 180 : r.kind === "x_search" || r.paid_listing ? 120 : 120;
-    const min = r.paid_listing ? PAID_LISTING_FLOOR : 30;
+    // Latido: only two paces for feeds — every 3 h for quiet ones, every 2 h for busy ones (was 15–60 min).
+    const max = r.participation_mode === "hot_signal" ? 180 : r.kind === "x_search" || r.paid_listing ? 120 : 180;
+    const min = r.paid_listing ? PAID_LISTING_FLOOR : 120;
     // X accounts read by shard follow the shard's pace, whatever their own volume.
-    const own = shardHandle(r) ? shardMinutes(r.participation_mode, r.uses) : perDay <= 0.15 ? max : Math.round(Math.min(max, Math.max(min, (24 * 60) / (perDay * 3))));
+    // Latido: a feed that would be read every 2 h or less often goes to 3 h; the rest to 2 h.
+    const paced = (24 * 60) / (perDay * 3);
+    const own = shardHandle(r) ? shardMinutes(r.participation_mode, r.uses) : perDay <= 0.15 || paced >= 120 ? max : min;
     // Another use may want the source sooner, never later, and a paid listing still waits its hour.
     const target = Math.max(min, Math.min(own, usePace(r.uses)));
     const res = await sql`UPDATE sources SET interval_minutes = ${target} WHERE id = ${r.id} AND interval_minutes <> ${target}`;
