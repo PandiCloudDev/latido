@@ -15,7 +15,7 @@ export async function registerEventJobs(boss: PgBoss) {
     if (signalOnly && !(await settleNonEditorial(articleId)).group) return { verdict: "skipped" };
     const result = await groupArticle(articleId, { signalOnly, regroup });
     if (result.storyId && !result.verdict.startsWith("signal")) {
-      await enqueue(QUEUES.digest, { storyId: result.storyId }, { singletonKey: `story:${result.storyId}`, startAfter: 60 });
+      await enqueue(QUEUES.digest, { storyId: result.storyId }, { singletonKey: `story:${result.storyId}`, startAfter: 1800 }); // Latido: one digest per story every 30 min, not one per report
     }
     return result;
   });
@@ -35,7 +35,7 @@ export async function sweepUngrouped(): Promise<{ enqueued: number }> {
       SELECT a.id, s.participation_mode, a.backfill, a.published_at, a.discovered_at FROM articles a JOIN sources s ON s.id = a.source_id
       WHERE a.grouping_status = 'pending' AND a.created_at < now() - interval '3 minutes'
         AND (s.participation_mode = 'editorial' AND a.processing_state = 'analyzed' AND EXISTS (
-              SELECT 1 FROM analyses an WHERE an.article_id = a.id AND an.input_revision = a.revision AND an.relevance = 'pass')
+              SELECT 1 FROM analyses an WHERE an.article_id = a.id AND an.input_revision = a.revision AND an.relevance = 'pass' AND an.selected)
           OR s.participation_mode = 'hot_signal' AND a.processing_state = 'skipped' AND ${newsCondition})
         AND NOT EXISTS (SELECT 1 FROM pgboss.job j WHERE j.name = ${QUEUES.group}
           AND j.data->>'articleId' = a.id AND j.state IN ('created', 'active', 'retry'))
