@@ -21,6 +21,8 @@ export const SELECTION = {
   classes: {
     ecosystem: { label: "Ecosistema e infraestructura", threshold: 70 },
     leaderboard: { label: "Rankings y evaluaciones", threshold: 76 },
+    // Portales propios de ADEV (2026-11-15): entran siempre a la selección si pasan el filtro de relevancia; ver selectionThreshold.
+    propio: { label: "Portales propios (ADEV)", threshold: 0 },
   } as Record<string, { label: string; threshold: number }>,
   /**
    * Categoría → umbral máximo. Si un sector solo tiene fuentes de medios (T2, 76), casi nada suyo entra a la selección y desaparece de los boletines;

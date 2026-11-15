@@ -62,6 +62,8 @@ export const SCORE_CALLS = 2;
 export function selectionThreshold(source: { tier: string; selectionClass?: string | null }): number | null {
   const tier = SELECTION.thresholds[source.tier];
   if (tier === undefined) return null;
+  // Latido (2026-11-15): the 7 own portals are always selection candidates (any score) to send traffic to them.
+  if (source.selectionClass === "propio") return 0;
   return Math.max(tier, (source.selectionClass && SELECTION.classes[source.selectionClass]?.threshold) || 0);
 }
 
