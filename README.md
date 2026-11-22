@@ -35,7 +35,7 @@
 
 [Latido](https://latido.news) es un radar de noticias de tecnología, negocios, energía y electromovilidad escrito en español, con una prioridad editorial clara: primero México, después Latinoamérica y, al final, lo global que sí mueve el tablero en la región. Cubre inteligencia artificial, productos y gadgets, startups y fintech, telecomunicaciones, ciberseguridad, regulación digital y videojuegos, además de inversión, industria, proyectos energéticos y transporte eléctrico.
 
-Todos los días recoge notas de hasta 212 fuentes configuradas, las filtra con un modelo de lenguaje, califica dos veces y por separado las que prometen, y redacta para cada una un titular informativo y un resumen que responde primero a la pregunta del lector. Cuando varios medios cuentan la misma historia, la agrupa en un solo **evento** y la ordena según cuántas fuentes independientes están hablando de ella. Cada mañana publica el boletín *Latido diario*, los lunes el semanal y el día 1 de cada mes el mensual.
+Todos los días recoge notas de hasta 215 fuentes configuradas, las filtra con un modelo de lenguaje, califica dos veces y por separado las que prometen, y redacta para cada una un titular informativo y un resumen que responde primero a la pregunta del lector. Cuando varios medios cuentan la misma historia, la agrupa en un solo **evento** y la ordena según cuántas fuentes independientes están hablando de ella. Cada mañana publica el boletín *Latido diario*, los lunes el semanal y el día 1 de cada mes el mensual.
 
 Este repositorio es el sitio completo: la web pública, el panel de administración, el flujo de selección, el algoritmo de agrupación y de temperatura, y **el texto íntegro de cada prompt y de cada umbral de selección**, para que cualquiera pueda auditar con qué criterio se elige lo que se publica.
 
@@ -80,7 +80,7 @@ La **temperatura** se calcula por evento y no por nota: dentro de 48 horas cada 
 
 ## Cobertura
 
-El catálogo suma 212 fuentes: 79 de energía, 16 de electromovilidad y 117 de tecnología, negocios y regulación.
+El catálogo suma 215 fuentes: 79 de energía, 17 de electromovilidad, 117 de tecnología, negocios y regulación, y 2 de salud y bienestar.
 
 | Categoría | Qué entra |
 |---|---|
