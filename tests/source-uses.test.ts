@@ -109,6 +109,8 @@ test("a use's pace speeds its sources up, never slows the news pipeline's pace a
   await sql`
     INSERT INTO sources (id, name, kind, config, participation_mode, uses, interval_minutes)
     VALUES (${`uses-jina-${T}`}, 'jina', 'web_list', ${sql.json({ url: `https://r.jina.ai/https://example.com/list-${T}` })}, 'isolated', ${["watch"]}, 45)`;
+  await createSource(feed("rss-watch", ["watch"]), "test");
+  await createSource(feed("rss-quiet"), "test");
   await adaptIntervals();
   const minutes = Object.fromEntries((await sql<{ id: string; interval_minutes: number }[]>`
     SELECT id, interval_minutes FROM sources WHERE id LIKE ${`uses-%-${T}`}`).map((r) => [r.id.slice(5, -T.length - 1), r.interval_minutes]));
@@ -118,4 +120,6 @@ test("a use's pace speeds its sources up, never slows the news pipeline's pace a
   assert.equal(minutes["editorial-watch"], 20, "faster than the news pipeline's half hour");
   assert.equal(minutes["editorial-slow"], 30, "a slower use leaves the news pipeline's pace alone");
   assert.equal(minutes["jina"], 60, "listings paid per read stay hourly");
+  assert.equal(minutes["rss-watch"], 20, "the RSS pipeline yields to a faster use");
+  assert.equal(minutes["rss-quiet"], 180, "quiet RSS feeds keep the slower editorial pace");
 });

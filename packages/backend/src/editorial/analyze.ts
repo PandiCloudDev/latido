@@ -62,7 +62,19 @@ export const SCORE_CALLS = 2;
 export function selectionThreshold(source: { tier: string; selectionClass?: string | null }): number | null {
   const tier = SELECTION.thresholds[source.tier];
   if (tier === undefined) return null;
+  // Latido (2026-11-15): the 7 own portals are always selection candidates (any score) to send traffic to them.
+  if (source.selectionClass === "propio") return 0;
   return Math.max(tier, (source.selectionClass && SELECTION.classes[source.selectionClass]?.threshold) || 0);
+}
+
+/**
+ * The source's threshold lowered to its category's cap (industry/selection.ts `categories`); a cap
+ * never raises it. The category is known only after the structure step, so this applies on normalizing.
+ */
+export function categoryThreshold(threshold: number | null, category: string | null | undefined): number | null {
+  if (threshold === null) return null;
+  const cap = category ? SELECTION.categories[category] : undefined;
+  return cap === undefined ? threshold : Math.min(threshold, cap);
 }
 
 /** Unselected items above this mean are written like selected ones. */
@@ -515,8 +527,8 @@ export function normalizeAnalysis(run: AnalysisRun) {
   const relevance = label === "BLOCK" ? "block" : !run.writing || !titleZh || (!summaryZh && run.writing.kind !== "verbatim") ? "unknown" : "pass";
   const values = run.scores && !run.scores.refused ? run.scores.values : null;
   const score = shownScore(run.scores);
-  const threshold = run.scores?.threshold ?? null;
-  const selected = relevance === "pass" && scoresSelect(run.scores);
+  const threshold = categoryThreshold(run.scores?.threshold ?? null, run.structure?.category);
+  const selected = relevance === "pass" && scoresSelect(run.scores, threshold);
   const subjects = run.structure?.subjects ?? [];
   const tags = [...(run.structure?.tags ?? [])];
   for (const s of subjects) {

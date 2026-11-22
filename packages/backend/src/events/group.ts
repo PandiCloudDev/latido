@@ -43,7 +43,8 @@ import {
 } from "./relate.ts";
 
 const RECALL_MIN_COSINE = 0.6;
-const RECALL_TOP_FACTS = 10;
+// Latido: 6 instead of 10 cut the grouping prompt (half of the model bill) after the 214-source expansion (2026-11-12).
+const RECALL_TOP_FACTS = 6;
 /** A merge with a candidate less similar than this is confirmed by the review model before it is written. */
 const CONFIRM_BELOW_COSINE = 0.85;
 /** Discussion posts are judged only against clear candidates, and attach without a call when nearly identical to a report. */

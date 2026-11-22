@@ -5,6 +5,8 @@ export interface Mail {
   to: string;
   subject: string;
   text: string;
+  /** The HTML alternative; nodemailer sends both as multipart/alternative. */
+  html?: string;
 }
 export type Mailer = (mail: Mail) => Promise<void>;
 

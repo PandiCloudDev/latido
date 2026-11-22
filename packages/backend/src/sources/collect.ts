@@ -393,6 +393,18 @@ export async function collectSource(sourceId: string, opts: { force?: boolean; x
     if (found) { nextCursor.detailDatedOut = datedOut; nextCursor.detailRetries = reads.retries; }
     if (!d || !Object.keys(nextCursor.detailDatedOut ?? {}).length) delete nextCursor.detailDatedOut;
     if (!d || !Object.keys(nextCursor.detailRetries ?? {}).length) delete nextCursor.detailRetries;
+    // Latido: optional daily cap of new entries per source (config._aihot.maxPerDay, Mexico City day).
+    // Entries already stored still pass (revisions); the newest new ones fill what is left of the day.
+    const maxPerDay = Number(source.config._aihot?.maxPerDay ?? 0);
+    if (!firstImport && maxPerDay > 0) {
+      const [{ today }] = await sql<{ today: number }[]>`SELECT count(*)::int AS today FROM articles
+        WHERE source_id = ${sourceId} AND NOT backfill
+          AND discovered_at >= (date_trunc('day', now() AT TIME ZONE 'America/Mexico_City') AT TIME ZONE 'America/Mexico_City')`;
+      const fresh = candidates.filter((c) => !known.has(c.identityKey!))
+        .sort((a, b) => (b.publishedAt?.getTime() ?? 0) - (a.publishedAt?.getTime() ?? 0));
+      const keep = new Set(fresh.slice(0, Math.max(0, maxPerDay - today)).map((c) => c.identityKey!));
+      candidates = candidates.filter((c) => known.has(c.identityKey!) || keep.has(c.identityKey!));
+    }
     const stored = await store(sourceId, candidates, firstImport ? "first-import" : null);
     ({ created, revised } = stored);
     for (const id of await fillScheduledPublications(sourceId)) await queueProcessing(id);
@@ -549,8 +561,8 @@ const paidListing = sql`coalesce(config->>'url', '') LIKE 'https://r.jina.ai/%'`
 const PAID_LISTING_FLOOR = 60;
 
 /**
- * Daily: adapt each source's interval to its recent output (active 15 min … quiet 120 min).
- * hot_signal sources are allowed to be slower; the source's other uses may ask for it sooner.
+ * Daily: adapt each source's interval to its recent output. Other uses may request faster reads,
+ * within each transport's limits.
  */
 export async function adaptIntervals(): Promise<{ updated: number }> {
   const rows = await sql<Array<Pick<SourceRow, "id" | "participation_mode" | "uses" | "kind" | "config" | "cursor"> & { paid_listing: boolean; per_day: number }>>`
@@ -560,14 +572,13 @@ export async function adaptIntervals(): Promise<{ updated: number }> {
   let updated = 0;
   for (const r of rows) {
     const perDay = Number(r.per_day);
-    // Editorial sites and feeds are looked at hourly at least (they cost nothing);
-    // editorial X and listings read through Jina stop at two hours (paid per call, within their budgets);
-    // hot signals may wait longer.
     const max = r.participation_mode === "hot_signal" ? 180 : r.kind === "x_search" || r.paid_listing ? 120 : 60;
     const min = r.paid_listing ? PAID_LISTING_FLOOR : 15;
-    // X accounts read by shard follow the shard's pace, whatever their own volume.
-    const own = shardHandle(r) ? shardMinutes(r.participation_mode, r.uses) : perDay <= 0.15 ? max : Math.round(Math.min(max, Math.max(min, (24 * 60) / (perDay * 3))));
-    // Another use may want the source sooner, never later, and a paid listing still waits its hour.
+    const paced = (24 * 60) / (perDay * 3);
+    // The 2–3 hour pace is the RSS pipeline's default. Shards keep their own schedule.
+    const own = shardHandle(r) ? shardMinutes(r.participation_mode, r.uses)
+      : r.kind === "rss" ? (paced >= 120 ? 180 : 120)
+        : Math.round(Math.min(max, Math.max(min, paced)));
     const target = Math.max(min, Math.min(own, usePace(r.uses)));
     const res = await sql`UPDATE sources SET interval_minutes = ${target} WHERE id = ${r.id} AND interval_minutes <> ${target}`;
     updated += res.count;

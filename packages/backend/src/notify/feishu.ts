@@ -146,6 +146,10 @@ export async function sendAlert(title: string, lines: string[]): Promise<"sent" 
     console.log(JSON.stringify({ level: "warn", msg: "alert (not sent: FEISHU_INTERNAL_ENABLED is off)", title, lines }));
     return "disabled";
   }
+  if (telegramAlertsConfigured()) {
+    await sendTelegramAlert(text);
+    return "sent";
+  }
   const rest = await toldThroughHub(webhookPieces(text));
   if (!rest.length) return "sent";
   const webhook = credential("integrations", "FEISHU_ALERT_WEBHOOK_URL");
@@ -160,6 +164,42 @@ export async function sendAlert(title: string, lines: string[]): Promise<"sent" 
   if (!chat) return "disabled";
   await sendToChat(chat, "text", { text: rest.join("") });
   return "sent";
+}
+
+/** Telegram takes the owner alerts instead of Feishu when a bot and a chat are set. */
+export const telegramAlertsConfigured = () =>
+  !!credential("integrations", "TELEGRAM_ALERT_BOT_TOKEN") && !!credential("integrations", "TELEGRAM_ALERT_CHAT_ID");
+
+// Telegram caps a message at 4096 characters; leave room for the part marker.
+const TELEGRAM_TEXT_CHARS = 3900;
+
+export function telegramPieces(text: string): string[] {
+  const pieces: string[] = [];
+  let current = "";
+  for (const line of text.split("\n")) {
+    for (let rest = line; ; ) {
+      const room = TELEGRAM_TEXT_CHARS - current.length - (current ? 1 : 0);
+      if (rest.length <= room) { current += (current ? "\n" : "") + rest; break; }
+      if (current) { pieces.push(current); current = ""; continue; }
+      pieces.push(rest.slice(0, TELEGRAM_TEXT_CHARS));
+      rest = rest.slice(TELEGRAM_TEXT_CHARS);
+      if (!rest) break;
+    }
+  }
+  if (current) pieces.push(current);
+  return pieces.length > 1 ? pieces.map((p, i) => `${p}\n(${i + 1}/${pieces.length})`) : pieces;
+}
+
+async function sendTelegramAlert(text: string): Promise<void> {
+  const token = credential("integrations", "TELEGRAM_ALERT_BOT_TOKEN")!;
+  const chat = credential("integrations", "TELEGRAM_ALERT_CHAT_ID")!;
+  for (const piece of telegramPieces(`Latido · ${text}`)) {
+    const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+      method: "POST", headers: { "content-type": "application/json" },
+      body: JSON.stringify({ chat_id: chat, text: piece, disable_web_page_preview: true }), signal: AbortSignal.timeout(15_000),
+    });
+    if (!res.ok) throw new Error(`telegram alert HTTP ${res.status}: ${(await res.text()).slice(0, 200)}`);
+  }
 }
 
 /**

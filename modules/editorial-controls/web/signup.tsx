@@ -10,13 +10,14 @@ export const headers = () => ({
   "X-Robots-Tag": "noindex",
 });
 export const meta = () => pageMeta({
-  title: "Boletín por correo", description: "Suscríbete al boletín semanal de Latido.", path: "/boletin", noindex: true,
+  title: "Boletines por correo", description: "Suscríbete al boletín diario o semanal de Latido.", path: "/boletin", noindex: true,
 });
 
 function intentOf(value: string | undefined) {
   if (value === undefined) return "signup";
   if (value === "confirmar") return "confirm";
   if (value === "baja") return "unsubscribe";
+  if (value === "preferencias") return "preferences";
   throw data(null, { status: 404 });
 }
 
@@ -28,6 +29,11 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 
 const button = "inline-flex min-h-11 items-center justify-center rounded-control bg-accent px-4 text-[14px] font-bold text-accent-contrast hover:opacity-90 disabled:opacity-50";
 const inlineLink = "font-bold text-editorial-blue underline underline-offset-4";
+const frequencyOptions = [
+  { value: "daily", label: "Diario: cada mañana, lo más importante del día anterior" },
+  { value: "weekly", label: "Semanal: los lunes, el resumen de la semana" },
+  { value: "both", label: "Los dos: diario y semanal" },
+];
 
 export async function action({ params, request }: ActionFunctionArgs) {
   const intent = intentOf(params.intent);
@@ -43,8 +49,10 @@ export async function action({ params, request }: ActionFunctionArgs) {
   }
   const form = await request.formData();
   const payload = intent === "signup"
-    ? { email: String(form.get("email") ?? ""), website: String(form.get("website") ?? "") }
-    : { token: String(form.get("token") ?? "") };
+    ? { email: String(form.get("email") ?? ""), frequency: String(form.get("frequency") ?? "daily"), website: String(form.get("website") ?? "") }
+    : intent === "preferences"
+      ? { token: String(form.get("token") ?? ""), frequency: String(form.get("frequency") ?? "daily") }
+      : { token: String(form.get("token") ?? "") };
   const res = await fetch(`${API_BASE_URL}/api/site/newsletter/${intent}`, {
     method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload),
     signal: AbortSignal.timeout(25_000),
@@ -56,12 +64,14 @@ export async function action({ params, request }: ActionFunctionArgs) {
   if (!res.ok || !body?.ok) {
     const message = intent === "signup" ? "Revisa que la dirección de correo esté bien escrita."
       : intent === "confirm" ? "El enlace ya se usó o venció. Si aún no confirmaste, vuelve a solicitar el boletín."
-        : "El enlace de baja no está completo. Ábrelo de nuevo desde el boletín.";
+        : intent === "preferences" ? "El enlace de preferencias ya no está disponible. Ábrelo de nuevo desde el boletín."
+          : "El enlace de baja no está completo. Ábrelo de nuevo desde el boletín.";
     return data({ ok: false, message }, { status: 400 });
   }
   const message = intent === "signup" ? "Si la dirección es nueva, revisa tu bandeja y confirma con el enlace que te enviamos. También puedes buscarlo en correo no deseado."
-    : intent === "confirm" ? "Tu suscripción está confirmada. Recibirás la próxima edición semanal."
-      : "La baja está lista. Puedes volver a suscribirte cuando quieras.";
+    : intent === "confirm" ? "Tu suscripción está confirmada. Recibirás las ediciones que elegiste."
+      : intent === "preferences" ? "Tus preferencias quedaron guardadas."
+        : "La baja está lista. Puedes volver a suscribirte cuando quieras.";
   return { ok: true, message };
 }
 
@@ -74,34 +84,48 @@ export default function NewsletterSignup() {
   useEffect(() => {
     setToken(window.location.hash.slice(1));
   }, [pathname]);
-  const title = intent === "signup" ? "Recibe el boletín de Latido"
-    : intent === "confirm" ? "Confirma tu suscripción" : "Cancela tu suscripción";
+  const title = intent === "signup" ? "Recibe los boletines de Latido"
+    : intent === "confirm" ? "Confirma tu suscripción"
+      : intent === "preferences" ? "Cambia lo que recibes" : "Cancela tu suscripción";
   return (
     <main className="mx-auto min-h-[55vh] w-full max-w-2xl px-4 py-10 sm:px-6 sm:py-16">
       <section className="rounded-card border border-line border-t-[3px] border-t-editorial-blue bg-surface p-5 sm:p-8">
-        <p className="mb-2 text-[12px] font-bold uppercase tracking-[0.12em] text-editorial-blue">Latido semanal</p>
+        <p className="mb-2 text-[12px] font-bold uppercase tracking-[0.12em] text-editorial-blue">Latido · boletines</p>
         <h1 className="text-[28px] font-bold leading-tight text-ink sm:text-[34px]">{title}</h1>
         {result && <p role={result.ok ? "status" : "alert"} className="mt-4 rounded-control border border-line p-3 text-[14px] text-ink">{result.message}</p>}
         {intent === "signup" && (open ? !result?.ok && (
           <Form method="post" className="mt-4 space-y-4">
-            <p className="text-[15px] leading-relaxed text-ink-3">Cada semana, una selección de noticias y contexto. Te enviaremos un enlace para confirmar tu correo.</p>
+            <p className="text-[15px] leading-relaxed text-ink-3">Cada mañana, lo más importante del día anterior; los lunes, el resumen de la semana. Elige qué quieres recibir y te enviaremos un enlace para confirmar tu correo.</p>
+            <label className="block text-[14px] font-bold text-ink" htmlFor="newsletter-frequency">Qué quieres recibir</label>
+            <select id="newsletter-frequency" name="frequency" defaultValue="daily" className="block min-h-11 w-full rounded-control border border-line bg-surface px-3 text-base text-ink">
+              {frequencyOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+            </select>
             <label className="block text-[14px] font-bold text-ink" htmlFor="newsletter-email">Tu correo electrónico</label>
             <input id="newsletter-email" name="email" type="email" autoComplete="email" maxLength={254} required className="block min-h-11 w-full rounded-control border border-line bg-surface px-3 text-base text-ink" />
             <div className="hidden" aria-hidden="true"><label>Deja este campo vacío<input name="website" tabIndex={-1} autoComplete="off" /></label></div>
-            <p className="text-[13px] leading-relaxed text-ink-3">Puedes darte de baja desde cualquier edición. Consulta el <Link className={inlineLink} to="/privacy">aviso de privacidad</Link>.</p>
+            <p className="text-[13px] leading-relaxed text-ink-3">Puedes cambiar lo que recibes o darte de baja desde cualquier edición. Consulta el <Link className={inlineLink} to="/privacy">aviso de privacidad</Link>.</p>
             <button className={button} disabled={busy}>{busy ? "Enviando…" : "Enviarme el enlace"}</button>
           </Form>
-        ) : <p className="mt-4 text-[15px] text-ink-3">La suscripción por correo todavía no está disponible. Ya puedes leer la edición semanal o seguirla por RSS.</p>)}
+        ) : <p className="mt-4 text-[15px] text-ink-3">La suscripción por correo todavía no está disponible. Ya puedes leer el boletín diario, el semanal o seguirlos por RSS.</p>)}
         {intent !== "signup" && !result?.ok && (
           <Form method="post" className="mt-4 space-y-4">
-            <p className="text-[15px] text-ink-3">{intent === "confirm" ? "Confirma que quieres recibir una edición por semana." : "Confirma que quieres dejar de recibir el boletín."}</p>
+            {intent === "preferences" ? <p className="text-[15px] text-ink-3">Elige qué ediciones quieres seguir recibiendo. La baja completa sigue disponible desde el pie de cada correo.</p>
+              : <p className="text-[15px] text-ink-3">{intent === "confirm" ? "Confirma que quieres recibir las ediciones que elegiste." : "Confirma que quieres dejar de recibir los boletines."}</p>}
+            {intent === "preferences" && <>
+              <label className="block text-[14px] font-bold text-ink" htmlFor="preferences-frequency">Qué quieres recibir</label>
+              <select id="preferences-frequency" name="frequency" defaultValue="" required className="block min-h-11 w-full rounded-control border border-line bg-surface px-3 text-base text-ink">
+                <option value="" disabled>Elige qué quieres recibir</option>
+                {frequencyOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+              </select>
+            </>}
             <input type="hidden" name="token" value={token} />
-            <button className={button} disabled={busy || !token}>{intent === "confirm" ? "Confirmar suscripción" : "Dar de baja mi correo"}</button>
+            <button className={button} disabled={busy || !token}>{intent === "confirm" ? "Confirmar suscripción" : intent === "preferences" ? "Guardar preferencias" : "Dar de baja mi correo"}</button>
             <noscript><p>Activa JavaScript y vuelve a abrir el enlace del correo.</p></noscript>
             {intent === "confirm" && result && <p><Link to="/boletin" className={inlineLink}>Solicitar un enlace nuevo</Link></p>}
           </Form>
         )}
         <div className="mt-6 flex flex-wrap gap-x-4 gap-y-2 border-t border-line pt-4 text-[14px]">
+          <Link className={inlineLink} to="/daily">Leer el boletín diario</Link>
           <Link className={inlineLink} to="/weekly">Leer el boletín semanal</Link>
           <a className={inlineLink} href={WEEKLY_RSS}>Seguir vía RSS</a>
         </div>

@@ -279,10 +279,10 @@ test("a source's language reaches its listing, detail page and article body, whi
   await fetchJsonList(source({ url: `${site}/en/items.json`, titlePaths: ["title"], urlTemplate: "{raw:url}", acceptLanguage: EN }));
   assert.equal(sent("/en/items.json"), EN);
 
-  // Without one, the default Chinese preference stays.
+  // Without one, the default Mexican Spanish preference stays.
   await fetchWebList(source(listing));
-  assert.match(sent("/en/blog") ?? "", /^zh-CN/);
-  assert.match((await extractFromUrl(item!.url, "article:fixture", pageRules({})))?.text ?? "", /^智能体/);
+  assert.match(sent("/en/blog") ?? "", /^es-MX/);
+  assert.match((await extractFromUrl(item!.url, "article:fixture", pageRules({})))?.text ?? "", /^Agents now finish/);
 });
 
 test("a page of several megabytes is read directly, keeping its tables", async () => {

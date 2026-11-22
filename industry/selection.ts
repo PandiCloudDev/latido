@@ -21,7 +21,17 @@ export const SELECTION = {
   classes: {
     ecosystem: { label: "Ecosistema e infraestructura", threshold: 70 },
     leaderboard: { label: "Rankings y evaluaciones", threshold: 76 },
+    // Portales propios de ADEV (2026-11-15): entran siempre a la selección si pasan el filtro de relevancia; ver selectionThreshold.
+    propio: { label: "Portales propios (ADEV)", threshold: 0 },
   } as Record<string, { label: string; threshold: number }>,
+  /**
+   * Categoría → umbral máximo. Si un sector solo tiene fuentes de medios (T2, 76), casi nada suyo entra a la selección y desaparece de los boletines;
+   * aquí se baja el umbral de las notas de esa categoría, venga de la fuente que venga. Solo baja, nunca sube: una fuente T1 conserva su umbral menor.
+   *   energia: todas las fuentes de energía son T2; con 76 entraba ~1 nota por semana (W45), con 65 entran ~6–7. Ajustado el 9-nov-2026.
+   */
+  categories: {
+    energia: 65,
+  } as Record<string, number>,
   /**
    * Las notas no seleccionadas con promedio mayor que este número también se redactan como seleccionadas (titular, resumen y motivo para leer);
    * el resto usa la redacción más barata de titular, resumen y traducción.

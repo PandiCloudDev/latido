@@ -8,7 +8,7 @@ import assert from "node:assert/strict";
 import { after, before, test } from "node:test";
 import { closeDb, sql } from "@aihot/backend/db";
 import { upsertMaterial } from "@aihot/backend/content/materials";
-import { analyzeArticle, buildMaterial, loadAnalyzeInput, normalizeStructure, selectionThreshold, StructureSchema, UNDERSTAND_FLOOR } from "@aihot/backend/editorial/analyze";
+import { analyzeArticle, buildMaterial, categoryThreshold, loadAnalyzeInput, normalizeAnalysis, normalizeStructure, selectionThreshold, StructureSchema, UNDERSTAND_FLOOR } from "@aihot/backend/editorial/analyze";
 import { createSource, updateSource } from "@aihot/backend/admin/sources";
 import { queueProcessing } from "@aihot/backend/jobs/content";
 import { QUEUES, stopBoss } from "@aihot/backend/jobs/queue";
@@ -256,6 +256,23 @@ test("guards: a company the input does not name is not written in; long summarie
   assert.ok(runOn.startsWith(head) && "，；".includes(runOn[head.length]!), head);
   assert.deepEqual(parseTranslateOutput("title_zh: 标题\nsummary_zh: 第一句。\n第二句。"), { titleZh: "标题", summaryZh: "第一句。\n第二句。", bodyZh: "" });
   assert.equal(parseTranslateOutput("title_zh: 标题\nbody_zh: 我们懂你。\n\n来源：X：PixVerse (@PixVerse)").bodyZh, "我们懂你。", "a repeated prompt line is dropped");
+});
+
+test("a category cap lowers a media source's threshold and never raises one", () => {
+  const cap = SELECTION.categories.energia!;
+  assert.ok(cap < T2 && cap > T1, "the cases need the energy cap between the official and the media thresholds");
+  assert.equal(categoryThreshold(T2, "energia"), cap);
+  assert.equal(categoryThreshold(T1, "energia"), T1, "an official source keeps its lower threshold");
+  assert.equal(categoryThreshold(T2, "ia"), T2, "a category without a cap keeps the source's threshold");
+  assert.equal(categoryThreshold(null, "energia"), null, "an unscored tier stays out");
+  const run = (category: string) => ({
+    prefilter: { label: "PASS", reason: "" },
+    scores: { model: "m", threshold: T2, values: [cap, cap], receiptIds: [], reused: false },
+    writing: { kind: "understand", model: "m", titleZh: "Título", summaryZh: "Resumen", reasonZh: null, receiptIds: [], reused: false },
+    structure: { category, tags: [], subjects: [], scope: "single" },
+  }) as unknown as Parameters<typeof normalizeAnalysis>[0];
+  assert.deepEqual([normalizeAnalysis(run("energia")).selected, normalizeAnalysis(run("energia")).threshold], [true, cap]);
+  assert.deepEqual([normalizeAnalysis(run("industry")).selected, normalizeAnalysis(run("industry")).threshold], [false, T2]);
 });
 
 test("a source class raises its tier's threshold to the class floor and never lowers one", () => {

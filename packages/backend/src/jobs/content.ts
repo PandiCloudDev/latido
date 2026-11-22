@@ -97,8 +97,10 @@ export async function queueProcessing(articleId: string, opts: { step?: Step; at
  * (history too, which groupArticle settles without founding events), or a discussion post while it is
  * news. Everything else is finished once processed, and its grouping stays pending.
  */
-export function needsGrouping(m: { participationMode: string; historical: boolean; relevance?: string | null }): boolean {
-  return m.participationMode === "editorial" ? m.relevance === "pass" : m.participationMode === "hot_signal" && !m.historical;
+// Latido (2026-11-13): only a selection candidate is grouped. Grouping was ~45% of the model bill and
+// 80% of it went to reports that can never be selected; they stay readable in the pool, ungrouped.
+export function needsGrouping(m: { participationMode: string; historical: boolean; relevance?: string | null; selected?: boolean | null }): boolean {
+  return m.participationMode === "editorial" ? m.relevance === "pass" && m.selected === true : m.participationMode === "hot_signal" && !m.historical;
 }
 
 /**
@@ -153,7 +155,7 @@ async function processRevision(articleId: string, row: NonNullable<Awaited<Retur
     }
     if (result.stale) return { state: "stale" }; // the newer revision has its own job
     await publishArticle(articleId);
-    if (needsGrouping({ participationMode: row.participation_mode, historical: row.historical, relevance: result.output.relevance })) await enqueue(QUEUES.group, { articleId }, { singletonKey: articleId, priority: groupingPriority({ signal: false, historical: row.historical }) });
+    if (needsGrouping({ participationMode: row.participation_mode, historical: row.historical, relevance: result.output.relevance, selected: result.output.selected })) await enqueue(QUEUES.group, { articleId }, { singletonKey: articleId, priority: groupingPriority({ signal: false, historical: row.historical }) });
     await sql`UPDATE articles SET processing_attempts = 0, processing_retry_at = NULL, processing_queued_at = NULL
               WHERE id = ${articleId} AND revision = ${row.revision}`;
     return { state: result.output.relevance };
