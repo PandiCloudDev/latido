@@ -561,8 +561,8 @@ const paidListing = sql`coalesce(config->>'url', '') LIKE 'https://r.jina.ai/%'`
 const PAID_LISTING_FLOOR = 60;
 
 /**
- * Daily: adapt each source's interval to its recent output (active 15 min … quiet 120 min).
- * hot_signal sources are allowed to be slower; the source's other uses may ask for it sooner.
+ * Daily: adapt each source's interval to its recent output. Other uses may request faster reads,
+ * within each transport's limits.
  */
 export async function adaptIntervals(): Promise<{ updated: number }> {
   const rows = await sql<Array<Pick<SourceRow, "id" | "participation_mode" | "uses" | "kind" | "config" | "cursor"> & { paid_listing: boolean; per_day: number }>>`
@@ -572,17 +572,13 @@ export async function adaptIntervals(): Promise<{ updated: number }> {
   let updated = 0;
   for (const r of rows) {
     const perDay = Number(r.per_day);
-    // Editorial sites and feeds are looked at hourly at least (they cost nothing);
-    // editorial X and listings read through Jina stop at two hours (paid per call, within their budgets);
-    // hot signals may wait longer.
-    // Latido: only two paces for feeds — every 3 h for quiet ones, every 2 h for busy ones (was 15–60 min).
-    const max = r.participation_mode === "hot_signal" ? 180 : r.kind === "x_search" || r.paid_listing ? 120 : 180;
-    const min = r.paid_listing ? PAID_LISTING_FLOOR : 120;
-    // X accounts read by shard follow the shard's pace, whatever their own volume.
-    // Latido: a feed that would be read every 2 h or less often goes to 3 h; the rest to 2 h.
+    const max = r.participation_mode === "hot_signal" ? 180 : r.kind === "x_search" || r.paid_listing ? 120 : 60;
+    const min = r.paid_listing ? PAID_LISTING_FLOOR : 15;
     const paced = (24 * 60) / (perDay * 3);
-    const own = shardHandle(r) ? shardMinutes(r.participation_mode, r.uses) : perDay <= 0.15 || paced >= 120 ? max : min;
-    // Another use may want the source sooner, never later, and a paid listing still waits its hour.
+    // The 2–3 hour pace is the RSS pipeline's default. Shards keep their own schedule.
+    const own = shardHandle(r) ? shardMinutes(r.participation_mode, r.uses)
+      : r.kind === "rss" ? (paced >= 120 ? 180 : 120)
+        : Math.round(Math.min(max, Math.max(min, paced)));
     const target = Math.max(min, Math.min(own, usePace(r.uses)));
     const res = await sql`UPDATE sources SET interval_minutes = ${target} WHERE id = ${r.id} AND interval_minutes <> ${target}`;
     updated += res.count;
