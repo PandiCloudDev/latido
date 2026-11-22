@@ -78,6 +78,39 @@ test("daily and weekly subscriptions only receive the edition they chose, and pr
   await unsubscribe(weeklyRow!.unsubscribe_key);
 });
 
+test("later batches recheck preferences before claiming newsletter delivery", async () => {
+  for (let index = 0; index < 6; index++) {
+    await requestSubscription(`batch-${index}@example.test`, async (mail) => {
+      const token = mail.text.match(/\/confirmar#([\w-]+)/)?.[1];
+      assert.ok(token);
+      assert.equal(await confirmSubscription(token), true);
+    }, "daily");
+  }
+  const subscribers = await sql<{ email: string; unsubscribe_key: string }[]>`
+    SELECT email, unsubscribe_key FROM newsletter_subscribers ORDER BY confirmed_at, id`;
+  const last = subscribers.at(-1)!;
+  const sent: string[] = [];
+  let changed = false;
+  const issue = { key: "2026-11-12", generatedAt: new Date(Date.now() + 1000), headline: "El día en Latido", leadParagraph: null, sections: [] };
+  try {
+    const result = await deliverIssue(issue, async (mail) => {
+      sent.push(mail.to);
+      if (sent.length === 1) changed = await updatePreferences(last.unsubscribe_key, "weekly");
+    }, null, "daily");
+    assert.equal(changed, true);
+    assert.deepEqual(result, { sent: 5, failed: 0 });
+    assert.deepEqual(sent.sort(), subscribers.slice(0, 5).map((subscriber) => subscriber.email).sort());
+
+    sent.length = 0;
+    assert.deepEqual(await deliverIssue({ ...issue, key: "2026-W46" }, async (mail) => {
+      sent.push(mail.to);
+    }, null, "weekly"), { sent: 1, failed: 0 });
+    assert.deepEqual(sent, [last.email]);
+  } finally {
+    await Promise.all(subscribers.map((subscriber) => unsubscribe(subscriber.unsubscribe_key)));
+  }
+});
+
 test("the weekly email is an HTML newsletter with every theme and its pictures", () => {
   const themes = ["Inteligencia artificial", "Productos y gadgets", "Negocios y startups", "Regulación y política digital", "Ciberseguridad", "Videojuegos"];
   const entry = (theme: number, n: number): EmailEntry => ({
