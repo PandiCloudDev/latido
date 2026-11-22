@@ -166,6 +166,7 @@
         }
       },
       "tier": "T1_5",
+      "selection_class": "propio",
       "owner_entity_id": null,
       "participation_mode": "editorial",
       "interval_minutes": 60,
@@ -188,6 +189,7 @@
         }
       },
       "tier": "T1_5",
+      "selection_class": "propio",
       "owner_entity_id": null,
       "participation_mode": "editorial",
       "interval_minutes": 60,
@@ -210,6 +212,7 @@
         }
       },
       "tier": "T1_5",
+      "selection_class": "propio",
       "owner_entity_id": null,
       "participation_mode": "editorial",
       "interval_minutes": 60,
@@ -232,6 +235,7 @@
         }
       },
       "tier": "T1_5",
+      "selection_class": "propio",
       "owner_entity_id": null,
       "participation_mode": "editorial",
       "interval_minutes": 60,
@@ -239,6 +243,72 @@
         "Medio",
         "México",
         "Tecnología"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-en-el-asfalto",
+      "name": "En el Asfalto",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://enelasfalto.com/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T1_5",
+      "selection_class": "propio",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Medio",
+        "México",
+        "Electromovilidad"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-diabetips",
+      "name": "DiabeTips",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://diabetips.info/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T1_5",
+      "selection_class": "propio",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Medio",
+        "México",
+        "Salud"
+      ],
+      "site_fulltext": false,
+      "syndicate_fulltext": false
+    },
+    {
+      "id": "rss-danytips",
+      "name": "Dany Tips",
+      "kind": "rss",
+      "config": {
+        "feedUrl": "https://danytips.com/feed/",
+        "_aihot": {
+          "initialBackfillLimit": 3
+        }
+      },
+      "tier": "T1_5",
+      "selection_class": "propio",
+      "participation_mode": "editorial",
+      "interval_minutes": 120,
+      "tags": [
+        "Medio",
+        "México",
+        "Salud"
       ],
       "site_fulltext": false,
       "syndicate_fulltext": false
