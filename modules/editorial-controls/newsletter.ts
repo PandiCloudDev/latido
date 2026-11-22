@@ -246,7 +246,10 @@ export async function deliverIssue(issue: FeedIssue, mailer: Mailer = sendMail, 
       const [claim] = await sql<Recipient[]>`
         WITH claimed AS (
           INSERT INTO newsletter_deliveries (issue_key, subscriber_id)
-          SELECT ${issue.key}, id FROM newsletter_subscribers WHERE id = ${candidate.id} FOR KEY SHARE
+          SELECT ${issue.key}, s.id FROM newsletter_subscribers s
+          WHERE s.id = ${candidate.id} AND s.confirmed_at <= ${issue.generatedAt}
+            AND s.frequency = ANY(${frequencies})
+          FOR SHARE
           ON CONFLICT DO NOTHING RETURNING subscriber_id
         )
         SELECT s.id, s.email, s.unsubscribe_key FROM newsletter_subscribers s JOIN claimed c ON c.subscriber_id = s.id`;
